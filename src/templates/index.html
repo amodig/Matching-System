@@ -1,0 +1,169 @@
+<html ng-app="KeywordApp">
+	<head>
+		<title>Kewyword app</title>
+
+		<link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="static/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="static/css/animate.css">
+		<link rel="stylesheet" href="static/css/site.css">
+		<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+
+		<script src="static/js/jquery.js"></script>
+		<script src="static/js/jquery-ui.min.js"></script>
+		<script src="static/js/knob.js"></script>
+		<script src="static/js/angular.js"></script>
+		<script src="static/bootstrap/js/bootstrap.min.js"></script>
+		<script src="static/js/transit.min.js"></script>
+		<script src="static/js/app/models.js"></script>
+		<script src="static/js/app/keyword_app.js"></script>
+
+	</head>
+
+	<body ng-controller="KeywordController">
+		
+		<!-- SEARCH FORM AND KEYWORD SUGGESTIONS -->
+		<div class="container-basic container-dark" id="search-container">
+
+			<div class="wrapper">
+				
+				<!-- SEARCH FORM -->
+				<form>
+					<input type="text" ng-model="search_word" class="form-control text-field-rounded" id="search-field" placeholder="What are you looking for?">
+					<input type="submit" ng-click="search()" style="display: none">
+				</form>
+
+				<!-- KEYWORD SUGGESTIONS -->
+				<p class="text-center text-muted" style="margin-bottom: 20px">Type in a search phrase of select your keywords from below</p>
+
+				<div class="text-center">
+
+					<button id="suggest-keywords-trigger" ng-click="toggle_keyword_suggestions()"><i class="fa fa-list marg-right"></i>Suggest keywords<i class="fa fa-angle-down marg-left" ng-hide="show_keyword_suggestions"></i><i class="fa fa-angle-up marg-left" ng-show="show_keyword_suggestions"></i></button>
+				
+				</div>
+
+				<div class="keyword-suggestions-list">
+
+					<button class="keyword-suggestion keyword-suggestion-selected-{[{keyword_suggestion.selected}]}" ng-repeat="keyword_suggestion in keyword_suggestions | limitTo: keyword_suggestions_count" ng-click="toggle_keyword_suggestion_selection(keyword_suggestion)"><i class="fa fa-square marg-right" ng-hide="keyword_suggestion.selected"></i><i class="fa fa-check-square marg-right" ng-show="keyword_suggestion.selected"></i>{[{keyword_suggestion.text}]}</button>
+
+					<div class="text-center" style="margin-top: 20px">
+						<button class="btn btn-green btn-rounded" ng-click="load_more_keyword_suggestions()"><i class="fa fa-plus marg-right"></i>More</button>
+						<button class="btn btn-blue btn-rounded" ng-click="search()"><i class="fa fa-search marg-right"></i>Search</button>
+					</div>
+				
+				</div>
+
+			</div>
+
+		</div>
+
+		<!-- KEYWORDS DISPLAY -->
+		<div class="container-basic" id="keywords-container">
+			
+			<h2>
+				Keywords
+				<button class="btn pull-right" id="next-iteration" data-toggle="tooltip" data-placement="bottom" title="Carry on to the next iteration" ng-click="next()">
+					<i class="fa fa-long-arrow-right"></i>
+				</button>
+
+				<button class="btn pull-right" id="end-search" data-toggle="tooltip" data-placement="bottom" title="End search" ng-click="end()">
+					<i class="fa fa-times"></i>
+				</button>
+
+			</h2>
+
+			<!-- SINGLE KEYWORD DISPLAY -->
+			<div class="keywords-display">
+
+				<div class="keyword-box animated bounceIn" data-keywordId="{[{keyword.id}]}" ng-repeat="keyword in current_keywords | filter: filter_removed_keywords" ng-mouseenter="highlight_keywords_persons(keyword)" ng-mouseleave="un_highlight_keywords_persons()">
+					
+					<input type="text" class="keyword-knob" data-width="70" data-height="70" data-displayPrevious="true" data-fgColor="#0097cf" data-bgColor="#ffffff" data-angleArc="250" data-angleOffset="-125" data-thickness=".3" value="{[{keyword.weight}]}" ng-model="keyword.weight">
+					<div class="text-center" style="margin-top: 10px">
+						<span class="arrow"></span>
+					</div>
+
+					<div class="text-center keyword-text">
+						<i class="fa fa-times text-danger remove-keyword" data-toggle="tooltip" data-placement="top" title="Remove this keyword" style="cursor: pointer" ng-click="remove_keyword(keyword)"></i>
+						{[{keyword.text}]}
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+		<!-- PEOPLE LIST -->
+		<div class="container-basic container-dark container-dark-vertical" id="people-container">
+
+			<h2>People</h2>
+
+			<ul class="vertical-nav">
+				<li ng-repeat="person in current_persons">
+					<button class="pull-right btn-no-style text-danger remove-person-button" ng-click="remove_person(person)"><i class="fa fa-times"></i></button>
+
+					<a ng-mouseenter="highlight_persons_keywords(person)" ng-mouseleave="un_highlight_persons_keywords()" ng-click="toggle_person_selection(person)" class="toggle-navigation" data-personId="{[{person.id}]}">
+						<i class="fa fa-user marg-right"></i>{[{person.name}]}
+						<i class="fa fa-plus pull-right" ng-hide="person.selected"></i>
+						<i class="fa fa-minus pull-right" ng-show="person.selected"></i>
+					</a>
+
+					<ul class="list-unstyled">
+						<li ng-repeat="article in person.articles">
+							<button class="btn-no-style pull-right show-related-articles" ng-click="show_related_articles(article)" style="padding: 13px 8px;" title="Show related articles" data-toggle="tooltip" data-placement="left"><i class="fa fa-eye"></i></button>
+
+							<a href="{[{article.url}]}" target="_blank" ng-mouseenter="highlight_article(article, person)" ng-mouseleave="un_highlight_article()"><i class="fa fa-file-text marg-right"></i>{[{article.title}]}</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+
+		</div>
+
+		<!-- RELATED ARTICLES -->
+		<div class="layer" id="article-relation-layer">
+			<button class="btn-no-style" id="close-article-relation" ng-click="hide_related_articles()"><i class="fa fa-times"></i></button>
+
+			<h2>Articles related to <i>"{[{related_articles.middle.title}]}"</i></h2>
+
+			<div id="article-relation-visualization">
+				<div class="article-ball article-ball-grey" ng-repeat="related_article in related_articles.around" style="top: {[{related_article.init_y}]}; left: {[{related_article.init_x}]}" data-desiredTop="{[{related_article.y}]}" data-desiredLeft="{[{related_article.x}]}" ng-click="bring_article_to_middle(related_article)" ng-mouseenter="set_current_related_article(related_article)" ng-mouseleave="un_set_current_related_article()"><i class="fa fa-file-text"></i></div>
+
+				<div class="article-ball" style="top: {[{related_articles.middle.y}]}; left: {[{related_articles.middle.x}]}" ng-mouseenter="set_current_related_article(related_articles.middle)" ng-mouseleave="un_set_current_related_article()"><i class=" fa fa-file-text"></i></div>
+			</div>
+
+			<div id="current-related-article">
+				<h3>{[{current_related_article.title}]} <small>{[{current_related_article.author}]}</small></h3>
+				{[{current_related_article.abstract}]}
+			</div>
+		</div>
+
+		<!-- PERSON PROFILE PICTURE -->
+		<div id="person-profile-picture" ng-class="{'bring-left': active_person && active_person.show }">
+			<img src="{[{active_person.profile_picture}]}" class="pull-left" ng-show="active_person.profile_picture">
+			<div id="person-profile-info" class="pull-left">
+				<h3>{[{active_person.name}]}</h3>
+				<ul class="fa-ul">
+					<li><i class="fa fa-li fa-envelope"></i> Email: {[{active_person.profile_info.email}]}</li>
+					<li><i class="fa fa-li fa-map-marker"></i> Room: {[{active_person.profile_info.room}]}</li>
+					<li><i class="fa fa-li fa-phone"></i> Phone: {[{active_person.profile_info.phone}]}</li>
+					<li><i class="fa fa-li fa-home"></i> Homepage: <a target="_blank" href="{[{active_person.profile_info.homepage}]}">{[{active_person.profile_info.homepage}]}</a></li>
+					<li><i class="fa fa-li fa-clock-o"></i> Reception time: {[{active_person.profile_info.reception_time}]}</li>
+					<li><i class="fa fa-li fa-group"></i> Group: {[{active_person.profile_info.group}]}</li>
+				</ul>
+			</div>
+		</div>
+
+		<!-- HIGHLIGHTED ARTICLE -->
+		<div id="keywords-display-layer" ng-class="{ 'bring-front': show_keyword_layer }">
+			<div id="article-highlight-display" class="media">
+			    <img class="media-object pull-left" src="{[{current_article.author_profile_picture}]}" style="width: 160px; height: auto; margin-right: 20px">
+			
+			  	<div class="media-body">
+			   		<h3>{[{current_article.highlighted_title}]}</h3>
+					<span class="text-muted" ng-bind-html="current_article.highlighted_abstract"></span>
+			  	</div>
+			</div>
+		</div>
+
+	</body>
+</html>

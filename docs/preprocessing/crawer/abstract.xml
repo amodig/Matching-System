@@ -1,0 +1,18 @@
+<articles><Article>
+<number>
+4
+</number>
+<name>Ahonen Teppo<title>
+http://cmmr2012.eecs.qmul.ac.uk/sites/cmmr2012.eecs.qmul.ac.uk/files/pdf/papers/cmmr2012_submission_82.pdf</title></number>
+<abstract>
+We approach the problem of measuring similarity between chromagrams and present two new quantized representations for the task. The first representation is a sequence of optimal transposition index (OTI) values between the global chroma vector and each frame of the chromagram, whereas the second representation uses in similar fashion the global chroma of the query and frames of the target chromagram, thus emphasizing the mutual information of the chromagrams in the representation. The similarity between quantized representations is measured using normalized compression distance (NCD) as the similarity metric, and we experiment with a variant of k-medians algorithm, where the commonly used Euclidean distance has been replaced with NCD, to cluster the chromagrams. The representations and clustering method are evaluated by experimenting how well different cover versions of a composition can be clustered, and based on the experiments, we analyze various parameter settings for the representations. The results are promising and provide possible directions for future work.</abstract>
+</Article>
+<Article>
+<number>
+6
+</number>
+<name>Ahonen Teppo<title>
+http://www.music-ir.org/mirex/abstracts/2011/ALL1.pdf</title></number>
+<abstract>
+We present a system for MIREX 2011 cover song identification task that is based on a method for measuring similarity between polyphonic, symbolic pieces of music [1].</abstract>
+</Article>

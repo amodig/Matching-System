@@ -1,0 +1,128 @@
+<html ng-app="ChartApp">
+	<head>
+		<title>Kewyword app</title>
+
+		<link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="static/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="static/css/animate.css">
+		<link rel="stylesheet" href="static/css/site.css">
+		<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+
+		<script src="static/js/jquery.js"></script>
+		<script src="static/js/jquery-ui.min.js"></script>
+		<script src="static/js/angular.js"></script>
+		<script src="static/bootstrap/js/bootstrap.min.js"></script>
+		<script src="static/js/chart.js"></script>
+		<script src="static/js/app/chart_app.js"></script>
+
+	</head>
+
+	<body ng-controller="ChartController">
+		<div class="container-basic" id="chart-container">
+			<h2>{[{current_chart.heading}]}</h2>
+
+			<div id="chart-holder">
+				<canvas id="chart-canvas"></canvas>
+			</div>
+
+			<div id="article-relation-container">
+				<div id="small-visualization-container">
+					<div class="article-ball-container">
+						<div class="article-label" ng-repeat="label in visualized_articles_labels" style="top: {[{label.y}]}px; left: {[{label.x}]}px; width: {[{label.width}]}; font-size: {[{label.font_size}]}em">
+							{[{label.text}]}
+						</div>
+
+						<canvas id="coordination-canvas"></canvas>
+
+						<div ng-repeat="article in visualized_articles" class="article-ball animated bounceIn" style="top: {[{article.y}]}; left: {[{article.x}]}; width: {[{article.size}]}; height: {[{article.size}]}" ng-click="show_article_information(article)" data-placement="right" ng-class="{active: article.active}" data-container="body" data-toggle="popover" data-trigger="hover" title="{[{article.title}]} <span class='text-muted' style='font-size: 0.8em'>{[{article.author}]}</span>" data-html="true" data-content="{[{article.abstract | limitTo: 150 }]}..."></div>
+					</div>
+				</div>
+
+				<div id="large-visualization-container">
+					<canvas id="article-relation-canvas" width="800" height="800"></canvas>
+					
+					<div class="legend">
+						<div class="legend-title" style="margin-bottom: 20px">High Correlation</div>
+						<div><div class="legend-scale"></div></div>
+						<div class="legend-title" style="margin-top: 20px">Low Correlation</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="article-relation-model-container" ng-class="{ show: active_article != null }">
+				<div class="heading-container">
+					<button id="close-article-relation-model" class="pull-right" ng-click="hide_article_information()"><i class="fa fa-times"></i></button>
+					<h2>Topic model</h2>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<h3>{[{active_article.title}]}</h3>
+						<p>
+							<input type="text" placeholder="Find keywords" ng-model="active_article_keyword_filter">
+						</p>
+						<ul class="bars">
+							<li ng-repeat="keyword in active_article.topic_model_keywords | filter: active_article_keyword_filter">
+								<div class="bar" data-toggle="tooltip" data-placement="top" title="Keyword has probability of {[{keyword.possibility * 100}]}%">
+									<div class="bar-title">{[{keyword.text}]} ({[{keyword.possibility * 100}]}%)</div>
+									<div class="bar-body" style="width: {[{keyword.possibility * 100}]}%"></div>
+								</div>
+							</li>
+						</ul>
+					</div>
+
+					<div class="col-md-6">
+						<h3>{[{active_article.row_parent.title}]}</h3>
+						<p>
+							<input type="text" placeholder="Find keywords" ng-model="row_parent_keyword_filter">
+						</p>
+							<ul class="bars">
+							<li ng-repeat="keyword in active_article.row_parent.topic_model_keywords | filter: row_parent_keyword_filter">
+								<div class="bar" data-toggle="tooltip" data-placement="top" title="Keyword has probability of {[{keyword.possibility * 100}]}%">
+									<div class="bar-title">{[{keyword.text}]} ({[{keyword.possibility * 100}]}%)</div>
+									<div class="bar-body" style="width: {[{keyword.possibility * 100}]}%"></div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="container-basic container-dark container-dark-vertical" id="chart-nav-container">
+			<h2>Charts</h2>
+			<ul class="vertical-nav">
+				<li ng-repeat="chart in charts"><a ng-click="switch_to_chart(chart)"><i class="fa fa-bar-chart-o marg-right"></i>{[{chart.heading}]}</a></li>
+				<li>
+					<a ng-click="switch_to_article_relation_chart()"><i class="fa fa-bar-chart-o marg-right"></i>Keyword relations</a>
+
+					<ul class="article-relation-chart-options">
+						<li>
+							<a ng-click="display_article_relation_visualization()" class="text-center">
+								<i class="fa fa-eye marg-right"></i>Visualize
+							</a>
+						</li>
+						<li class="no-link">
+							<input type="text" class="form-control text-field-rounded" ng-model="article_list_filter">
+						</li>
+						<li class="no-link text-center">
+							<button ng-click="check_all_articles()" class="btn-no-style">
+								<i class="fa fa-check marg-right"></i>Select all
+							</button> <span style="color: rgb(100,100,100)">/</span> <button ng-click="un_check_all_articles()" class="btn-no-style">
+								<i class="fa fa-times marg-right"></i>Deselect all
+							</button>
+						</li>
+						<li ng-repeat="article in articles | filter: article_list_filter" class="no-link">
+							<div class="checkbox">
+							  <label>
+							    <input type="checkbox" value="" ng-model="article.selected">
+							    {[{article.title}]}
+							  </label>
+							</div>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>

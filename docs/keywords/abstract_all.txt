@@ -1,0 +1,2683 @@
+c__builtin__
+set
+p0
+((lp1
+S''
+p2
+aS'physical environment awareness'
+p3
+aS'active engagement'
+p4
+aS'concept'
+p5
+aS'similarity'
+p6
+aS'several choices'
+p7
+aS'trajectory information'
+p8
+aS'results'
+p9
+aS'rmbs'
+p10
+aS'correct word forms'
+p11
+aS'novel collective paradigm'
+p12
+aS'insights'
+p13
+aS'lexicon'
+p14
+aS'normalized compression distance ncd'
+p15
+aS'fairness'
+p16
+aS'query'
+p17
+aS'mammal genera'
+p18
+aS'cases'
+p19
+aS'issues'
+p20
+aS'available network capacity estimation'
+p21
+aS'layers'
+p22
+aS'interestingness'
+p23
+aS'edard'
+p24
+aS'oparray_pop nostringval errorexec_pop'
+p25
+aS'terms'
+p26
+aS'modern smart phones'
+p27
+aS'real-time responses'
+p28
+aS'subliminal perception'
+p29
+aS'technique'
+p30
+aS'large-scale deployment'
+p31
+aS'opportunities'
+p32
+aS'united states senate'
+p33
+aS'languages'
+p34
+aS'open problems'
+p35
+aS'usability'
+p36
+aS'device'
+p37
+aS'protocols'
+p38
+aS'cooperation policy'
+p39
+aS'preprocess'
+p40
+aS'safety'
+p41
+aS'major impact'
+p42
+aS'presentation'
+p43
+aS'risk factors'
+p44
+aS'resources'
+p45
+aS'main families'
+p46
+aS'sound'
+p47
+aS'smartphone'
+p48
+aS'string'
+p49
+aS'advantage'
+p50
+aS'natural feature hierarchies'
+p51
+aS'different methodologies'
+p52
+aS'new quantized representations'
+p53
+aS'starting point'
+p54
+aS'choice'
+p55
+aS'microlabel f1 score'
+p56
+aS'enzyme function prediction'
+p57
+aS'lingware'
+p58
+aS'successful application'
+p59
+aS'finding clusterings'
+p60
+aS'human intelligence'
+p61
+aVvariance
+p62
+aS'collaborative process'
+p63
+aS'high-level contexts'
+p64
+aS'mobile platform'
+p65
+aS'leads'
+p66
+aS'language technology research project'
+p67
+aS'household electrical appliances'
+p68
+aS'novel inner bound'
+p69
+aS'transition operator'
+p70
+aS'real-world deployment'
+p71
+aS'list'
+p72
+aS'passage retrieval'
+p73
+aS'access control policies'
+p74
+aS'prototypes'
+p75
+aVrandom
+p76
+aVcomparisons
+p77
+aS'global defaults'
+p78
+aS'new network'
+p79
+aS'age information'
+p80
+aS'identification task'
+p81
+aS'theoretical properties'
+p82
+aS'efficient technique'
+p83
+aS'rate-splitting approaches'
+p84
+aS'low treewidth'
+p85
+aS'occurrence'
+p86
+aS'findings'
+p87
+aS'enzymatic reactions'
+p88
+aS'remote resources'
+p89
+aS'operator induces'
+p90
+aS'estimates'
+p91
+aS'tee'
+p92
+aS'automatic credits'
+p93
+aS'ec class prediction'
+p94
+aS'keywords'
+p95
+aS'nphard problem'
+p96
+aS'noise'
+p97
+aS'design'
+p98
+aS'cellular networks'
+p99
+aS'induces computational gains'
+p100
+aS'different query formulation strategies'
+p101
+aVcertain algorithms
+p102
+aVnon-content bearing causes
+p103
+aS'metabolic networks'
+p104
+aS'machines'
+p105
+aS'chrome extensions'
+p106
+aVspecific additive noise components
+p107
+aS'chromagrams'
+p108
+aS'material'
+p109
+aS'objects similarity'
+p110
+aS'organisms'
+p111
+aS'interactive video'
+p112
+aVcontributions
+p113
+aS'specification'
+p114
+aS'bandwidth-delay product'
+p115
+aS'fingers'
+p116
+aS'networks'
+p117
+aS'domain name resolution traces'
+p118
+aS'exploratory search'
+p119
+aS'experiment'
+p120
+aS'bayesian networks'
+p121
+aS'machine learning approaches'
+p122
+aS'reconstruction'
+p123
+aS'scientists'
+p124
+aS'contextual information'
+p125
+aS'userrank'
+p126
+aS'method'
+p127
+aS'gyroscope'
+p128
+aS'user history'
+p129
+aS'body'
+p130
+aS'using simulation experiments'
+p131
+aS'available data sources'
+p132
+aS'fukunaga class-separability'
+p133
+aS'mobile tees'
+p134
+aS'degree'
+p135
+aS'indirect measurements'
+p136
+aS'compilation'
+p137
+aS'tee standardization activities'
+p138
+aS'user-defined domain knowledge'
+p139
+aS'hundreds'
+p140
+aS'polyphonic music'
+p141
+aS'direct evaluation'
+p142
+aS'objects'
+p143
+aS'let'
+p144
+aS'search nearer'
+p145
+aS'useful way'
+p146
+aS'alone'
+p147
+aS'consideration'
+p148
+aS'november'
+p149
+aS'thesum'
+p150
+aS'volatile tcp traffic'
+p151
+aS'contribute'
+p152
+aS'domain knowledge'
+p153
+aS'search'
+p154
+aS'generalizing'
+p155
+aS'low cost'
+p156
+aS'mature content request'
+p157
+aS'themeasurement period'
+p158
+aS'standard web ontology formats'
+p159
+aS'computer science re-searchers'
+p160
+aS'reminiscent'
+p161
+aS'allows'
+p162
+aS'experimenting'
+p163
+aS'exploitation'
+p164
+aS'internet connectivity'
+p165
+aS'security cameras'
+p166
+aS'several papers'
+p167
+aS'throughput'
+p168
+aS'advertising'
+p169
+aS'situations'
+p170
+aS'inappropriate apps'
+p171
+aS'home automation concerns'
+p172
+aS'extends'
+p173
+aS'specific subtopics'
+p174
+aS'segments'
+p175
+aS'many cases'
+p176
+aS'contrastive divergence learning'
+p177
+aS'cyber foraging'
+p178
+aS'trace gas concentrations'
+p179
+aS'current forms'
+p180
+aS'candidate passages'
+p181
+aVsecure
+p182
+aS'family'
+p183
+aS'polynomial kernel'
+p184
+aS'app'
+p185
+aS'default policy configurations'
+p186
+aS'scale invariance'
+p187
+aS'clean devices'
+p188
+aS'general packet radio services'
+p189
+aS'content awareness'
+p190
+aS'unnecessary retransmissions'
+p191
+aS'decrease'
+p192
+aS'multi-word units'
+p193
+aVkernel density estimation
+p194
+aS'ontology-aware offline tools'
+p195
+aS'spectral ordering achieves good performance'
+p196
+aS'cloud'
+p197
+aS'recent global platform standards'
+p198
+aS'markov chain monte carlo mcmc methods'
+p199
+aS'cover version identification'
+p200
+aS'use'
+p201
+aS'test set'
+p202
+aS'ubiquitous interaction paradigms'
+p203
+aS'presence'
+p204
+aS'mobile hardware security'
+p205
+aS'contains'
+p206
+aS'direction'
+p207
+aS'ubiquitous positioning solutions'
+p208
+aS'depth cameras'
+p209
+aS'scenarios'
+p210
+aS'lexicon network'
+p211
+aS'pervasive computing'
+p212
+aS'music'
+p213
+aS'therefore'
+p214
+aS'availability'
+p215
+aVmemory
+p216
+aS'human mobility patterns'
+p217
+aS'type'
+p218
+aS'gsm'
+p219
+aS'stopped_push nostringval nostringval nostringval false'
+p220
+aS'phone'
+p221
+aS'basic problem'
+p222
+aS'reuters-21578 newswire collection'
+p223
+aS'spatial relations'
+p224
+aS'independent sources'
+p225
+aS'packet losses'
+p226
+aS'pairs'
+p227
+aS'infection'
+p228
+aS'state changes'
+p229
+aS'cumbersome process'
+p230
+aS'arm trustzone'
+p231
+aS'bag-of-features representation'
+p232
+aS'meteorological data'
+p233
+aS'mirex'
+p234
+aVdistinctive feature
+p235
+aVtees
+p236
+aS'harnessing'
+p237
+aS'novel visual interface'
+p238
+aS'smart phone platform'
+p239
+aS'account'
+p240
+aS'behavior awareness'
+p241
+aS'little information'
+p242
+aS'augment'
+p243
+aS'recent research'
+p244
+aS'car'
+p245
+aS'points'
+p246
+aS'work'
+p247
+aS'actual available capacity'
+p248
+aS'accurate knowledge'
+p249
+aS'measures'
+p250
+aS'reviews'
+p251
+aS'assumptions'
+p252
+aS'values'
+p253
+aS'present experiments'
+p254
+aS'electronic literature search tools'
+p255
+aS'example'
+p256
+aS'address'
+p257
+aS'retrieval system'
+p258
+aS'control'
+p259
+aS'activities'
+p260
+aS'process'
+p261
+aS'share'
+p262
+aS'purposes'
+p263
+aS'packet'
+p264
+aS'combinatorial target object'
+p265
+aS'compact representations'
+p266
+aS'gibbs sampling'
+p267
+aS'malware infection'
+p268
+aS'access control decisions'
+p269
+aS'parallel tempering pt'
+p270
+aS'sparsification'
+p271
+aS'malware datasets'
+p272
+aS'important challenge'
+p273
+aS'alerting mechanism'
+p274
+aS'accuracy requirements'
+p275
+aS'problem space'
+p276
+aS'results confirm'
+p277
+aS'information'
+p278
+aS'malware'
+p279
+aS'state-of-the-art position'
+p280
+aS'end'
+p281
+aS'goal'
+p282
+aS'range majority'
+p283
+aS'turn'
+p284
+aS'x1 x2'
+p285
+aS'discussion'
+p286
+aS'intent estimates'
+p287
+aS'prototype implementation'
+p288
+aS'providing feedback'
+p289
+aS'methodology'
+p290
+aS'frequencies'
+p291
+aS'modern mobile phones'
+p292
+aS'cwnd'
+p293
+aS'explicit user consent'
+p294
+aS'intelligent'
+p295
+aVoutput learning approach
+p296
+aS'ng positions'
+p297
+aS'many words'
+p298
+aS'description'
+p299
+aVcomputational biology
+p300
+aS'battery use'
+p301
+aS'tonal centroids'
+p302
+aS'chromagram vectors'
+p303
+aS'paleontologists'
+p304
+aVvariant
+p305
+aS'mapping'
+p306
+aS'tracking'
+p307
+aS'applications'
+p308
+aS'mac'
+p309
+aVsecure memory
+p310
+aS'structure'
+p311
+aS'date'
+p312
+aS'representations'
+p313
+aS'on-board credentials'
+p314
+aS'seriation task'
+p315
+aS'data'
+p316
+aS'positioning-even limiting'
+p317
+aS'third-party applications'
+p318
+aVhandwritten digit images
+p319
+aS'hard problem'
+p320
+aS'independent beta source densities'
+p321
+aS'dragging tasks'
+p322
+aS'hmin'
+p323
+aS'thesauri'
+p324
+aS'partial maximum satisfiability'
+p325
+aS'various aspects'
+p326
+aS'close semantic relations'
+p327
+aS'urban design'
+p328
+aS'extrapolation'
+p329
+aValgorithms
+p330
+aS'local current file position'
+p331
+aS'alphabet'
+p332
+aS'global interestingness'
+p333
+aS'representation'
+p334
+aS'yangtze river delta yrd'
+p335
+aS'conventional search system'
+p336
+aS'order'
+p337
+aS'gesture'
+p338
+aS'used euclidean distance'
+p339
+aS'exploratory search tasks'
+p340
+aS'passages'
+p341
+aS'feedback'
+p342
+aS'new challenges'
+p343
+aS'large screens'
+p344
+aS'taxonomy'
+p345
+aS'compass'
+p346
+aS'competitive computational complexity'
+p347
+aVcharacters
+p348
+aS'positioning capabilities'
+p349
+aS'stability'
+p350
+aS'mixing'
+p351
+aS'experiments'
+p352
+aS'hardware-based tees'
+p353
+aS'cross-device indoor localization'
+p354
+aS'probabilistic inference'
+p355
+aS'change blindness'
+p356
+aS'existence'
+p357
+aS'dissimilar sites'
+p358
+aS'entice users'
+p359
+aS'cooperation impacts network'
+p360
+aVpersonal computers
+p361
+aS'nostringval execution stack'
+p362
+aS'position'
+p363
+aS'csi'
+p364
+aS'monitor'
+p365
+aS'nekrich'
+p366
+aS'recommendations'
+p367
+aS'structural properties'
+p368
+aVeax mode
+p369
+aS'significant assistance'
+p370
+aS'dupthresh value'
+p371
+aS'initial jittery annotations'
+p372
+aS'tolyrics'
+p373
+aS'integral part'
+p374
+aS'providing facility'
+p375
+aS'simpler list-based interface'
+p376
+aS'diary logs'
+p377
+aS'mobile device'
+p378
+aS'task performance'
+p379
+aS'considerable interest'
+p380
+aS'first lower-bound'
+p381
+aS'motivated'
+p382
+aS'visualized intents'
+p383
+aS'nanjing university sorpes-nju'
+p384
+aS'real-world baseline'
+p385
+aS'app markets today'
+p386
+aS'cover'
+p387
+aS'lexical affinities'
+p388
+aS'number'
+p389
+aS'framework'
+p390
+aS'copyrights'
+p391
+aS'effects'
+p392
+aS'implementation spurs'
+p393
+aS'particular markov chain model'
+p394
+aS'discuss'
+p395
+aS'permissions'
+p396
+aS'design challenges'
+p397
+aS'term'
+p398
+aS'capacity'
+p399
+aS'nfc'
+p400
+aS'interactive media'
+p401
+aS'crowd-sourcing paradigms'
+p402
+aS'queues'
+p403
+aVoccurrences
+p404
+aS'common usage'
+p405
+aS'selection gesture'
+p406
+aS'important information'
+p407
+aS'channel input'
+p408
+aS'task-based user study'
+p409
+aS'accurate function prediction'
+p410
+aS'side'
+p411
+aS'reliable real-time monitoring'
+p412
+aS'gprs'
+p413
+aS'domain'
+p414
+aS'local environment'
+p415
+aS'malware infection rates'
+p416
+aS'malicious applications'
+p417
+aS'weight'
+p418
+aS'non-negative matrix factorisation'
+p419
+aS'generation'
+p420
+aS'series'
+p421
+aS'energy'
+p422
+aS'algorithm avoids unnecessary retransmissions'
+p423
+aS'community ratings'
+p424
+aS'battery lasts'
+p425
+aS'bluetooth'
+p426
+aS'challenges'
+p427
+aS'feature distances'
+p428
+aS'usual description'
+p429
+aS'differential mobility particle sizer'
+p430
+aS'personalization'
+p431
+aS'discontiguous sequential descriptors'
+p432
+aS'hierarchical nature'
+p433
+aS'unfamiliar research areas'
+p434
+aS'vicinity'
+p435
+aS'subjective decision'
+p436
+aS'ethernet'
+p437
+aVexpectation
+p438
+aS'novel user interface design'
+p439
+aS'network'
+p440
+aS'realtime'
+p441
+aS'furthermore'
+p442
+aS'reaction kernels'
+p443
+aS'gtg features'
+p444
+aVviability
+p445
+aS'research'
+p446
+aS'content'
+p447
+aS'participants'
+p448
+aS'gold standard enzyme families'
+p449
+aS'internet'
+p450
+aS'trusted platform module tpm'
+p451
+aS'global chroma vector'
+p452
+aS'ro'
+p453
+aS'evaluation'
+p454
+aS'competent performance'
+p455
+aS'architecture'
+p456
+aS'new technique'
+p457
+aS'perception'
+p458
+aS'gprs networks'
+p459
+aS'belief'
+p460
+aS'city'
+p461
+aS'providing access'
+p462
+aS'game theoretical framework'
+p463
+aS'expensive monitoring'
+p464
+aS'standard malware'
+p465
+aS'markov chain'
+p466
+aS'gtg feature'
+p467
+aVbinary
+p468
+aS'approaches'
+p469
+aS'laplacian matrix'
+p470
+aS'advantages'
+p471
+aS'dynamics'
+p472
+aS'wifi'
+p473
+aS'sensors'
+p474
+aS'directed acyclic graph structure'
+p475
+aS'beginning'
+p476
+aS'publication'
+p477
+aS'power assignments'
+p478
+aS'software designers attempt'
+p479
+aS'training'
+p480
+aS'interaction'
+p481
+aS'similar sites'
+p482
+aS'activity datasets'
+p483
+aS'similar fashion'
+p484
+aS'area'
+p485
+aS'html5 web apps'
+p486
+aVmobile devices
+p487
+aS'dialogue system'
+p488
+aS'times'
+p489
+aS'construing'
+p490
+aS'ordering'
+p491
+aS'length'
+p492
+aS'framework enhances'
+p493
+aS'literature search tools'
+p494
+aS'runexec2 nostringval nostringval nostringval'
+p495
+aS'consequence'
+p496
+aS'stopped_push'
+p497
+aS'paleontological data'
+p498
+aS'sequence motifs'
+p499
+aS'door locks'
+p500
+aS'purpose'
+p501
+aS'activity recognition systems'
+p502
+aVability
+p503
+aS'congestion-related packet losses'
+p504
+aS'features'
+p505
+aS'probability'
+p506
+aS'transportation dataset'
+p507
+aS'novel information'
+p508
+aS'supplement'
+p509
+aS'public transportation operating costs'
+p510
+aS'interface variants'
+p511
+aS'present paper combines'
+p512
+aS'energy-efficient way'
+p513
+aS'limited cooperation'
+p514
+aS'prominent approach'
+p515
+aS'gaussian channel input'
+p516
+aS'particle number size distributions'
+p517
+aS'document collections'
+p518
+aS'development effort'
+p519
+aS'analysis mechanisms'
+p520
+aS'quality'
+p521
+aS'evaluations'
+p522
+aS'size'
+p523
+aS'annotation effort'
+p524
+aVmaximum margin regression
+p525
+aS'correct annotation label'
+p526
+aS'temperature'
+p527
+aS'prominent examples'
+p528
+aS'privacy'
+p529
+aS'related work'
+p530
+aS'normalized compression distance'
+p531
+aS'interviews'
+p532
+aS'structured'
+p533
+aS'system'
+p534
+aS'neighbor classifier'
+p535
+aS'accurate positioning'
+p536
+aS'quantized representations'
+p537
+aS'station'
+p538
+aS'earth sys-tem'
+p539
+aS'observations'
+p540
+aS'rate-splitting bounds'
+p541
+aS'probable options'
+p542
+aS'show'
+p543
+aS'initial network'
+p544
+aS'generic architectures'
+p545
+aVadequate support
+p546
+aS'emergent location-aware applications'
+p547
+aS'novel compression-based method'
+p548
+aS'new protein'
+p549
+aS'on-device simplification'
+p550
+aS'rao-blackwellised gibbs sampling'
+p551
+aS'beesley'
+p552
+aS'lot'
+p553
+aVlarge-scale text mining
+p554
+aVtrusted execution environments
+p555
+aS'measuring similarity'
+p556
+aS'easy integration'
+p557
+aS'artifact'
+p558
+aS'prediction'
+p559
+aS'mobile malware infection rates'
+p560
+aS'cyber'
+p561
+aS'target chromagram'
+p562
+aS'x2'
+p563
+aS'validating'
+p564
+aS'copy'
+p565
+aS'ncd'
+p566
+aS'well-intentioned users'
+p567
+aS'specific accuracy requirements'
+p568
+aS'distance'
+p569
+aS'kind'
+p570
+aS'open media retrieval omr model'
+p571
+aS'independent worst-case'
+p572
+aS'facebook apps'
+p573
+aS'federated search'
+p574
+aS'linear algebra'
+p575
+aS'trec'
+p576
+aS'chord sequence estimation'
+p577
+aS'project'
+p578
+aS'parameter-free quasi-universal similarity'
+p579
+aS'air ion spec-trometer'
+p580
+aVmuch larger
+p581
+aS'contrary'
+p582
+aS'risks'
+p583
+aS'mf minesweep'
+p584
+aS'superfamilies'
+p585
+aS'tee functionality'
+p586
+aS'enables'
+p587
+aS'western part'
+p588
+aS'real world data sets'
+p589
+aS'behaviors'
+p590
+aS'interests'
+p591
+aS'motivation'
+p592
+aS'developers'
+p593
+aS'permissive licenses'
+p594
+aS'swahili verb sema'
+p595
+aS'clusterings'
+p596
+aS'different types'
+p597
+aS'requirements increase'
+p598
+aS'current trend'
+p599
+aS'ages'
+p600
+aS'needs'
+p601
+aS'chan-nels'
+p602
+aS'filtering-based gsm positioning'
+p603
+aVneed
+p604
+aS'delay ratios'
+p605
+aS'license terms'
+p606
+aS'approach hinges'
+p607
+aVdata explanatory purposes
+p608
+aS'long period'
+p609
+aS'documents'
+p610
+aS'energy-efficient tracking'
+p611
+aS'anti-malware tools'
+p612
+aS'exploratory'
+p613
+aS'patterns'
+p614
+aS'web-based survey'
+p615
+aS'remote controls'
+p616
+aS'layers tends'
+p617
+aS'regular expressions'
+p618
+aS'annotation transfer'
+p619
+aS'ambient light'
+p620
+aS'mixed-method case studies'
+p621
+aS'paleontological findings'
+p622
+aVabstract description
+p623
+aS'performance'
+p624
+aS'effectiveness'
+p625
+aVcomputation
+p626
+aS'channel'
+p627
+aS'file operand stack'
+p628
+aS'lectures'
+p629
+aS'large scale smart phone data collection campaign'
+p630
+aS'towards'
+p631
+aS'multiple'
+p632
+aS'battery power'
+p633
+aS'transactions'
+p634
+aS'attractiveness'
+p635
+aS'enzyme function'
+p636
+aS'infor-mation needs'
+p637
+aS'xerox'
+p638
+aS'battery life'
+p639
+aS'lists'
+p640
+aS'platforms popular applications request'
+p641
+aS'popular applications'
+p642
+aS'different cover versions'
+p643
+aS'non-experts'
+p644
+aS'perceptive phenomena'
+p645
+aVshort text documents
+p646
+aVdata-driven reasoning
+p647
+aS'terabyte corpus'
+p648
+aS'independent program components'
+p649
+aS'multiple annotators'
+p650
+aS'audio'
+p651
+aS'treewidth bayesian'
+p652
+aS'access various legal image sources'
+p653
+aS'variational ica method'
+p654
+aS'implications'
+p655
+aS'language represents'
+p656
+aS'capacity region'
+p657
+aS'surface strings'
+p658
+aS'k-medians'
+p659
+aS'regards'
+p660
+aS'pervasive computing technique'
+p661
+aS'third-party tee development'
+p662
+aS'com-puter scientists'
+p663
+aS'variational approximation'
+p664
+aS'effect'
+p665
+aS'kernel methods'
+p666
+aS'notion'
+p667
+aS'quantity'
+p668
+aS'topic models'
+p669
+aS'selection'
+p670
+aS'paper presents'
+p671
+aS'lyrics'
+p672
+aS'restriction'
+p673
+aVtrue presences
+p674
+aS'syntaxerror'
+p675
+aS'authors'
+p676
+aS'informal user study'
+p677
+aS'rate-splitting approach'
+p678
+aS'pinpointing infection'
+p679
+aS'attempts'
+p680
+aS'expressing'
+p681
+aS'wide range'
+p682
+aS'security policy decisions'
+p683
+aS'scarce'
+p684
+aS'electronic literature re-sources'
+p685
+aS'security issues'
+p686
+aS'decade'
+p687
+aS'accurate indicator'
+p688
+aS'msrc2 dataset'
+p689
+aVaccess
+p690
+aS'indicator'
+p691
+aS'x1'
+p692
+aS'voting records'
+p693
+aS'parameters'
+p694
+aS're-viewing literature'
+p695
+aS'implementation'
+p696
+aS'lexical affinities replaces'
+p697
+aS'hierarchical max-margin markov algorithm'
+p698
+aS'important problem'
+p699
+aS'heterogeneous access network environments'
+p700
+aS'different phases'
+p701
+aS'enzyme'
+p702
+aVversion
+p703
+aS'dict'
+p704
+aS'equipped'
+p705
+aS'maxsat formulation'
+p706
+aS'computational overhead'
+p707
+aS'spatio-temporal aspects'
+p708
+aS'item search tend'
+p709
+aS'bdp'
+p710
+aS'hours'
+p711
+aS'gibbs chain'
+p712
+aS'succinct'
+p713
+aS'emulation experiments'
+p714
+aS'third tier'
+p715
+aS'known techniques'
+p716
+aS'non-concatenative phenomena'
+p717
+aVannotation transfer methods
+p718
+aS'infection vectors'
+p719
+aS'maximal frequent sequence'
+p720
+aS'cross-promotional deals'
+p721
+aS'simi-larity measure'
+p722
+aS'sequential data'
+p723
+aS'tcp'
+p724
+aS'words'
+p725
+aS'despite'
+p726
+aS'report'
+p727
+aS'background knowledge'
+p728
+aS'compiles'
+p729
+aS'proposal differs'
+p730
+aS'state-of-the-art maxsat solver'
+p731
+aS'collaborative filtering'
+p732
+aS'settings'
+p733
+aS'multivariate bernoulli likelihood'
+p734
+aVab model
+p735
+aS'text phrases'
+p736
+aS'location coordinates'
+p737
+aS'bandwidth'
+p738
+aS'similar angles'
+p739
+aS'global chroma'
+p740
+aVexact expectation
+p741
+aS'paper'
+p742
+aVpalaeontological recordings
+p743
+aS'general methods'
+p744
+aS'relative scales'
+p745
+aS'queries'
+p746
+aS'compressibility'
+p747
+aS'first experiments'
+p748
+aS'frequent purpose'
+p749
+aS'accurate learning'
+p750
+aS'important research problem'
+p751
+aS'caches'
+p752
+aS'boltzmann machines'
+p753
+aS'set'
+p754
+aS'pe-nalizes'
+p755
+aS'standard topic models'
+p756
+aS'security features'
+p757
+aS'excavation'
+p758
+aS'interactive feature construction'
+p759
+aS'frame'
+p760
+aS'morphophonological rules'
+p761
+aS'humans'
+p762
+aS'modeling'
+p763
+aS'several parallel connections'
+p764
+aS'word sequences'
+p765
+aS'lexical description'
+p766
+aVaspect bernoulli ab model
+p767
+aS'changes'
+p768
+aS'straightforward compression-based similarity'
+p769
+aS'lisbon'
+p770
+aS'vertices'
+p771
+aS'valuable substitute'
+p772
+aS'single object'
+p773
+aVimportant application
+p774
+aS'techniques'
+p775
+aS'many emergent mobile applications'
+p776
+aS'qa test'
+p777
+aS'recall values'
+p778
+aS'exact fashion'
+p779
+aS'label jitter'
+p780
+aS'output prediction methods'
+p781
+aVencryption modes
+p782
+aS'pattern'
+p783
+aS'review'
+p784
+aS'tcp throughput'
+p785
+aS'familiarity'
+p786
+aS'sites'
+p787
+aS'hard constraints'
+p788
+aS'power techniques'
+p789
+aS'extensible framework'
+p790
+aS'state'
+p791
+aS'previous work'
+p792
+aS'identification'
+p793
+aS'used periodic update schemes'
+p794
+aS'cooperation'
+p795
+aS'congestion-related losses'
+p796
+aS'first independent study'
+p797
+aS'progress'
+p798
+aS'popular example'
+p799
+aS'approach'
+p800
+aS'diverse information'
+p801
+aS'arrival'
+p802
+aS'prediction accuracy'
+p803
+aS'second representation uses'
+p804
+aS'comparison study'
+p805
+aS'resource intensive work'
+p806
+aS'visualization'
+p807
+aS'unknown portion'
+p808
+aS'metropolis-type mcmc algorithm'
+p809
+aS'attention'
+p810
+aS'focus'
+p811
+aS'flow'
+p812
+aS'scalability'
+p813
+aS'global semantic spaces'
+p814
+aS'computational requirements'
+p815
+aS'hypothesis'
+p816
+aS'domain content'
+p817
+aS'web browsers tends'
+p818
+aS'interface'
+p819
+aS'chromagram'
+p820
+aS'application stores'
+p821
+aS'mean total particle concentration'
+p822
+aS'search intents'
+p823
+aS'document features'
+p824
+aS'recent proposal'
+p825
+aVstandard manner
+p826
+aS'automatic direct method'
+p827
+aS'prospects'
+p828
+aS'transfer time'
+p829
+aS'imperfect channel-state information'
+p830
+aS'individual ec digits'
+p831
+aS'query suggestions'
+p832
+aS'maximum satisfiability'
+p833
+aS'user-consent permission systems'
+p834
+aS'hence'
+p835
+aS'observing regional processes'
+p836
+aS'specificities'
+p837
+aS'standard benchmark dataset'
+p838
+aS'etc'
+p839
+aS'pairwise similarity measurement'
+p840
+aS'tcp traffic'
+p841
+aS'context'
+p842
+aS'dwellers'
+p843
+aS'new topics'
+p844
+aS'contribution'
+p845
+aS'expression'
+p846
+aS'unwanted variability'
+p847
+aS'sake'
+p848
+aS'millions'
+p849
+aS'gps'
+p850
+aS'thecompile-replace command'
+p851
+aS'near future'
+p852
+aVgroups
+p853
+aS'patches'
+p854
+aS'evaluation link structure'
+p855
+aS'acceptable quality level'
+p856
+aS'remote server'
+p857
+aS'home automation'
+p858
+aS'algorithm modifies'
+p859
+aS'gesture selection'
+p860
+aS'classical music variations'
+p861
+aS'regularexpressions'
+p862
+aS'karpinski'
+p863
+aS'simple image reuse situations'
+p864
+aS'learning'
+p865
+aS'sequences'
+p866
+aS'respect'
+p867
+aS'natural images'
+p868
+aS'diameter range'
+p869
+aS'different sensors'
+p870
+aS'first mobile phones'
+p871
+aS'kernels'
+p872
+aS'article presents'
+p873
+aS'main purposes'
+p874
+aS'accelerometer'
+p875
+aS'basis'
+p876
+aS'addition'
+p877
+aS'trajectory'
+p878
+aS'correct function'
+p879
+aVomission addition detection
+p880
+aS'midi files'
+p881
+aS'relying'
+p882
+aS'extraction'
+p883
+aS'interactive intent'
+p884
+aS'treat'
+p885
+aS'casting btw-bnsl'
+p886
+aS'karttunen'
+p887
+aS'indicators'
+p888
+aS'collections'
+p889
+aS'connection'
+p890
+aS'prototype'
+p891
+aS'local device'
+p892
+aS'oti'
+p893
+aS'compromises'
+p894
+aS'mobile device users'
+p895
+aVenzyme function prediction problem
+p896
+aS'handoff'
+p897
+aS'channel output'
+p898
+aS'reaction'
+p899
+aS'independent gaussian random variables'
+p900
+aS'recent studies'
+p901
+aS'btw-bnsl'
+p902
+aS'precision'
+p903
+aS'task execution time'
+p904
+aS'spectral ordering output'
+p905
+aS'related studies'
+p906
+aS'pervasive social computing'
+p907
+aS'document frequency'
+p908
+aS'media creation applications cater'
+p909
+aS'be23'
+p910
+aS'mobile smart devices'
+p911
+aS'item sequences'
+p912
+aS'present'
+p913
+aS'case'
+p914
+aS'homes'
+p915
+aS'integrated computing environment'
+p916
+aS'replaces'
+p917
+aS'pareto optimal configuration'
+p918
+aS'formalization'
+p919
+aS'independent component analysis'
+p920
+aS'kolmogorov complexity inlyrics'
+p921
+aS'scale-based constraints'
+p922
+aVchoices
+p923
+aVab
+p924
+aS'rough estimate'
+p925
+aS'optimization'
+p926
+aS'discarding features'
+p927
+aS'cross-layer notifications'
+p928
+aS'items'
+p929
+aS'recommendation approaches'
+p930
+aS'situation'
+p931
+aS'bluetooth devices'
+p932
+aS'combining different discretized features'
+p933
+aS'study'
+p934
+aS'procedure'
+p935
+aS'maxsat'
+p936
+aS'layer'
+p937
+aS'salient semantic relations'
+p938
+aS'portugal'
+p939
+aS'memoryless'
+p940
+aS'characteristics'
+p941
+aS'new content'
+p942
+aS'good motivations'
+p943
+aS'site'
+p944
+aS'individual documents'
+p945
+aS'relevance feedback'
+p946
+aS'daily life'
+p947
+aS'maintenance job scenario'
+p948
+aS'experts'
+p949
+aS'sensor data'
+p950
+aS'new access links'
+p951
+aS'mixing properties'
+p952
+aS'protein'
+p953
+aS'various parameter settings'
+p954
+aS'interactive information retrieval system'
+p955
+aS'latent dirichlet allocation'
+p956
+aS'continuous sensing'
+p957
+aS'par'
+p958
+aVabsences
+p959
+aS'baseline'
+p960
+aS'several genres'
+p961
+aS'considerable savings'
+p962
+aS'media'
+p963
+aS'binary chromagrams'
+p964
+aS'locking'
+p965
+aS'cross'
+p966
+aS'orders'
+p967
+aS'rules'
+p968
+aS'image structures'
+p969
+aS'lyricists'
+p970
+aS'scale-induced hierarchies'
+p971
+aS'information extraction models'
+p972
+aS'electric bulbs'
+p973
+aS'solution'
+p974
+aS'composition'
+p975
+aS'interpolation'
+p976
+aS'appropriate interaction techniques'
+p977
+aS'virtual environments'
+p978
+aS'literature'
+p979
+aS'infinity'
+p980
+aS'decentralized control strategy'
+p981
+aS'state-of-the-art approaches'
+p982
+aS'trajectories'
+p983
+aS'search space'
+p984
+aS'automation'
+p985
+aS'modular agent architecture'
+p986
+aS'user'
+p987
+aS'ownership'
+p988
+aS'exact inference'
+p989
+aS'jitter'
+p990
+aS'opportunity'
+p991
+aS'high cost'
+p992
+aS'real-time home automation'
+p993
+aS'rbm learning algorithms'
+p994
+aS'task'
+p995
+aS'mutual information'
+p996
+aS'center'
+p997
+aS'different information sources'
+p998
+aS'seriation'
+p999
+aS'studies'
+p1000
+aS'replacement term'
+p1001
+aS'original query'
+p1002
+aS'radial layout'
+p1003
+aS'recent exact dynamic programming algorithm'
+p1004
+aS'analysis'
+p1005
+aS'tcp connection'
+p1006
+aS'latter case'
+p1007
+aS'interface controls'
+p1008
+aS'components'
+p1009
+aS'entry'
+p1010
+aS'model'
+p1011
+aS'consumer experience'
+p1012
+aS'sensing'
+p1013
+aS'replacement method'
+p1014
+aS'researchers'
+p1015
+aS'significant difference'
+p1016
+aS'opinions'
+p1017
+aS'relevant intents'
+p1018
+aS'gene ontology'
+p1019
+aS'exploits'
+p1020
+aS'several studies'
+p1021
+aS'fast access link'
+p1022
+aS'gaussian multiple-access channel'
+p1023
+aS'energy-efficient position'
+p1024
+aS'amount'
+p1025
+aS'compact text descriptors'
+p1026
+aS'mfs'
+p1027
+aS'key component'
+p1028
+aS'formulating'
+p1029
+aS'sequential descriptors'
+p1030
+aS'transportation'
+p1031
+aS'hardware equipments'
+p1032
+aS'web'
+p1033
+aS'various domains'
+p1034
+aS'inbuilt sensors'
+p1035
+aS'classification'
+p1036
+aS'density'
+p1037
+aS'web traffic causes'
+p1038
+aS'usenet newsgroup messages'
+p1039
+aS'online multimedia'
+p1040
+aS'standardization'
+p1041
+aS'morphophonological alternation rules'
+p1042
+aS'improvement'
+p1043
+aS'signals'
+p1044
+aS'affinity'
+p1045
+aS'integral expression'
+p1046
+aS'hypertext display'
+p1047
+aVinput
+p1048
+aS'real high-speed cellular network'
+p1049
+aS'baselines'
+p1050
+aS'probabilistic baseline predictor'
+p1051
+aS'march'
+p1052
+aS'physical position'
+p1053
+aS'indoor location based services'
+p1054
+aS'post-genomic bioinformatics'
+p1055
+aS'navigation strategies'
+p1056
+aS'surrounding environment'
+p1057
+aS'interaction awareness'
+p1058
+aS'efficient manner'
+p1059
+aS'smarteye'
+p1060
+aS'different formulation strategies'
+p1061
+aS'reinforcement learning'
+p1062
+aS'different modes'
+p1063
+aS'finding'
+p1064
+aS'increases'
+p1065
+aS'normal processing environment'
+p1066
+aS'moods'
+p1067
+aS'annotation boundaries'
+p1068
+aS'deployment'
+p1069
+aS'using'
+p1070
+aVvariants
+p1071
+aS'cd'
+p1072
+aS'social networking'
+p1073
+aS'available capacity'
+p1074
+aS'advanced'
+p1075
+aS'digit ec code'
+p1076
+aS'traditional interactions'
+p1077
+aS'efficient calculation'
+p1078
+aS'training phase'
+p1079
+aS'data compression'
+p1080
+aS'similarity measure'
+p1081
+aS'large scale'
+p1082
+aS'facets'
+p1083
+aS'local resources'
+p1084
+aS'public transportation services'
+p1085
+aS'server'
+p1086
+aS'novel score-based approach'
+p1087
+aS'boolean optimization paradigm'
+p1088
+aS'superiority'
+p1089
+aS'many environments'
+p1090
+aVoutput
+p1091
+aS'good estimate'
+p1092
+aS'accuracy'
+p1093
+aS'terminology'
+p1094
+aS'real-life applicability'
+p1095
+aS'pm2'
+p1096
+aS'community awareness'
+p1097
+aS'methods'
+p1098
+aS'sequence'
+p1099
+aVsystem memory
+p1100
+aS'method relies'
+p1101
+aS'statistical techniques'
+p1102
+aS'end-to-end path characteristics'
+p1103
+aS'equipments'
+p1104
+aVsmall amount
+p1105
+aS'mixed-method task-based information'
+p1106
+aS'platforms'
+p1107
+aVprobabilistic multiple cause model
+p1108
+aS'bayesian network structure'
+p1109
+aS'mac withimperfect csi'
+p1110
+aS'application domains'
+p1111
+aS'discrete data'
+p1112
+aVpresences
+p1113
+aS'images'
+p1114
+aS'device operating system'
+p1115
+aS'interp_exit'
+p1116
+aVpotential pitfalls
+p1117
+aS'domestic tasks'
+p1118
+aS'objective function'
+p1119
+aS'recognition'
+p1120
+aVenzymatic reaction
+p1121
+aS'novel on-device sensor management strategy'
+p1122
+aS'simple en-route caching'
+p1123
+aS'spectral ordering'
+p1124
+aS'programmable nature'
+p1125
+aS'compile-replace algorithm'
+p1126
+aS'combining gtg'
+p1127
+aS'tasks'
+p1128
+aS'gaussian process-based approach'
+p1129
+aS'missing terms'
+p1130
+aS'similar intents'
+p1131
+aS'rimoldiand urbanke'
+p1132
+aS'mobile application platforms'
+p1133
+aS'subliminal cues'
+p1134
+aS'large sets'
+p1135
+aS'machine'
+p1136
+aS'significant improvements'
+p1137
+aS'hand'
+p1138
+aS'new informationseeking practices'
+p1139
+aS'assuming'
+p1140
+aS'large scale data collection'
+p1141
+aS'form word sequences'
+p1142
+aS'traditional query-based baseline'
+p1143
+aS'simulation results'
+p1144
+aS'tcp sender algorithm'
+p1145
+aS'public domain'
+p1146
+aS'considering'
+p1147
+aS'compression distance'
+p1148
+aS'mean pm'
+p1149
+aS'wifi access points'
+p1150
+aS'social media'
+p1151
+aS'bus ridership'
+p1152
+aS'predicting'
+p1153
+aS'trees'
+p1154
+aS'expansion'
+p1155
+aS'boundaries'
+p1156
+aS'long-lived tcp connections'
+p1157
+aS'novel contribution'
+p1158
+aS'substitution'
+p1159
+aS'mammal co-occurrences'
+p1160
+aS'eye'
+p1161
+aS'human expert'
+p1162
+aS'human-machine interface uses'
+p1163
+aS'intelligent sensor management'
+p1164
+aS'personalized interestingness algorithm'
+p1165
+aS'aerosols'
+p1166
+aS'user preferences'
+p1167
+aS'available network capacity'
+p1168
+aS'obc'
+p1169
+aS'quantized sequences'
+p1170
+aS'original authors'
+p1171
+aS'user model'
+p1172
+aS'machine-learning techniques'
+p1173
+aS'innerbound'
+p1174
+aS'fashion'
+p1175
+aS'feature selection'
+p1176
+aS'granting permissions'
+p1177
+aS'delay'
+p1178
+aS'world wide web'
+p1179
+aS'data transmission'
+p1180
+aS'optimal transposition index'
+p1181
+aS'enhancement'
+p1182
+aS'first representation'
+p1183
+aS'document collection'
+p1184
+aS'unified theory'
+p1185
+aS'air ions'
+p1186
+aS'heterogeneous access networks'
+p1187
+aS'depart'
+p1188
+aS'inclusion'
+p1189
+aS'creative work flow'
+p1190
+aS'spectral ordering ignores'
+p1191
+aS'stopped_push dictionary stack'
+p1192
+aS'bound'
+p1193
+aS'remote homology case'
+p1194
+aS'services'
+p1195
+aS'output prediction model'
+p1196
+aS'bus usage'
+p1197
+aS'mobile phone'
+p1198
+aVnoise removal
+p1199
+aS'weassign powers'
+p1200
+aS'selects'
+p1201
+aS'reducing'
+p1202
+aS'recent emergence'
+p1203
+aS'distributing'
+p1204
+aS'statistics'
+p1205
+aS'dmps'
+p1206
+aS'binary data'
+p1207
+aS'comparing'
+p1208
+aS'support'
+p1209
+aS'fine-grained representation'
+p1210
+aS'apps'
+p1211
+aS'fast'
+p1212
+aS'predicting enzyme ec classification'
+p1213
+aS'pool'
+p1214
+aS'new function'
+p1215
+aS'output learning approaches'
+p1216
+aS'web-like traffic'
+p1217
+aS'symbolic pieces'
+p1218
+aS'social signal processing'
+p1219
+aS'psychophysiological recordings'
+p1220
+aS'one-way delay'
+p1221
+aS'synthesis'
+p1222
+aS'function'
+p1223
+aS'music information retrieval'
+p1224
+aS'possible accuracy'
+p1225
+aS'form'
+p1226
+aS'semantic similarity'
+p1227
+aS'meta-morphotactic descriptions'
+p1228
+aS'emergent narrative'
+p1229
+aS'approach scales'
+p1230
+aS'audio data'
+p1231
+aVeax
+p1232
+aS'illuminates'
+p1233
+aS'individual tcp flow'
+p1234
+aS'bootstrap'
+p1235
+aS'unfamiliar topics'
+p1236
+aS'previous independent estimate'
+p1237
+aS'paleontological domain'
+p1238
+aS'information retrieval'
+p1239
+aS'vertical handoff'
+p1240
+aS'sent'
+p1241
+aS'algorithm employs cross-layer notifications'
+p1242
+aS'datasets'
+p1243
+aS'applying'
+p1244
+aS'random checks'
+p1245
+aS'access link characteristics'
+p1246
+aS'google scholar'
+p1247
+aS'devices'
+p1248
+aS'new particle formation'
+p1249
+aS'binary data models'
+p1250
+aS'android apps'
+p1251
+aS'synthetic reality platform'
+p1252
+aS'today'
+p1253
+aS'new domains'
+p1254
+aVtrue absences
+p1255
+aS'unified framework'
+p1256
+aS'gaussian noise'
+p1257
+aS'problem'
+p1258
+aS'interactive user'
+p1259
+aS'supremum'
+p1260
+aS'obtains'
+p1261
+aS'execution environment'
+p1262
+aS'intents'
+p1263
+aS'future work'
+p1264
+aS'semantic space models'
+p1265
+aS'ec hierarchy'
+p1266
+aS'abstract'
+p1267
+aS'novel'
+p1268
+aS'current context'
+p1269
+aS'evidence'
+p1270
+aS'various evaluations'
+p1271
+aS'exploration'
+p1272
+aS'communicate using ontology programming techniques'
+p1273
+aS'families'
+p1274
+aS'various subliminal cues'
+p1275
+aS'dragging'
+p1276
+aS'oparray_pop'
+p1277
+aS'example design'
+p1278
+aS'initial window'
+p1279
+aS'android devices'
+p1280
+aS'functions'
+p1281
+aS'nm'
+p1282
+aS'multilingual context'
+p1283
+aS'variety'
+p1284
+aS'tier cyber'
+p1285
+aVway
+p1286
+aS'finding optimal clusterings wrt'
+p1287
+aS'measurement tasks'
+p1288
+aS'application'
+p1289
+aS'possible directions'
+p1290
+aS'setting'
+p1291
+aS'functionality'
+p1292
+aS'jitter problem'
+p1293
+aS'virtual channel'
+p1294
+aS'correlation'
+p1295
+aS'example application'
+p1296
+aVrigid gaps
+p1297
+aS'privacy risks'
+p1298
+aS'lowerbound'
+p1299
+aS'users'
+p1300
+aS'calculating'
+p1301
+aS'tonal centroid representation values'
+p1302
+aVmodels
+p1303
+aS'initial results'
+p1304
+aS'lexicographer'
+p1305
+aS'search engine'
+p1306
+aS'nearby surrogate computers'
+p1307
+aS'scinet'
+p1308
+aS'information-centric networking'
+p1309
+aS'battery consumption'
+p1310
+aS'dsack information'
+p1311
+aS'allowing'
+p1312
+aS'ratesplitting approach'
+p1313
+aS'single parameter'
+p1314
+aS'meanwhile long-lived tcp connections'
+p1315
+aS'access link bandwidth'
+p1316
+aS'challenging set'
+p1317
+aS'secure processing environment'
+p1318
+aS'novel semi-supervised spectral ordering algorithm'
+p1319
+aS'descriptive phrases'
+p1320
+aS'big hindrance'
+p1321
+aS'algorithm'
+p1322
+aS'reliable indicators'
+p1323
+aS'home'
+p1324
+aS'partial supervision'
+p1325
+aS'space'
+p1326
+aS'packets'
+p1327
+aS'others'
+p1328
+aS'strings'
+p1329
+aS'strong independence assumption inherent'
+p1330
+aVfine-grained fashion
+p1331
+aS'intent radar'
+p1332
+aS'current allocation mode'
+p1333
+aS'students'
+p1334
+aS'time'
+p1335
+aS'age-based ordering'
+p1336
+aS'free applications'
+p1337
+aS'information space'
+p1338
+aS'hope'
+p1339
+atp1340
+Rp1341
+.
