@@ -21,6 +21,7 @@ import functools
 import numpy
 import string
 import random
+import pprint
 
 from base_handler import *
 from charts_handlers import *
@@ -37,11 +38,11 @@ class AnalyzerHandler(BaseHandler):
 
 class FormHandler(BaseHandler):
     def get(self):
-        user=self.get_current_user()
+        user = self.get_current_user()
         if None == user:
             self.redirect("/login")         
         messages = self.application.syncdb.messages.find()
-        self.render("form.html", messages=messages, notification=self.get_flash(),user=self.get_current_user())
+        self.render("form.html", messages=messages, notification=self.get_flash(), user=self.get_current_user())
 
     def post(self):
         description = self.get_argument('description', '')
@@ -80,22 +81,25 @@ class LoginHandler(BaseHandler):
         self.render("login.html", notification=self.get_flash())
 
     def post(self):
-        user = self.get_argument("username", "")
+        username = self.get_argument("username", "")
         password = self.get_argument("password", "").encode("utf-8")
-        user = self.application.syncdb['users'].find_one({'user': user})
+        user = self.application.syncdb['users'].find_one({'user': username})
         # Warning bcrypt will block IO loop:
-        if user and user['password'] and bcrypt.hashpw(password, user['password'].encode("utf-8")) == user['password']:
-            self.set_current_user(user)
+        if not user:
+            print "User not found"
+        if user['password'] and bcrypt.hashpw(password, user['password'].encode("utf-8")) == user['password']:
+            self.set_current_user(username)
             self.redirect("/index")
         else:
             self.set_secure_cookie('flash', "Login incorrect")
-            self.redirect(u"/login")
+            error_msg = u"?error=" + tornado.escape.url_escape("Login incorrect")
+            self.redirect(u"/login" + error_msg)
+            print error_msg
 
-
-    def set_current_user(self, user):
-        print "setting " + user
-        if user:
-            self.set_secure_cookie("user", tornado.escape.json_encode(user))
+    def set_current_user(self, username):
+        print "setting " + username
+        if username:
+            self.set_secure_cookie("user", tornado.escape.json_encode(username))
         else:
             self.clear_cookie("user")
 
@@ -133,7 +137,8 @@ class NoneBlockingLogin(BaseHandler):
 
     def _password_fail_callback(self):
         self.set_flash('Error Login incorrect')
-        self.redirect('/login')
+        error_msg = u"?error=" + tornado.escape.url_escape("Password fail")
+        self.redirect(u"/login" + error_msg)
 
 
 class RegisterHandler(LoginHandler):
@@ -168,11 +173,13 @@ class RegisterHandler(LoginHandler):
         user = {}
         user['name'] = name
         user['email'] = email
-        user['user'] = username
+        user['username'] = username
         user['password'] = hashed_passwd
 
         auth = self.application.syncdb['users'].save(user)
         self.set_current_user(username)
+
+        # Add two-step verification?
 
         self.redirect(u"/index")
 
@@ -518,14 +525,14 @@ class S3PhotoUploadHandler(BaseHandler):
         AWS_ACCESS_KEY_ID = ''
         AWS_SECRET_ACCESS_KEY = ''
 
-        #credentials can be stored in environment AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+        # credentials can be stored in environment AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
         conn = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
 
-        #Connect to bucket and create key
+        # Connect to bucket and create key
         b = conn.get_bucket('photos')
         k = b.new_key('example5.png')
 
-        #Note we're setting contents from the in-memory string provided by cStringIO
+        # Note we're setting contents from the in-memory string provided by cStringIO
         k.set_contents_from_string(image2.getvalue(), headers={"Content-Type": "image/png"})
         tornado.ioloop.IOLoop.instance().add_callback(functools.partial(self.image_uploaded))
 
@@ -540,17 +547,24 @@ class UploadHandler(BaseHandler):
 
 
 class PdfUploader(BaseHandler):
-    """ Ideally image resizing should be done with a queue and a seperate python process """
     @tornado.web.asynchronous
     def post(self):
-        file1 = self.request.files['file'][0]
-        original_fname = file1['filename']
-        extension = os.path.splitext(original_fname)[1]
-        fname = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
-        final_filename= fname+extension
-        output_file = open("uploads/" + final_filename, 'w')
-        output_file.write(file1['body'])
-        self.finish("file" + final_filename + " is uploaded")
+        print "POST files:"
+        print [f['filename'] for f in self.request.files['file']]
+        print "POST arguments:"
+        print self.request.arguments
+
+        msg = "Following files were uploaded:<br>"
+        for f in self.request.files['file']:
+            original_f_name = f['filename']
+            extension = os.path.splitext(original_f_name)[1]
+            f_name = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
+            final_filename = f_name + extension
+            output_file = open("uploads/" + final_filename, 'w')
+            output_file.write(f['body'])
+            msg = msg + original_f_name + "<br>"
+
+        self.finish(msg)
 
 
 

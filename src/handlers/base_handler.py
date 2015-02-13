@@ -9,6 +9,7 @@ from tornado.httpclient import AsyncHTTPClient
 
 import json
 
+
 class BaseHandler(RequestHandler):
     def get_login_url(self):
         return u"/login"
@@ -19,12 +20,14 @@ class BaseHandler(RequestHandler):
             return tornado.escape.json_decode(user_json)
         else:
             return None
+
     def json_ok(self, data):
         info = {}
         info.update(data)
         j_ = json.dumps(info)
         self.set_header("Content-Type", "application/json")
         self.finish("%s\n" % j_)
+
     # Allows us to get the previous URL
     def get_referring_url(self):
         try:

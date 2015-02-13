@@ -38,8 +38,8 @@ class Application(tornado.web.Application):
         url(r'/file_upload', UploadHandler, name="file_upload"),
         url(r'/paper_upload', PdfUploader, name="paper_upload"),
         
-        url(r'/form', FormHandler, name = 'form'),
-        url(r'/next', NextHandler, name = 'next'),
+        url(r'/form', FormHandler, name='form'),
+        url(r'/next', NextHandler, name='next'),
         url(r'/remove_person', RemovePersonHandler, name='remove_person'),
         url(r'/index', IndexHandler, name='index'),
         url(r'/search', SearchHandler, name='search'),
@@ -105,7 +105,7 @@ class Application(tornado.web.Application):
             # this file stores information of all abstracts
             self.abstracts_filename = "../docs/abstracts/abstracts.xml"
             
-            # this file stores informaiton of all keywords as a set
+            # this file stores information of all keywords as a set
             self.keywords_filename = "../docs/keywords/abstract_%s.txt"%self._num_of_corpuses
             
             # this file stores keywords list of each abstract
@@ -137,7 +137,7 @@ class Application(tornado.web.Application):
             self.persons_info = []
             
             person_id = 0
-            for title,  original_corpuse,  decomposed_corpus, name in zip(self.titles,  self.original_corpuses, self.corpuses, self.auther_names):
+            for title,  original_corpus,  decomposed_corpus, name in zip(self.titles,  self.original_corpuses, self.corpuses, self.auther_names):
                 if name not in self.corpuses_name_id.keys():
                     self.corpuses_name_id[name] = {}
                     self.corpuses_name_id[name]["id"] = person_id
@@ -158,7 +158,7 @@ class Application(tornado.web.Application):
                     self.corpuses_name_id[name]["profile_picture"] = "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg"
 
 
-                self.corpuses_name_id[name]["articles"].append({"author_profile_picture":"http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg", "id": 1, "title":"%s"%title ,   "abstract":"%s"%original_corpuse, "url":"http://images4.fanpop.com/image/photos/14700000/Beautifull-cat-cats-14749885-1600-1200.jpg"})
+                self.corpuses_name_id[name]["articles"].append({"author_profile_picture":"http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg", "id": 1, "title":"%s"%title ,   "abstract":"%s"%original_corpus, "url":"http://images4.fanpop.com/image/photos/14700000/Beautifull-cat-cats-14749885-1600-1200.jpg"})
                 
                 # append keywords in list corpuses_name_id[name]["keywords"]
                 for keyword in decomposed_corpus.split(','):
