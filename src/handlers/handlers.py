@@ -564,7 +564,7 @@ class PdfUploader(BaseHandler):
             output_file.write(f['body'])
             msg = msg + original_f_name + "<br>"
 
-        self.finish(msg)
+        #self.finish(msg)
 
 
 

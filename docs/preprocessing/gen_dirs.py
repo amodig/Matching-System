@@ -1,7 +1,7 @@
 """
 This file generates the dirs of the each person.
 It reads the information form the database and then 
-generate information according to the names of authers
+generate information according to the names of authors
 
 @auther yuangao
 @project matching system
@@ -37,6 +37,5 @@ iter = mysqldb.fetch()
 for row in iter:
     first_name = row[1].lstrip().decode('latin1')
     last_name = row[2].lstrip().decode('latin1')
-    mkdir(docs_path +first_name+ "_"+last_name)
+    mkdir(docs_path + first_name + "_" + last_name)
     paper_sql = ""
-    

@@ -10,19 +10,19 @@ class MysqlMessager():
     Class :  MysqlMessager
     Description:  Mysql Messager deals communication with mysql server.
     """    
-    #def __init__(self,table = None,  user="keyword_app", psword="ohTun1ah", database = "matching_system"):
-    def __init__(self,table = None,  user="root", psword="root", database = "matching_system"):
+    #def __init__(self,table = None,  user="keyword_app", password="ohTun1ah", database = "matching_system"):
+    def __init__(self, table=None, user="root", password="root", database="matching_system"):
         """ Initialize database connection, open logfile
         @param self Pointer to class
         @param user User name
-        @param psword User password
+        @param password User password
         @param database Name of database
         """
 
         self.table = table
         self.mysql_log_file = codecs.open("mysql_log_file.txt", "w","utf-8")
         try:
-            self.cnx = MySQLdb.connect('localhost', user, psword, database)
+            self.cnx = MySQLdb.connect('localhost', user, password, database)
             self.cursor = self.cnx.cursor()  
         except Exception, e:
             print "Error: %s" % (e.args[0])

@@ -34,9 +34,9 @@ class MysqlMessager():
         table = kwargs.get('table', self.table)
         if table is not None:
             sql = u"TRUNCATE TABLE %s;"%table
-            self.excute_sql(sql, self.mysql_log_file)
+            self.execute_sql(sql, self.mysql_log_file)
 
-    def excute_sql(self, sql,  log_file = None):
+    def execute_sql(self, sql,  log_file = None):
         """ Excute sql, if it is failed and log file name is given, store the information in log file
         @param self Pointer to class
         @param log_file_name Name of log file used to store error information

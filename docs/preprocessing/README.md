@@ -1,4 +1,4 @@
-This file introduces functionalities of each file in this folder.
+This file introduces functions of each file in this folder.
 
 #### corpus_extractor.py
 
@@ -18,5 +18,5 @@ Files in this folder deals with "Given abstracts stored in database(keyword_app)
 
 #### gen_dirs.py
 
-This file generate all folders under folder papers according to auther's names.
+This file generate all folders under folder papers according to author's names.
 

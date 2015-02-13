@@ -24,9 +24,9 @@ from sklearn.preprocessing import normalize
 class Analyzer():
     def __init__(self, all_keywords, all_corpus):
         """
-        This constructer initialize the connection with mysqldatabase
+        This constructor initializes the connection with mysql database
         """
-        set_printoptions(threshold= nan)
+        set_printoptions(threshold=nan)
         self._mm = MysqlMessager()
 
         self._all_keywords = all_keywords
@@ -45,14 +45,15 @@ class Analyzer():
         
     def articlewise_wordcounts(self):
         """
-        return: articleswise word counts
+        return: article-wise word counts
         """
-        return sum_matrix(self._X, axis = 0)
+        return sum_matrix(self._X, axis=0)
+
     def feature_matrix(self):
         return self._X
     def _linrel_sub(self, xi, w, y):
         """
-        This function calculate the relevence score for each of the images.'
+        This function calculate the relevance score for each of the images.'
         @param self: Pointer to class
         @param cii: current image
         """
@@ -64,7 +65,7 @@ class Analyzer():
         
     def linrel(self, cX, cy):
         """
-        implementing linrel algorithm, the formulars are described in 
+        implementing linrel algorithm, the formulas are described in
         paper -> "Pinview: implicit Feedback in content-based image retrieval"
         """
         assert(type(cX) == matrixlib.defmatrix.matrix)
@@ -86,10 +87,10 @@ class Analyzer():
 
         def tf_2_augmented_frequency(tfm):
             """
-            This function transforms the term frequency matrix to augmented grequency matrix
+            This function transforms the term frequency matrix to augmented frequency matrix
             defined as in http://stackoverflow.com/questions/24731626/is-there-any-function-in-sklearn-that-implements-augmented-frequency?noredirect=1#comment38364544_24731626
             """
-            return where(max(tfm, axis=0)==0, tfm, 0.5 + (0.5 * tfm * 1./max(tfm,axis=0)))
+            return where(max(tfm, axis=0) == 0, tfm, 0.5 + (0.5 * tfm * 1./max(tfm,axis=0)))
             
         vectorizer = CountVectorizer(vocabulary= keywords, tokenizer = tokenizer)  
 
@@ -99,12 +100,12 @@ class Analyzer():
         # get augmented frequency matrix
         afm = tf_2_augmented_frequency(tfm)
         
-        #tfidft : term frequency inverse document frequency transformer
+        # tfidft : term frequency inverse document frequency transformer
         tfidft = TfidfTransformer(smooth_idf = True, norm = "l2")
-        #tfidfm : term frequency inverse document frequency matrix        
+        # tfidfm : term frequency inverse document frequency matrix
         tfidfm = matrix(tfidft.fit_transform(afm).toarray(), dtype=float64)
         target_matrix = tfidfm
-        #print target_matrix.T
+        # print target_matrix.T
         return target_matrix.T
         
     def calculate_y(self, weights, current_X_row_num):

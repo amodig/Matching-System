@@ -57,7 +57,7 @@ if __name__ == "__main__":
                        passwd="kid1412",  # your password
                        db="keyword_app")  # name of the data base
     clean_database_sql = "truncate table PreprocessedAbstracts;"
-    execute_sql(clean_database_sql,database)
+    execute_sql(clean_database_sql, database)
     file_path = "../../keywords/corpus_abstract_109.txt"
     with read_pickle_file(file_path) as content:
         print len(content)

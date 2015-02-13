@@ -3,7 +3,7 @@ import json
 import MySQLdb
 
 def excute_sql(sql, cursor, database):
-    """ Excute sql, if it is failed and log file name is given, store the information in log file
+    """ Execute sql, if it is failed and log file name is given, store the information in log file
     @param self Pointer to class
     @param log_file_name Name of log file used to store error information
     """

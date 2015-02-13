@@ -1,6 +1,6 @@
 from mysql_messager import MysqlMessager
 from sys import stderr
-from bs4 import BeautifulSoup as bs
+from bs4 import BeautifulSoup as BSoup
 from urllib2 import Request
 from urllib2 import urlopen
 
@@ -28,16 +28,16 @@ class WebsiteExtractor():
     """
     Class: WebsiteExtractor
     Description: This class deals with extracting abstract from different website.
-    It reads all informatio of whole webpage and then process the website to find the area of 
+    It reads all information of whole web pages and then process the website to find the area of
     abstract.
     """
-    def website_extractor(self,web_site,link):
+    def website_extractor(self, web_site, link):
         """
-        This funcition is responsible for dealing with extracting abstract from different website
+        This function is responsible for dealing with extracting abstract from different website
         """
         return self._select_website_type(web_site,link)
 
-    def _select_website_type(self,web_site,link):
+    def _select_website_type(self, web_site, link):
         return {
             'dl.acm.org': self._dl_acm_dealer,
             'www.researchgate.net': self._reserchgate_dealer,
@@ -48,8 +48,8 @@ class WebsiteExtractor():
             'arxiv.org': self._arxiv_dealer,
             'library.wur.nl': self._library_wur_dealer,
             'eprints.pascal-network.org': self._eprints_pascal_networking_dealer,
-            'papers.ssrn.com':self._paper_ssrn_dealer,
-            'www.biomedcentral.com':self._biomedcentral_dealer,
+            'papers.ssrn.com': self._paper_ssrn_dealer,
+            'www.biomedcentral.com': self._biomedcentral_dealer,
             'www.igi-global.com': self._igi_global_dealer,
             'www.sciencedirect.com/': self._science_direct_dealer,
             "epubs.siam.org": self._epubs_sism_dealer,
@@ -62,20 +62,20 @@ class WebsiteExtractor():
         }[web_site](link)
 
     def _downloader(self, url, out_folder="doc/"):
-        """ Download the webpage and store it python daabstractta sttructure
+        """Download the web page and store it python abstract structure
+
         @param self Pointer to class
         @param url URL to be downloaded
         @param out_folder Folder that stores information
-        """""
+        """
         with closing(Firefox()) as browser:
             browser.get(url)
             page_source = browser.page_source
-        soup = bs(page_source)
+        soup = BSoup(page_source)
         return soup
 
     def _science_direct_dealer(self, link):
-        """
-        This functions extracts abstract information from science direct web site.
+        """This functions extracts abstract information from science direct web site.
         The position of the abstract is identified by following:
 
         soup.find("h2", text="Abstract").find_next_sibling("p")
@@ -88,8 +88,7 @@ class WebsiteExtractor():
         return abstract_section.text
 
     def _pnas_dealer(self, link):
-        """
-        This function extracts abstract information from web site pnas
+        """This function extracts abstract information from web site pnas
         The position of the abstract is identified by following:
         :param link:
         :return: abstract in the format of string
@@ -393,11 +392,11 @@ class TestWebsiteExtractorFunctions(unittest.TestCase):
 class AbstractExtractor():
     """
     Class :  AbstractExtractor
-    Description:  This class dealls with extracting abstract from different website. 
+    Description:  This class deals with extracting abstract from different website.
     It read the links from database and process fetch iterator(curcor of data). After
-    it extracts the data, it will store the inforamtion in table "PaperAbstract".
-    """    
-    def __init__(self, mm = None):
+    it extracts the data, it will store the information in table "PaperAbstract".
+    """
+    def __init__(self, mm=None):
         self._db_name = "PaperAbstract"
         self._mm = None
         if mm is not None:
@@ -405,24 +404,25 @@ class AbstractExtractor():
         # Name of table which stores abstract of paper.
         self._info_db_name = "Paper_Links"
         self._website_extractor = WebsiteExtractor()
-    
+
     @property
     def db_name(self):
         return self._db_name
+
     @property
     def db_info_name(self):
         return self._info_db_name
 
-    def download_data(self, database_name = None):
+    def download_data(self, database_name=None):
         """
-        This funcition is in charge of receiving data from a specific database.
+        This function is in charge of receiving data from a specific database.
         """
         if None == database_name:
             database_name = self._info_db_name
         sql = "select PaperLinks.Link_ID,PaperLinks.Paper_ID, Persons.FirstName,Persons.LastName," \
               " PaperLinks.PaperLink, PaperNames.PaperName from PaperLinks, PaperNames,Persons" \
               " where PaperNames.Paper_ID = PaperLinks.Paper_ID and PaperNames.P_ID = Persons.ID;"
-        self._mm.excute_sql(sql)
+        self._mm.execute_sql(sql)
 
         # iterator over returned values
         iter = self._mm.fetch()
@@ -439,7 +439,7 @@ class AbstractExtractor():
                 abstract_file_obj.write("<name>" )
                 # write first name 
                 abstract_file_obj.write(row[2])
-                #write last name
+                # write last name
                 abstract_file_obj.write(row[3])
                 abstract_file_obj.write("<title>" + "\n")
                 abstract_file_obj.write(row[4])
@@ -451,31 +451,30 @@ class AbstractExtractor():
                 abstract_file_obj.write("</Article>")
                 abstract_file_obj.write("\n")
             #sleep(randint(10, 20))
-                
+
         abstract_file_obj.write("</articles>")
         abstract_file_obj.close()
         return iter
 
-    def _analyze_website(self, row):
+    def pdf_abstract_extractor(self, pdf):
+        def __pdf_to_txt(pdf_path):
+            null_f = open(devnull, "w")
+            contents = Popen(["ps2ascii", pdf_path], stdout=PIPE, stderr=null_f).communicate()[0]
+            null_f.close()
+            abstract_start_position = contents.lower().find("abstract")
+            abstract_end_position = contents[abstract_start_position:].lower().find("\n\n") + abstract_start_position
+            len_abstract = len("abstract") + len('\n')
+            return sub('\s+', ' ', contents[abstract_start_position + len_abstract:abstract_end_position]).strip()
+        contents = None
+        try:
+            print pdf
+            contents = __pdf_to_txt(pdf)
+        except Exception, e:
+            stderr.write("Debug: path, %s" % pdf)
+            stderr.write("Error: %s,\n" % e)
+        return contents
 
-        def _pdf_abstract_extracter(pdf):
-            def __pdf_to_txt(pdf_path):
-                null_f = open(devnull, "w")
-                contents = Popen(["ps2ascii", pdf_path], stdout=PIPE, stderr=null_f).communicate()[0]
-                null_f.close()
-                abstract_start_position = contents.lower().find("abstract")
-                abstract_end_position = contents[abstract_start_position:].lower().find("\n\n") + \
-                                        abstract_start_position
-                len_abstract = len("abstract") + len('\n')
-                return sub('\s+', ' ', contents [abstract_start_position + len_abstract:abstract_end_position]).strip()
-            contents = None
-            try:
-                print pdf
-                contents = __pdf_to_txt(pdf)
-            except Exception, e:
-                stderr.write("Debug: path, %s" % pdf)
-                stderr.write("Error: %s,\n" % e)
-            return contents        
+    def _analyze_website(self, row):
         link_id = row[0]
         paper_id = row[1]
         first_name = row[2].lstrip().decode('latin1')
@@ -489,8 +488,8 @@ class AbstractExtractor():
         if "pdf" in paper_link:
             try:
                 from urllib import urlretrieve
-                urlretrieve(paper_link,path_name)
-                contents = _pdf_abstract_extracter(path_name)
+                urlretrieve(paper_link, path_name)
+                contents = self.pdf_abstract_extractor(path_name)
             except Exception, e:
                 stderr.write("Error: %s .\n" % e)
             pass
@@ -509,6 +508,3 @@ if __name__ == "__main__":
     mysql_db = MysqlMessager()
     abstract_extractor = AbstractExtractor(mysql_db)
     abstract_extractor.download_data()
-    
-
-

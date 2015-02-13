@@ -82,7 +82,7 @@ class NameCrawler(AbstractCrawler):
                 names = link.span.contents[0].split(',')
                 href = link['href']
                 sql = u"INSERT INTO Persons (ID, FirstName, LastName, Link) VALUES (default, \"" + names[0]+u"\",\"" + names[1] + u"\",\""+ href + u"\")"
-                self.mm.excute_sql(sql, log_file)
+                self.mm.execute_sql(sql, log_file)
         log_file.close()
 
     def _downloader(self, url, out_folder="doc/"):
@@ -120,7 +120,7 @@ class PaperNameCrawler(AbstractCrawler):
         """
         self.mm.clear_table()
         sql = "SELECT * FROM Persons"
-        self.mm.excute_sql(sql)
+        self.mm.execute_sql(sql)
         iter = self.mm.fetch()
         for row in iter:
             url = row[3]
@@ -180,7 +180,7 @@ class PaperNameCrawler(AbstractCrawler):
                             pass
                     sql = u"INSERT INTO PaperNames (Paper_ID, PaperName, Link, P_ID) VALUES ( default,\"" + paper_names + u"\", " + paper_out_link_resolved  + u", " + str(foreign_key) + u")"
                     print sql
-                    self.mm.excute_sql(sql, log_file)
+                    self.mm.execute_sql(sql, log_file)
         log_file.close()
         
 class PaperAbstractCrawler(AbstractCrawler):
@@ -197,14 +197,14 @@ class PaperAbstractCrawler(AbstractCrawler):
         self.libraries = []
             
     def crawl(self):
-        """ crawl informations from page
+        """ crawl information from page
         @param self Pointer to class
         """
         import time
         import random
         #self.mm.clear_table()
         sql = "SELECT PaperNames.PaperName,PaperNames.Paper_ID, Persons.FirstName, LastName FROM PaperNames inner join Persons on PaperNames.P_ID = Persons.ID"
-        self.mm.excute_sql(sql)
+        self.mm.execute_sql(sql)
         iter = self.mm.fetch()
         for row in iter:
             if row[1] > 795:
@@ -220,7 +220,7 @@ class PaperAbstractCrawler(AbstractCrawler):
                 time.sleep( random.randint(60, 130)) 
                     
     def _downloader(self, url, out_folder="doc/"):
-        """ Download the webpage and store it python data sttructure
+        """ Download the web page and store it python data structure
         @param self Pointer to class
         @param url URL to be downloaded
         @param out_folder Folder that stores information
@@ -243,7 +243,7 @@ class PaperAbstractCrawler(AbstractCrawler):
                 
                 sql = u"INSERT INTO PaperLinks (Link_ID, PaperLink, Paper_ID) VALUES ( default,\"" + link+ u"\", " + str(foreign_key) + u")"
                 print sql
-                self.mm.excute_sql(sql, log_file)   
+                self.mm.execute_sql(sql, log_file)
             except Exception, e:
                 print "Something wrong happended."
                 
@@ -293,7 +293,7 @@ class CourseContentCrawler(AbstractCrawler):
                 course_description = "not found"
             sql = u"INSERT INTO CourseDescription (Course_ID, Course_Name, Course_Description) VALUES ( default,\"" + course_name+ u"\", \"" + course_description + u"\")"               
             print sql  
-            self.mm.excute_sql(sql, log_file)        
+            self.mm.execute_sql(sql, log_file)
 def unit_test():
     #name_crawler = NameCrawler()
     #url = "https://tuhat.halvi.helsinki.fi/portal/en/organisations-units/department-of-compu(225405e8-3362-4197-a7fd-6e7b79e52d14)/persons.html?pageSize=all&page=0&filter=current"

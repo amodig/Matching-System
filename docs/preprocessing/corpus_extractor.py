@@ -23,7 +23,7 @@ import pickle
 
 class KeywordExtractor():
 
-    def __init__(self,file_name = None,line_number = None):
+    def __init__(self, file_name=None, line_number=None):
         """
         @param self a point of class
         @param line_number number of lines to be processed as batch 
@@ -34,9 +34,9 @@ class KeywordExtractor():
             self._file_name = file_name
         self._mm = MysqlMessager() 
         
-    def get_corpus(self, number_of_corpus, file_name = None):
+    def get_corpus(self, number_of_corpus, file_name=None):
         """
-        This funciton reads name of paper from database. and return all the words that belongs to one auther in a list
+        This function reads name of paper from database. and return all the words that belongs to one author in a list
         @param self: Pointer to class
         @return a term frequency matrix
         """
@@ -52,13 +52,13 @@ class KeywordExtractor():
                 if element.tag == "abstract":
                     abstract = element.text
                     corpus.append(abstract)
-            if(len(corpus)  == number_of_corpus):
+            if len(corpus) == number_of_corpus:
                 break
         return corpus
             
-    def get_from_abstract(self,number_of_corpuses, file_name = None):
+    def get_from_abstract(self, number_of_corpuses, file_name=None):
         """
-        This funciton reads name of paper from database. and return all the words that belongs to one auther in a list
+        This function reads name of paper from database. and return all the words that belongs to one author in a list
         @param self: Pointer to class
         @return a term frequency matrix
         """
@@ -76,8 +76,8 @@ class KeywordExtractor():
         if not path.isfile(self._keywords_filename):
             keyword_set = set()
             corpuses_representation_list = []
-            f_obj = open(self._keywords_filename,'w')
-            f_corpus_obj = open(self._corpus_keyword_filename,'w')
+            f_obj = open(self._keywords_filename, 'w')
+            f_corpus_obj = open(self._corpus_keyword_filename, 'w')
             i = 0
             phase_extractor = PhraseExtractor()
             for article in root.iterchildren():
@@ -99,5 +99,5 @@ class KeywordExtractor():
             f_corpus_obj.close()
  
 if __name__ == "__main__":
-    keyword_extractor = KeywordExtractor("abstracts.xml",4)
+    keyword_extractor = KeywordExtractor("abstracts.xml", 4)
     keyword_extractor.get_from_arxiv_num(109)

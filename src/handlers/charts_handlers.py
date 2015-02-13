@@ -41,14 +41,14 @@ class ChartsDataHandler(BaseHandler):
         """
         This function implements the method of forming relationship between persons and total count of each keywords
         """
-        word_counts, person_names = zip(*[(len(person_info["keywords"]), person_info["name"])  for person_info in self.application.corpuses_name_id.values() ])
+        word_counts, person_names = zip(*[(len(person_info["keywords"]), person_info["name"]) for person_info in self.application.corpuses_name_id.values() ])
         return {
                 "persons": person_names,
                 "data": word_counts
         }
 
     def __form_article_correlation_relationship(self):
-        self._mm = MysqlMessager(database = "keyword_app")
+        self._mm = MysqlMessager(database="keyword_app")
         sql = "select * from Abstracts;"
         self._mm.excute_sql(sql)
         iter = self._mm.fetch()
@@ -68,7 +68,7 @@ class ArticleMatrixHandler(BaseHandler):
         representatio_limit =20
         correlation_matrix = numpy.sqrt(self.application.analyzer._X.T * self.application.analyzer._X)  
         
-        self._mm = MysqlMessager(database= "keyword_app")
+        self._mm = MysqlMessager(database="keyword_app")
         sql = "select AbstractID,Title,Abstract, AutherName from Abstracts where  AbstractID in %s;" % (tuple(data["articles"]),)
         print sql
         self._mm.excute_sql(sql)
