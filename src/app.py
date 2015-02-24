@@ -2,6 +2,7 @@
 
 # Tornado imports
 import pymongo
+import motor
 import uuid
 
 import tornado.ioloop
@@ -26,47 +27,47 @@ class Application(tornado.web.Application):
     def __init__(self, **overrides):
         #self.config = self._get_config()
         handlers = [
-        url(r'/', LoginHandler, name='/'),
+            url(r'/', LoginHandler, name='/'),
 
-        url(r'/charts', ChartsHandler, name='charts'), 
-        url(r'/charts_data', ChartsDataHandler, name='charts_data'),
-        url(r'/topic_model', TopicModelHandler, name='topic_model'),
-        url(r'/tables', TablesHandler, name='tables'), 
-        url(r'/tables_data', TablesDataHandler, name='tables_data'), 
-        url(r'/article_matrix', ArticleMatrixHandler, name='article_matrix'),
-        url(r'/related_articles', RelatedArticlesHandler, name='related_articles'),
-        url(r'/file_upload', UploadHandler, name="file_upload"),
-        url(r'/paper_upload', PdfUploader, name="paper_upload"),
-        
-        url(r'/form', FormHandler, name='form'),
-        url(r'/next', NextHandler, name='next'),
-        url(r'/remove_person', RemovePersonHandler, name='remove_person'),
-        url(r'/index', IndexHandler, name='index'),
-        url(r'/search', SearchHandler, name='search'),
-        url(r'/analyzer', AnalyzerHandler, name='analyzer'),
-        url(r'/email', EmailMeHandler, name='email'),
-        url(r'/message', MessageHandler, name='message'),
-        url(r'/grav', GravatarHandler, name='grav'),
-        url(r'/menu', MenuTagsHandler, name='menu'),
-        url(r'/slidy', SlidyHandler, name='slidy'),
-        url(r'/notification', NotificationHandler, name='notification'),
-        url(r'/fb_demo', FacebookDemoHandler, name='fb_demo'),
-        url(r'/popup', PopupHandler, name='popup_demo'),
-        url(r'/tail', TailHandler, name='tail_demo'),
-        url(r'/pusher', DataPusherHandler, name='push_demo'),
-        url(r'/pusher_raw', DataPusherRawHandler, name='push_raw_demo'),
-        url(r'/matcher/([^\/]+)/', WildcardPathHandler),
-        url(r'/back_to_where_you_came_from', ReferBackHandler, name='referrer'),
-        url(r'/thread', ThreadHandler, name='thread_handler'),
-        url(r'/s3uploader', S3PhotoUploadHandler, name='photos'),
+            url(r'/charts', ChartsHandler, name='charts'),
+            url(r'/charts_data', ChartsDataHandler, name='charts_data'),
+            url(r'/topic_model', TopicModelHandler, name='topic_model'),
+            url(r'/tables', TablesHandler, name='tables'),
+            url(r'/tables_data', TablesDataHandler, name='tables_data'),
+            url(r'/article_matrix', ArticleMatrixHandler, name='article_matrix'),
+            url(r'/related_articles', RelatedArticlesHandler, name='related_articles'),
+            url(r'/file_upload', UploadHandler, name="file_upload"),
+            url(r'/paper_upload', PdfUploader, name="paper_upload"),
+            url(r'/control', ControlHandler, name="control"),
 
-        url(r'/login_no_block', NoneBlockingLogin, name='login_no_block'),
-        url(r'/login', LoginHandler, name='login'),
-        url(r'/twitter_login', TwitterLoginHandler, name='twitter_login'),
-        url(r'/facebook_login', FacebookLoginHandler, name='facebook_login'),
-        url(r'/register', RegisterHandler, name='register'),
-        url(r'/logout', LogoutHandler, name='logout'),
+            url(r'/form', FormHandler, name='form'),
+            url(r'/next', NextHandler, name='next'),
+            url(r'/remove_person', RemovePersonHandler, name='remove_person'),
+            url(r'/index', IndexHandler, name='index'),
+            url(r'/search', SearchHandler, name='search'),
+            url(r'/analyzer', AnalyzerHandler, name='analyzer'),
+            url(r'/email', EmailMeHandler, name='email'),
+            url(r'/message', MessageHandler, name='message'),
+            url(r'/grav', GravatarHandler, name='grav'),
+            url(r'/menu', MenuTagsHandler, name='menu'),
+            url(r'/slidy', SlidyHandler, name='slidy'),
+            url(r'/notification', NotificationHandler, name='notification'),
+            url(r'/fb_demo', FacebookDemoHandler, name='fb_demo'),
+            url(r'/popup', PopupHandler, name='popup_demo'),
+            url(r'/tail', TailHandler, name='tail_demo'),
+            url(r'/pusher', DataPusherHandler, name='push_demo'),
+            url(r'/pusher_raw', DataPusherRawHandler, name='push_raw_demo'),
+            url(r'/matcher/([^\/]+)/', WildcardPathHandler),
+            url(r'/back_to_where_you_came_from', ReferBackHandler, name='referrer'),
+            url(r'/thread', ThreadHandler, name='thread_handler'),
+            url(r'/s3uploader', S3PhotoUploadHandler, name='photos'),
 
+            url(r'/login_no_block', NoneBlockingLogin, name='login_no_block'),
+            url(r'/login', LoginHandler, name='login'),
+            url(r'/twitter_login', TwitterLoginHandler, name='twitter_login'),
+            url(r'/facebook_login', FacebookLoginHandler, name='facebook_login'),
+            url(r'/register', RegisterHandler, name='register'),
+            url(r'/logout', LogoutHandler, name='logout'),
         ]
 
         #xsrf_cookies is for XSS protection add this to all forms: {{ xsrf_form_html() }}
@@ -85,6 +86,7 @@ class Application(tornado.web.Application):
             'xsrf_cookies': False,
             'debug': True,
             'log_file_prefix': "tornado.log",
+            'autoescape': 'None'
         }
 
         tornado.web.Application.__init__(self, handlers, **settings)

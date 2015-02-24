@@ -18,14 +18,13 @@ import urlparse
 import time
 import threading
 import functools
-import numpy
 import string
-import random
 import pprint
 
 from base_handler import *
 from charts_handlers import *
 from process_handlers import *
+from upload_handlers import *
 
 
 class AnalyzerHandler(BaseHandler):
@@ -496,79 +495,6 @@ class DataPusherRawHandler(BaseHandler):
             self.flush()
         _read_data()
 
-
-class S3PhotoUploadHandler(BaseHandler):
-    """ Ideally image resizing should be done with a queue and a seperate python process """
+class ControlHandler(BaseHandler):
     def get(self):
-        template_vars = {}
-
-        self.render('upload.html',
-                    **template_vars
-                    )
-
-    @tornado.web.asynchronous
-    def post(self):
-        file1 = self.request.files['file1'][0]
-        img = cStringIO.StringIO(file1['body'])
-        image = Image.open(img)
-
-        thread = threading.Thread(target=self.resize_the_image, args=(image,))
-        thread.start()
-
-    def resize_the_image(self, image):
-        im2 = image.resize((100, 100), Image.NEAREST)
-        out_im2 = cStringIO.StringIO()
-        im2.save(out_im2, 'PNG')
-        tornado.ioloop.IOLoop.instance().add_callback(functools.partial(self.upload_to_s3, out_im2))
-
-    def upload_to_s3(self, image2):
-        AWS_ACCESS_KEY_ID = ''
-        AWS_SECRET_ACCESS_KEY = ''
-
-        # credentials can be stored in environment AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
-        conn = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
-
-        # Connect to bucket and create key
-        b = conn.get_bucket('photos')
-        k = b.new_key('example5.png')
-
-        # Note we're setting contents from the in-memory string provided by cStringIO
-        k.set_contents_from_string(image2.getvalue(), headers={"Content-Type": "image/png"})
-        tornado.ioloop.IOLoop.instance().add_callback(functools.partial(self.image_uploaded))
-
-    def image_uploaded(self):
-        self.set_secure_cookie('flash', "File Uploaded")
-        self.redirect("/")
-
-
-class UploadHandler(BaseHandler):
-    def get(self):
-        self.render("upload-files.html")
-
-
-class PdfUploader(BaseHandler):
-    @tornado.web.asynchronous
-    def post(self):
-        print "POST files:"
-        print [f['filename'] for f in self.request.files['file']]
-        print "POST arguments:"
-        print self.request.arguments
-
-        msg = "Following files were uploaded:<br>"
-        for f in self.request.files['file']:
-            original_f_name = f['filename']
-            extension = os.path.splitext(original_f_name)[1]
-            f_name = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
-            final_filename = f_name + extension
-            output_file = open("uploads/" + final_filename, 'w')
-            output_file.write(f['body'])
-            msg = msg + original_f_name + "<br>"
-
-        #self.finish(msg)
-
-
-
-# class FileHandler(tornado.web.RequestHandler):
-#     file_body = self.request.files['filefieldname'][0]['body']
-#     img = Image.open(StringIO.StringIO(file_body))
-#     img.save("../img/", img.format)
+        self.render("control.html")

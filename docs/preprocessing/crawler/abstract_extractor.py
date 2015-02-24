@@ -5,7 +5,7 @@ from urllib2 import Request
 from urllib2 import urlopen
 
 from contextlib import closing
-from selenium.webdriver import Firefox # pip install selenium
+from selenium.webdriver import Firefox  # pip install selenium
 from selenium.webdriver.support.ui import WebDriverWait
 
 from subprocess import Popen
@@ -456,7 +456,8 @@ class AbstractExtractor():
         abstract_file_obj.close()
         return iter
 
-    def pdf_abstract_extractor(self, pdf):
+    @staticmethod
+    def pdf_abstract_extractor(pdf):
         def __pdf_to_txt(pdf_path):
             null_f = open(devnull, "w")
             contents = Popen(["ps2ascii", pdf_path], stdout=PIPE, stderr=null_f).communicate()[0]
