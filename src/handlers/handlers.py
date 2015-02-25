@@ -76,13 +76,15 @@ class MenuTagsHandler(BaseHandler):
 
 class LoginHandler(BaseHandler):
     def get(self):
-        messages = self.application.syncdb.messages.find()
+        #messages = self.application.syncdb.messages.find()
         self.render("login.html", notification=self.get_flash())
 
     def post(self):
         username = self.get_argument("username", "")
         password = self.get_argument("password", "").encode("utf-8")
-        user = self.application.syncdb['users'].find_one({'user': username})
+        #user = self.application.syncdb['users'].find_one({'user': username})
+        user = self.application.db['users'].find_one({'user': username})
+
         # Warning bcrypt will block IO loop:
         if not user:
             print "User not found"
@@ -175,7 +177,8 @@ class RegisterHandler(LoginHandler):
         user['username'] = username
         user['password'] = hashed_passwd
 
-        auth = self.application.syncdb['users'].save(user)
+        #auth = self.application.syncdb['users'].save(user)
+        auth = self.application.db['users'].save(user)
         self.set_current_user(username)
 
         # Add two-step verification?
@@ -183,7 +186,8 @@ class RegisterHandler(LoginHandler):
         self.redirect(u"/index")
 
     def _already_taken(self, entry, query):
-        return self.application.syncdb['users'].find_one({entry: query})
+        #return self.application.syncdb['users'].find_one({entry: query})
+        return self.application.db['users'].find_one({entry: query})
 
 
 class TwitterLoginHandler(LoginHandler,

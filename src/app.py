@@ -19,9 +19,9 @@ from handlers.handlers import *
 define("port", default=8899, type=int)
 define("config_file", default="app_config.yml", help="app_config file")
 
-#MONGO_SERVER = '192.168.1.68'
-MONGO_SERVER = 'localhost'
-
+#MONGO_SERVER_ADDRESS = '192.168.1.68'
+MONGO_SERVER_ADDRESS = 'localhost'
+MONGO_SERVER_PORT = 27017
 
 class Application(tornado.web.Application):
     def __init__(self, **overrides):
@@ -91,13 +91,16 @@ class Application(tornado.web.Application):
 
         tornado.web.Application.__init__(self, handlers, **settings)
 
-        self.syncconnection = pymongo.Connection(MONGO_SERVER, 27017)
+        #self.syncconnection = pymongo.Connection(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
+        self.client = motor.MotorClient(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
 
         if 'db' in overrides:
-            self.syncdb = self.syncconnection[overrides['db']]
+            #self.syncdb = self.syncconnection[overrides['db']]
+            self.db = self.client[overrides['db']]
         else:
-            self.syncdb = self.syncconnection["test-thank"]
-        self.syncconnection.close()
+            #self.syncdb = self.syncconnection["test-thank"]
+            self.db = self.client['test-thank']
+        #self.syncconnection.close()
 
         # following part is for analyzer
         def set_keywords_parameters():
@@ -158,7 +161,6 @@ class Application(tornado.web.Application):
                     self.corpuses_name_id[name]["keywords"] = []
                     self.corpuses_name_id[name]["articles"] = []
                     self.corpuses_name_id[name]["profile_picture"] = "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg"
-
 
                 self.corpuses_name_id[name]["articles"].append({"author_profile_picture":"http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg", "id": 1, "title":"%s"%title ,   "abstract":"%s"%original_corpus, "url":"http://images4.fanpop.com/image/photos/14700000/Beautifull-cat-cats-14749885-1600-1200.jpg"})
                 
