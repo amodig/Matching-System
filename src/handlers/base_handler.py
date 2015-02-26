@@ -2,6 +2,7 @@ import tornado.auth
 import tornado.escape
 import tornado.gen
 import tornado.httpserver
+from urlparse import urlparse
 
 from tornado.ioloop import IOLoop
 from tornado.web import asynchronous, RequestHandler, Application
@@ -10,6 +11,7 @@ from tornado.httpclient import AsyncHTTPClient
 import json
 
 class BaseHandler(RequestHandler):
+
     def get_login_url(self):
         return u"/login"
 
@@ -30,7 +32,7 @@ class BaseHandler(RequestHandler):
     # Allows us to get the previous URL
     def get_referring_url(self):
         try:
-            _, _, referer, _, _, _ = urlparse.urlparse(self.request.headers.get('Referer'))
+            _, _, referer, _, _, _ = urlparse(self.request.headers.get('Referer'))
             if referer:
                 return referer
         # Test code will throw this if there was no 'previous' page

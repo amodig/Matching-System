@@ -19,13 +19,14 @@ from handlers.handlers import *
 define("port", default=8899, type=int)
 define("config_file", default="app_config.yml", help="app_config file")
 
-#MONGO_SERVER_ADDRESS = '192.168.1.68'
+# MONGO_SERVER_ADDRESS = '192.168.1.68'
 MONGO_SERVER_ADDRESS = 'localhost'
 MONGO_SERVER_PORT = 27017
 
 class Application(tornado.web.Application):
     def __init__(self, **overrides):
         #self.config = self._get_config()
+
         handlers = [
             url(r'/', LoginHandler, name='/'),
 
@@ -68,11 +69,15 @@ class Application(tornado.web.Application):
             url(r'/logout', LogoutHandler, name='logout'),
         ]
 
-        #xsrf_cookies is for XSS protection add this to all forms: {{ xsrf_form_html() }}
+        # xsrf_cookies is for XSS protection add this to all forms: {{ xsrf_form_html() }}
         settings = {
+            # static file settings
             'static_path': os.path.join(os.path.dirname(__file__), 'static'),
+            # template settings
             'template_path': os.path.join(os.path.dirname(__file__), 'templates'),
-            "cookie_secret":    base64.b64encode(uuid.uuid4().bytes + uuid.uuid4().bytes),
+            'autoescape': 'None',  # Defaults to "xhtml_escape"
+            # authentication and security
+            'cookie_secret': base64.b64encode(uuid.uuid4().bytes + uuid.uuid4().bytes),
             'twitter_consumer_key': 'KEY',
             'twitter_consumer_secret': 'SECRET',
             'facebook_app_id': '180378538760459',
@@ -80,11 +85,10 @@ class Application(tornado.web.Application):
             'facebook_registration_redirect_url': 'http://localhost:8888/facebook_login',
             'mandrill_key': 'KEY',
             'mandrill_url': 'https://mandrillapp.com/api/1.0/',
-
-            'xsrf_cookies': False,
+            'xsrf_cookies': False,  # If true, Cross-site request forgery protection will be enabled.
+            # general settings
             'debug': True,
             'log_file_prefix': "tornado.log",
-            'autoescape': 'None'
         }
 
         tornado.web.Application.__init__(self, handlers, **settings)

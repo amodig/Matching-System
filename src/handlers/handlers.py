@@ -75,9 +75,12 @@ class MenuTagsHandler(BaseHandler):
 
 
 class LoginHandler(BaseHandler):
+
     def get(self):
         #messages = self.application.syncdb.messages.find()
-        self.render("login.html", notification=self.get_flash())
+        self.render("login.html", next=self.get_argument("next","/"),
+                    notification=self.get_flash(),
+                    message=self.get_argument("error", ""))
 
     def post(self):
         username = self.get_argument("username", "")
@@ -87,15 +90,15 @@ class LoginHandler(BaseHandler):
 
         # Warning bcrypt will block IO loop:
         if not user:
-            print "User not found"
+            error_msg = u"?error=" + tornado.escape.url_escape("User not found.")
+            self.redirect(u"/login" + error_msg)
         if user['password'] and bcrypt.hashpw(password, user['password'].encode("utf-8")) == user['password']:
             self.set_current_user(username)
             self.redirect("/index")
         else:
             self.set_secure_cookie('flash', "Login incorrect")
-            error_msg = u"?error=" + tornado.escape.url_escape("Login incorrect")
+            error_msg = u"?error=" + tornado.escape.url_escape("Login incorrect.")
             self.redirect(u"/login" + error_msg)
-            print error_msg
 
     def set_current_user(self, username):
         print "setting " + username
@@ -143,6 +146,7 @@ class NoneBlockingLogin(BaseHandler):
 
 
 class RegisterHandler(LoginHandler):
+
     def get(self):
         self.render("register.html", next=self.get_argument("next", "/"))
 
@@ -379,8 +383,8 @@ class FacebookDemoHandler(BaseHandler):
 
 
 class GravatarHandler(BaseHandler):
-    def build_grav_url(self, email):
 
+    def build_grav_url(self, email):
         #default = "http://thumbs.dreamstime.com/thumblarge_540/1284957171JgzjF1.jpg"
         # random patterned background:
         default = 'identicon'
@@ -420,8 +424,9 @@ class WildcardPathHandler(BaseHandler):
 
 
 class ReferBackHandler(BaseHandler):
+    """Return to previous page."""
     def get(self):
-        print 'returning back to previous page'
+        print 'Returning back to previous page'
         self.set_secure_cookie("flash", "returning back to previous page")
         self.redirect(self.get_referring_url())
 
@@ -431,8 +436,6 @@ async demo - creates a constantly loading webpage which updates from a file.
 'tail -f data/to_read.txt' >> webpage
 Blocks. Can't be used by more than 1 user at a time.
 """
-
-
 class TailHandler(BaseHandler):
     @asynchronous
     def get(self):
@@ -440,7 +443,7 @@ class TailHandler(BaseHandler):
         self.pos = self.file.tell()
 
         def _read_file():
-            # Read some amout of bytes here. You can't read until newline as it
+            # Read some amount of bytes here. You can't read until newline as it
             # would block
             line = self.file.read(40)
             last_pos = self.file.tell()
