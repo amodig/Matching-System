@@ -23,6 +23,7 @@ py-bcrypt==0.4
 pycparser==2.10
 pymongo==2.8
 pyPdf==1.13
+python-magic==0.4.6
 PyYAML==3.11
 requests==2.2.1
 scikit-learn==0.14.1

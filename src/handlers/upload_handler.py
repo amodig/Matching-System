@@ -19,10 +19,16 @@ DOCUMENT_TYPES = 'application/pdf' #re.compile('image/(gif|p?jpeg|(x-)?png)')
 ACCEPT_FILE_TYPES = DOCUMENT_TYPES
 
 class UploadHandler(BaseHandler):
-    def get(self):
-        self.render("upload-files.html")
 
-class PdfUploader(BaseHandler):
+    def initialize(self, request, response):
+        super(UploadHandler, self).initialize(request, response)
+        self.response.headers['Access-Control-Allow-Origin'] = '*'
+        self.response.headers[
+            'Access-Control-Allow-Methods'
+        ] = 'OPTIONS, HEAD, GET, POST, PUT, DELETE'
+        self.response.headers[
+            'Access-Control-Allow-Headers'
+        ] = 'Content-Type, Content-Range, Content-Disposition'
 
     def callback(self, result, error):
         if error:
@@ -30,7 +36,8 @@ class PdfUploader(BaseHandler):
         print 'result', repr(result)
         IOLoop.instance().stop(self)
 
-    def validate(self, file):
+    @staticmethod
+    def validate(file):
         if file['size'] < MIN_FILE_SIZE:
             file['error'] = 'File is too small'
         elif file['size'] > MAX_FILE_SIZE:
@@ -41,7 +48,8 @@ class PdfUploader(BaseHandler):
             return True
         return False
 
-    def get_file_size(self, file):
+    @staticmethod
+    def get_file_size(file):
         file.seek(0, 2)  # Seek to the end of the file
         size = file.tell()  # Get the position of EOF
         file.seek(0)  # Reset the file position to the beginning
@@ -53,18 +61,9 @@ class PdfUploader(BaseHandler):
         # default: file_id is the ObjectId of the resulting file
         file_id = yield fs.put(file_content, _id=key, callback=self.callback, filename=result['name'],
                                content_type=result['type'])
-        assert id == file_id
+        # start IOLoop when callback has run
         IOLoop.instance().start(self)
-
-    @tornado.gen.coroutine
-    def delete(self):
-        key = self.request.get('key') or ''
-        fs = motor.MotorGridFS(self.application.db['documents'])
-        fs.delete(key, callback=self.callback)
-        s = json.dumps({key: True}, separators=(',', ':'))
-        if 'application/json' in self.request.headers.get('Accept'):
-            self.response.headers['Content-Type'] = 'application/json'
-        self.response.write(s)
+        assert id == file_id
 
     def handle_upload_db(self):
         results = []
@@ -104,13 +103,27 @@ class PdfUploader(BaseHandler):
             results.append(result)
         return results
 
+    def send_access_control_headers(self):
+
+    def send_content_type_header(self):
+
+    def head(self):
+        self.set_header('Pragma', 'no-cache')
+        self.set_header('Cache-Control', 'no-store, no-cache, must-revalidate')
+        self.set_header('Content-Disposition: inline; filename="files.json"')
+        # Prevent Internet Explorer from MIME-sniffing the content-type:
+        self.set_header('X-Content-Type-Options', 'nosniff')
+        if self.options['access_control_allow_origin']:
+            self.send_access_control_headers()
+        self.send_content_type_header()
+
     def get(self):
         template_vars = {}
         self.render("upload-files.html", **template_vars)
 
     @tornado.web.asynchronous
     def post(self):
-        if self.request.get('_method') == 'DELETE':
+        if self.get_query_argument('_method') == 'DELETE':
             return self.delete()
         result = {'files': self.handle_upload_db()}
         s = json.dumps(result, separators=(',', ':'))
@@ -121,7 +134,7 @@ class PdfUploader(BaseHandler):
             ))
         if 'application/json' in self.request.headers.get('Accept'):
             self.response.headers['Content-Type'] = 'application/json'
-        self.response.write(s)
+        self.write(s)
 
         print "POST files:"
         print [f['filename'] for f in self.request.files['file']]
@@ -129,3 +142,15 @@ class PdfUploader(BaseHandler):
         print self.request.arguments
 
         self.finish()
+
+    @tornado.gen.coroutine
+    def delete(self):
+        key = self.request.get('key') or ''
+        fs = motor.MotorGridFS(self.application.db['documents'])
+        yield fs.delete(key, callback=self.callback)
+        # start IOLoop when callback has run
+        IOLoop.instance().start(self)
+        s = json.dumps({key: True}, separators=(',', ':'))
+        if 'application/json' in self.request.headers.get('Accept'):
+            self.response.headers['Content-Type'] = 'application/json'
+        self.write(s)

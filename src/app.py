@@ -37,7 +37,6 @@ class Application(tornado.web.Application):
             url(r'/article_matrix', ArticleMatrixHandler, name='article_matrix'),
             url(r'/related_articles', RelatedArticlesHandler, name='related_articles'),
             url(r'/file_upload', UploadHandler, name="file_upload"),
-            url(r'/paper_upload', PdfUploader, name="paper_upload"),
             url(r'/control', ControlHandler, name="control"),
 
             url(r'/form', FormHandler, name='form'),
@@ -60,7 +59,6 @@ class Application(tornado.web.Application):
             url(r'/matcher/([^\/]+)/', WildcardPathHandler),
             url(r'/back_to_where_you_came_from', ReferBackHandler, name='referrer'),
             url(r'/thread', ThreadHandler, name='thread_handler'),
-            url(r'/s3uploader', S3PhotoUploadHandler, name='photos'),
 
             url(r'/login_no_block', NoneBlockingLogin, name='login_no_block'),
             url(r'/login', LoginHandler, name='login'),

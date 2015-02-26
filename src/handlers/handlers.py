@@ -24,7 +24,7 @@ import pprint
 from base_handler import *
 from charts_handlers import *
 from process_handlers import *
-from upload_handlers import *
+from upload_handler import *
 
 
 class AnalyzerHandler(BaseHandler):

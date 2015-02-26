@@ -9,7 +9,6 @@ from tornado.httpclient import AsyncHTTPClient
 
 import json
 
-
 class BaseHandler(RequestHandler):
     def get_login_url(self):
         return u"/login"
