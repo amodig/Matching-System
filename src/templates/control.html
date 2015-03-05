@@ -10,23 +10,59 @@
     <link rel="stylesheet" href="static/css/site.css">
     <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
 
-    <script src="static/js/jquery.js"></script>
-    <script src="static/js/jquery-ui.min.js"></script>
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- The Templates plugin is included to render the upload/download listings -->
-    <script src="../external/JavaScript-Templates/js/tmpl.min.js"></script>
-
     <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
     <link rel="stylesheet" href="static/css/jquery.fileupload.css">
     <link rel="stylesheet" href="static/css/jquery.fileupload-ui.css">
+
+    <script src="static/js/jquery.js"></script>
+    <script src="static/js/jquery-ui.min.js"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <!-- The template to display files available for upload -->
+
+
+
+    <script>
+
+        function scriptsLoaded(data) {
+        }
+
+        function downloadTemplateLoaded(data) {
+            window.downloadTemplate = data;
+            $('#ajax-load-scripts').load('/static/scripts.html', scriptsLoaded);
+        }
+
+        function uploadTemplateLoaded(data) {
+            window.uploadTemplate = data;
+            $.get('/static/js/template-download.tmpl', downloadTemplateLoaded);
+        }
+        $(function () {
+            $.get('/static/js/template-upload.tmpl', uploadTemplateLoaded);
+
+
+            /*$('#template-upload').load('/static/js/template-upload.tmpl', function (data) {
+                alert('1');
+                window.uploadTemplate = data;
+
+                $('#template-download').load('/static/js/template-download.tmpl', function (data) {
+                    alert('2');
+                    window.downloadTemplate = data;
+
+                    $('#ajax-load-scripts').load('/static/scripts.html', function (data) {
+                        alert('LOADED: ' + data);
+                    });
+                });
+            });*/
+        });
+    </script>
+
 </head>
 <body>
+
 <h2 class="page-title">
     Upload articles
 </h2>
 
-<form id="fileupload" action="/file_upload" method="POST" enctype="multipart/form-data">
+<form id="fileupload" action="/control" method="POST" enctype="multipart/form-data">
     <div class="row fileupload-buttonbar">
         <div class="col-lg-7">
             <!-- The fileinput-button span is used to style the file input field as button -->
@@ -62,32 +98,14 @@
         </div>
     </div>
     <!-- The table listing the files available for upload/download -->
-        <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+    <table role="presentation" class="table table-striped">
+        <tbody class="files" id="files"></tbody>
+    </table>
 </form>
 
-<!-- The template to display files available for upload -->
-<script id="template-upload" type="text/x-tmpl" src="static/js/template-upload.js"></script>
-<!-- The template to display files available for download -->
-<script id="template-download" type="text/x-tmpl" src="static/js/template-download.js"></script>
+<input id="clickMe" type="button" value="clickme" onclick="tmpl.load('template-upload');"/>
 
-<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-<script src="../external/jQuery-File-Upload-9.9.3/js/jquery.iframe-transport.js"></script>
-<!-- The basic File Upload plugin -->
-<script src="../external/jQuery-File-Upload-9.9.3/js/jquery.fileupload.js"></script>
-<!-- The File Upload processing plugin -->
-<script src="../external/jQuery-File-Upload-9.9.3/js/jquery.fileupload-process.js"></script>
-<!-- The File Upload image preview & resize plugin -->
-<script src="../external/jQuery-File-Upload-9.9.3/js/jquery.fileupload-image.js"></script>
-<!-- The File Upload audio preview plugin -->
-<script src="../external/jQuery-File-Upload-9.9.3/js/jquery.fileupload-audio.js"></script>
-<!-- The File Upload video preview plugin -->
-<script src="../external/jQuery-File-Upload-9.9.3/js/jquery.fileupload-video.js"></script>
-<!-- The File Upload validation plugin -->
-<script src="../external/jQuery-File-Upload-9.9.3/js/jquery.fileupload-validate.js"></script>
-<!-- The File Upload user interface plugin -->
-<script src="../external/jQuery-File-Upload-9.9.3/js/jquery.fileupload-ui.js"></script>
-<!-- The main application script -->
-<script src="../external/jQuery-File-Upload-9.9.3/js/main.js"></script>
+<div id="ajax-load-scripts"></div>
 
 </body>
 </html>

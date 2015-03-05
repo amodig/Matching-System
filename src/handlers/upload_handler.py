@@ -4,7 +4,10 @@ import magic
 import motor
 import random
 import string
+import re
 
+from tornado.web import asynchronous
+from tornado.gen import coroutine
 from tornado.ioloop import IOLoop
 from tornado.options import define, options
 from requests.utils import quote
@@ -16,11 +19,11 @@ class UploadHandler(BaseHandler):
     # class attributes
     MIN_FILE_SIZE = 1  # bytes
     MAX_FILE_SIZE = 5000000  # bytes
-    DOCUMENT_TYPES = 'application/pdf' #re.compile('image/(gif|p?jpeg|(x-)?png)')
+    DOCUMENT_TYPES = re.compile('application/pdf')  #re.compile('image/(gif|p?jpeg|(x-)?png)')
     ACCEPT_FILE_TYPES = DOCUMENT_TYPES
 
     def initialize(self):
-        self.param_name = 'files'
+        self.file_param_name = 'files'
         self.access_control_allow_origin = '*'
         self.access_control_allow_credentials = False
         self.access_control_allow_methods = ['OPTIONS', 'HEAD', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE']
@@ -53,6 +56,7 @@ class UploadHandler(BaseHandler):
 
     @tornado.gen.coroutine
     def write_file(self, file_content, key, result):
+        """Write file to MongoDB GridFS system."""
         fs = motor.MotorGridFS(self.application.db['documents'])
         # default: file_id is the ObjectId of the resulting file
         file_id = yield fs.put(file_content, _id=key, callback=self.callback, filename=result['name'],
@@ -62,45 +66,51 @@ class UploadHandler(BaseHandler):
         assert id == file_id
 
     def handle_upload_db(self):
+        """Handle uploads to database.
+        :return JSON list of uploaded files.
+        """
         results = []
-        # each f is a dictionary
-        for f in self.request.files[self.param_name]:
-            result = {}
-            result['name'] = f['filename']
-            print result['name']  # debug
-            filebody = f['body']
-            # result['type'] = magic.from_file(filebody, mime=True)  # get MIME type
-            result['type'] = f['content_type']
-            result['size'] = self.get_file_size(filebody)
-            if self.validate(result):
-                key = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
-                #document = {key : f}
-                #self.application.db['documents'].insert(document, callback=self.callback)
-                self.write_file(filebody, key, result)
-                result['deleteType'] = 'DELETE'
-                result['key'] = key
-                result['deleteUrl'] = self.request.host_url + '/?key=' + quote(key, '')
-                if 'url' not in result:
-                    result['url'] = self.request.host_url + '/' + key + '/' + quote(result['name'].encode('utf-8'))
-                if self.access_control_allow_credentials:
-                    result['deleteWithCredentials'] = True
-            results.append(result)
+        if self.request.files:
+            # each f is a dictionary
+            for f in self.request.files[self.file_param_name]:
+                result = {}
+                result['name'] = f['filename']
+                print result['name']  # debug
+                filebody = f['body']
+                # result['type'] = magic.from_file(filebody, mime=True)  # get MIME type
+                result['type'] = f['content_type']
+                # result['size'] = self.get_file_size(filebody)
+                result['size'] = len(filebody)
+                if self.validate(result):
+                    key = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
+                    #document = {key : f}
+                    #self.application.db['documents'].insert(document, callback=self.callback)
+                    #self.write_file(filebody, key, result)
+                    result['deleteType'] = 'DELETE'
+                    result['key'] = key
+                    result['deleteUrl'] = self.request.full_url() + '/?key=' + key
+                    if 'url' not in result:
+                        result['url'] = self.request.full_url() + '/' + key + '/' + quote(result['name'].encode('utf-8'))
+                    if self.access_control_allow_credentials:
+                        result['deleteWithCredentials'] = True
+                results.append(result)
         return results
 
     def handle_upload_dir(self):
         results = []
-        for f in self.request.files[self.param_name]:
-            result = {}
-            result['name'] = f['filename']
-            result['type'] = magic.from_file(f, mime=True)
-            result['size'] = self.get_file_size(f)
-            if self.validate(result):
-                extension = os.path.splitext(f['filename'])[1]
-                f_name = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
-                final_filename = f_name + extension
-                output_file = open("uploads/" + final_filename, 'w')
-                output_file.write(f['body'])
-            results.append(result)
+        if self.request.files[self.file_param_name]:
+            for f in self.request.files[self.file_param_name]:
+                result = {}
+                result['name'] = f['filename']
+                result['type'] = magic.from_file(f, mime=True)
+                result['size'] = self.get_file_size(f)
+                if self.validate(result):
+                    extension = os.path.splitext(f['filename'])[1]
+                    f_name = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
+                    final_filename = f_name + extension
+                    output_file = open("uploads/" + final_filename, 'w')
+                    output_file.write(f['body'])
+                results.append(result)
         return results
 
     def download(self):
@@ -143,34 +153,35 @@ class UploadHandler(BaseHandler):
 
     @tornado.web.asynchronous
     def post(self):
+
         if self.get_query_argument('_method', default=None) == 'DELETE':
             return self.delete()
         result = {'files': self.handle_upload_db()}
         s = json.dumps(result, separators=(',', ':'))
-        redirect = self.request.get('redirect')
+        redirect = self.get_query_argument('redirect', default=None)
         if redirect:
-            return self.redirect(str(
-                redirect.replace('%s', quote(s, ''), 1)
-            ))
-        if 'application/json' in self.request.headers.get('Accept'):
-            self.response.headers['Content-Type'] = 'application/json'
+            return self.redirect(str(redirect.replace('%s', quote(s, ''), 1)))
+        if 'application/json' in self.request.headers.get_list('Accept'):
+            self.request.set_headers('Content-Type', 'application/json')
+        print "kirjoitetaan %s" % s
         self.write(s)
-
         print "POST files:"
-        print [f['filename'] for f in self.request.files['file']]
+        print [f['filename'] for f in self.request.files[self.file_param_name]]
         print "POST arguments:"
         print self.request.arguments
 
+        print 'FINISHING'
         self.finish()
 
     @tornado.gen.coroutine
     def delete(self):
         key = self.request.get('key') or ''
+        print key
         fs = motor.MotorGridFS(self.application.db['documents'])
         yield fs.delete(key, callback=self.callback)
         # start IOLoop when callback has run
         IOLoop.instance().start(self)
         s = json.dumps({key: True}, separators=(',', ':'))
         if 'application/json' in self.request.headers.get('Accept'):
-            self.response.headers['Content-Type'] = 'application/json'
-        self.write(s)
+            self.request.headers['Content-Type'] = 'application/json'
+        self.request.connection.write(s)

@@ -85,8 +85,11 @@ class LoginHandler(BaseHandler):
     def post(self):
         username = self.get_argument("username", "")
         password = self.get_argument("password", "").encode("utf-8")
-        #user = self.application.syncdb['users'].find_one({'user': username})
-        user = self.application.db['users'].find_one({'user': username})
+        user = self.application.syncdb['users'].find_one({'user': username})
+        #user = self.application.db['users'].find_one({'user': username})
+
+        print user
+        print type(user)
 
         # Warning bcrypt will block IO loop:
         if not user:
@@ -502,6 +505,3 @@ class DataPusherRawHandler(BaseHandler):
             self.flush()
         _read_data()
 
-class ControlHandler(BaseHandler):
-    def get(self):
-        self.render("control.html")

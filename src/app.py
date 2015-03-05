@@ -37,8 +37,7 @@ class Application(tornado.web.Application):
             url(r'/tables_data', TablesDataHandler, name='tables_data'),
             url(r'/article_matrix', ArticleMatrixHandler, name='article_matrix'),
             url(r'/related_articles', RelatedArticlesHandler, name='related_articles'),
-            url(r'/file_upload', UploadHandler, name="file_upload"),
-            url(r'/control', ControlHandler, name="control"),
+            url(r'/control', UploadHandler, name="control"),
 
             url(r'/form', FormHandler, name='form'),
             url(r'/next', NextHandler, name='next'),
@@ -93,15 +92,15 @@ class Application(tornado.web.Application):
 
         tornado.web.Application.__init__(self, handlers, **settings)
 
-        #self.syncconnection = pymongo.Connection(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
-        self.client = motor.MotorClient(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
+        self.syncconnection = pymongo.Connection(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
+        #self.client = motor.MotorClient(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
 
         if 'db' in overrides:
-            #self.syncdb = self.syncconnection[overrides['db']]
-            self.db = self.client[overrides['db']]
+            self.syncdb = self.syncconnection[overrides['db']]
+            #self.db = self.client[overrides['db']]
         else:
-            #self.syncdb = self.syncconnection["test-thank"]
-            self.db = self.client['test-thank']
+            self.syncdb = self.syncconnection["test-thank"]
+            #self.db = self.client['test-thank']
         #self.syncconnection.close()
 
         # following part is for analyzer
