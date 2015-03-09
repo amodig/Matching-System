@@ -188,7 +188,7 @@ class KeywordExtractor():
         
     def get_from_abstracts(self):
         """
-        This funciton reads name of paper from database. and return all the words that belongs to one auther in a list
+        This funciton reads name of paper from database. and return all the words that belongs to one author in a list
         @param self: Pointer to class
         @return a term frequency matrix
         """
@@ -197,19 +197,19 @@ class KeywordExtractor():
         row_iter = self._mm.fetch()
         corpus = []
         # following loop first counts
-        old_auther_ID = -1
-        current_auther_ID = 0
-        auther_count = 0
+        old_author_ID = -1
+        current_author_ID = 0
+        author_count = 0
         for row in row_iter:
-            old_auther_ID = current_auther_ID
+            old_author_ID = current_author_ID
             first_name = row[0].lstrip().decode('latin1')
             last_name = row[1].lstrip().decode('latin1') 
             paper_name = row[2].lstrip().decode('latin1') 
-            current_auther_ID = row[3]
-            if current_auther_ID  == old_auther_ID:
-                corpus[auther_count -1] = corpus[auther_count -1]+ " " + paper_name
+            current_author_ID = row[3]
+            if current_author_ID  == old_author_ID:
+                corpus[author_count -1] = corpus[author_count -1]+ " " + paper_name
             else:
-                auther_count = auther_count +1
+                author_count = author_count +1
                 corpus.append(paper_name)
                 vectorizer = CountVectorizer()        
             # tfm : term frequency matrix
@@ -219,7 +219,7 @@ class KeywordExtractor():
 
     def get_from_paper_name(self):
         """
-        This funciton reads name of paper from database. and return all the words that belongs to one auther in a list
+        This funciton reads name of paper from database. and return all the words that belongs to one author in a list
         @param self: Pointer to class
         @return a term frequency matrix
         """
@@ -228,19 +228,19 @@ class KeywordExtractor():
         row_iter = self._mm.fetch()
         corpus = []
         # following loop first counts
-        old_auther_ID = -1
-        current_auther_ID = 0
-        auther_count = 0
+        old_author_ID = -1
+        current_author_ID = 0
+        author_count = 0
         for row in row_iter:
-            old_auther_ID = current_auther_ID
+            old_author_ID = current_author_ID
             first_name = row[0].lstrip().decode('latin1')
             last_name = row[1].lstrip().decode('latin1') 
             paper_name = row[2].lstrip().decode('latin1') 
-            current_auther_ID = row[3]
-            if current_auther_ID  == old_auther_ID:
-                corpus[auther_count -1] = corpus[auther_count -1]+ " " + paper_name
+            current_author_ID = row[3]
+            if current_author_ID  == old_author_ID:
+                corpus[author_count -1] = corpus[author_count -1]+ " " + paper_name
             else:
-                auther_count = auther_count +1
+                author_count = author_count +1
                 corpus.append(paper_name)
                 vectorizer = CountVectorizer()        
 
@@ -253,7 +253,7 @@ class KeywordExtractor():
             return pickle.load(f_corpus_obj)
     def get_corpus(self, number_of_corpus, file_name = None):
         """
-        This funciton reads name of paper from database. and return all the words that belongs to one auther in a list
+        This funciton reads name of paper from database. and return all the words that belongs to one author in a list
         @param self: Pointer to class
         @return a term frequency matrix
         """
@@ -275,7 +275,7 @@ class KeywordExtractor():
         
     def get_from_arxiv(self,file_name = None):
         """
-        This funciton reads name of paper from database. and return all the words that belongs to one auther in a list
+        This funciton reads name of paper from database. and return all the words that belongs to one author in a list
         @param self: Pointer to class
         @return a term frequency matrix
         """
@@ -304,7 +304,7 @@ class KeywordExtractor():
             pass
     def get_from_arxiv_num(self,number_of_corpuses, file_name = None):
         """
-        This funciton reads name of paper from database. and return all the words that belongs to one auther in a list
+        This funciton reads name of paper from database. and return all the words that belongs to one author in a list
         @param self: Pointer to class
         @return a term frequency matrix
         """
@@ -344,7 +344,7 @@ class KeywordExtractor():
             
     def get_from_arxiv_bag_of_word_model(self,file_name = None):
         """
-        This funciton reads name of paper from database. and return all the words that belongs to one auther in a list
+        This funciton reads name of paper from database. and return all the words that belongs to one author in a list
         @param self: Pointer to class
         @return a term frequency matrix
         """

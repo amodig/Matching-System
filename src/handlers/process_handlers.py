@@ -117,7 +117,8 @@ class NextHandler(MainBaseHandler):
         def update_keywords_info(scores):
             """
             This function update information stored in the self.application.keywords_info
-            @params scores is a list of tuples. First element of tuple stores exploitation rate of the keyword. Second element of tuple stores exaploration rate of the keyword
+            @params Scores is a list of tuples. First element of tuple stores exploitation rate of the keyword.
+                    Second element of tuple stores exploration rate of the keyword
             """
             for i in xrange(len(self.application.keywords_info)):
                 self.application.keywords_info[i]["exploitation"] = scores[i][0]
@@ -213,7 +214,7 @@ class RelatedArticlesHandler(MainBaseHandler):
                         sorted(enumerate(display_distance), key=lambda x: x[1])]  # get index of element in sorted array
         # setup the connection with database
         mm = MysqlMessager(database="keyword_app")
-        sql = "select AbstractID,Title,Abstract, AutherName from Abstracts where AbstractID in %s;" \
+        sql = "select AbstractID, Title, Abstract, AuthorName from Abstracts where AbstractID in %s;" \
               % str(tuple(sorted_index))
         mm.excute_sql(sql)
         iterator = mm.fetch()

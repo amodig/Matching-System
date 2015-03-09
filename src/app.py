@@ -92,15 +92,17 @@ class Application(tornado.web.Application):
 
         tornado.web.Application.__init__(self, handlers, **settings)
 
-        self.syncconnection = pymongo.Connection(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
-        #self.client = motor.MotorClient(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
+        # Connect to mongod.
+        #self.syncconnection = pymongo.Connection(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
+        self.client = motor.MotorClient(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
 
         if 'db' in overrides:
-            self.syncdb = self.syncconnection[overrides['db']]
-            #self.db = self.client[overrides['db']]
+            #self.syncdb = self.syncconnection[overrides['db']]
+            self.db = self.client[overrides['db']]
         else:
-            self.syncdb = self.syncconnection["test-thank"]
-            #self.db = self.client['test-thank']
+            #self.syncdb = self.syncconnection["test-thank"]
+            self.db = self.client['test-thank']
+
         #self.syncconnection.close()
 
         # following part is for analyzer
@@ -135,7 +137,7 @@ class Application(tornado.web.Application):
             
         def form_persons_info():    
             # for persons_info
-            assert(len(self.original_corpuses) == len(self.corpuses) == len(self.auther_names))
+            assert(len(self.original_corpuses) == len(self.corpuses) == len(self.author_names))
             
             self.corpuses_name_id = {}
             
@@ -143,7 +145,7 @@ class Application(tornado.web.Application):
             self.persons_info = []
             
             person_id = 0
-            for title,  original_corpus,  decomposed_corpus, name in zip(self.titles,  self.original_corpuses, self.corpuses, self.auther_names):
+            for title,  original_corpus,  decomposed_corpus, name in zip(self.titles,  self.original_corpuses, self.corpuses, self.author_names):
                 if name not in self.corpuses_name_id.keys():
                     self.corpuses_name_id[name] = {}
                     self.corpuses_name_id[name]["id"] = person_id
@@ -185,11 +187,8 @@ class Application(tornado.web.Application):
             # set of all keywords
             self.keywords_set = pickle.load(self.keywords_file_obj)
 
-            # get list of auther names 
-            self.auther_names = self.extractors.auther_names
-            
-            # get list of auther names 
-            self.auther_names = self.extractors.auther_names
+            # get list of author names
+            self.author_names = self.extractors.author_names
 
             # length of all keywords
             self.current_selected_keyword_length = len(list(self.keywords_set))

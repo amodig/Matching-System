@@ -69,7 +69,7 @@ class ArticleMatrixHandler(BaseHandler):
         correlation_matrix = numpy.sqrt(self.application.analyzer._X.T * self.application.analyzer._X)  
         
         self._mm = MysqlMessager(database="keyword_app")
-        sql = "select AbstractID,Title,Abstract, AutherName from Abstracts where  AbstractID in %s;" % (tuple(data["articles"]),)
+        sql = "select AbstractID, Title, Abstract, AuthorName from Abstracts where AbstractID in %s;" % (tuple(data["articles"]),)
         print sql
         self._mm.excute_sql(sql)
         iter = self._mm.fetch()

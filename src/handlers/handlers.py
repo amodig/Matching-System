@@ -82,14 +82,12 @@ class LoginHandler(BaseHandler):
                     notification=self.get_flash(),
                     message=self.get_argument("error", ""))
 
+    @tornado.gen.coroutine
     def post(self):
         username = self.get_argument("username", "")
         password = self.get_argument("password", "").encode("utf-8")
-        user = self.application.syncdb['users'].find_one({'user': username})
-        #user = self.application.db['users'].find_one({'user': username})
-
-        print user
-        print type(user)
+        #user = self.application.syncdb['users'].find_one({'user': username})
+        user = yield self.application.db['users'].find_one({'user': username})  # returns a Future
 
         # Warning bcrypt will block IO loop:
         if not user:
@@ -185,17 +183,17 @@ class RegisterHandler(LoginHandler):
         user['password'] = hashed_passwd
 
         #auth = self.application.syncdb['users'].save(user)
-        auth = self.application.db['users'].save(user)
+        auth = yield self.application.db['users'].save(user)
         self.set_current_user(username)
 
         # Add two-step verification?
 
         self.redirect(u"/index")
 
+    @tornado.gen.coroutine
     def _already_taken(self, entry, query):
         #return self.application.syncdb['users'].find_one({entry: query})
-        return self.application.db['users'].find_one({entry: query})
-
+        yield self.application.db['users'].find_one({entry: query})
 
 class TwitterLoginHandler(LoginHandler,
                           tornado.auth.TwitterMixin):

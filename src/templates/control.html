@@ -17,44 +17,23 @@
     <script src="static/js/jquery.js"></script>
     <script src="static/js/jquery-ui.min.js"></script>
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <!-- The template to display files available for upload -->
 
-
-
+    <!-- The Template and jQuery File Upload scripts -->
     <script>
-
         function scriptsLoaded(data) {
         }
-
         function downloadTemplateLoaded(data) {
             window.downloadTemplate = data;
-            $('#ajax-load-scripts').load('/static/scripts.html', scriptsLoaded);
+            $('#ajax-load-scripts').load('static/scripts.html', scriptsLoaded);
         }
-
         function uploadTemplateLoaded(data) {
             window.uploadTemplate = data;
-            $.get('/static/js/template-download.tmpl', downloadTemplateLoaded);
+            $.get('static/js/template-download.tmpl', downloadTemplateLoaded);
         }
         $(function () {
-            $.get('/static/js/template-upload.tmpl', uploadTemplateLoaded);
-
-
-            /*$('#template-upload').load('/static/js/template-upload.tmpl', function (data) {
-                alert('1');
-                window.uploadTemplate = data;
-
-                $('#template-download').load('/static/js/template-download.tmpl', function (data) {
-                    alert('2');
-                    window.downloadTemplate = data;
-
-                    $('#ajax-load-scripts').load('/static/scripts.html', function (data) {
-                        alert('LOADED: ' + data);
-                    });
-                });
-            });*/
+            $.get('static/js/template-upload.tmpl', uploadTemplateLoaded);
         });
     </script>
-
 </head>
 <body>
 
@@ -103,7 +82,6 @@
     </table>
 </form>
 
-<input id="clickMe" type="button" value="clickme" onclick="tmpl.load('template-upload');"/>
 
 <div id="ajax-load-scripts"></div>
 

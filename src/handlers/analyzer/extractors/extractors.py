@@ -98,15 +98,15 @@ class Extractors():
         """
         self._file_name = file_name
         # This variable stores the information of the corpuses needed in this project_corpus
-        self.project_corpuses,  self.auther_names,  self.titles = self.get_information(10000)
+        self.project_corpuses,  self.author_names,  self.titles = self.get_information(10000)
     def get_titles(self):
         return self.titles
         
     def get_corpuses(self):
         return self.project_corpuses
     
-    def get_auther_names(self):
-        return self.auther_names
+    def get_author_names(self):
+        return self.author_names
     # def get_information_from_database(self):
     #     corpora = []
     #     author_names = []
@@ -121,7 +121,7 @@ class Extractors():
         """
 
         corpuses = []
-        auther_names = []
+        author_names = []
         titles = []
         keyword_set = set()
         if file_name is None:
@@ -136,15 +136,15 @@ class Extractors():
                     abstract = element.text
                     corpuses.append(abstract)
                 if element.tag == "name":
-                    auther_name = element.text
-                    auther_names.append(auther_name)
+                    author_name = element.text
+                    author_names.append(author_name)
                 if element.tag == "title":
                     title = element.text
                     titles.append(title)
             if (len(corpuses)  == number_of_corpus):
                 break
 
-        return corpuses,  auther_names,  titles
+        return corpuses,  author_names,  titles
 
             
     def get_keywords_from_abstract(self, number_of_corpuses, file_name = None):

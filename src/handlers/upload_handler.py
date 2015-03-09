@@ -33,7 +33,7 @@ class UploadHandler(BaseHandler):
         if error:
             raise error
         print 'result', repr(result)
-        IOLoop.instance().stop(self)
+        IOLoop.instance().stop()
 
     def validate(self, file):
         """Validate a given file (a dictionary object)."""
@@ -57,13 +57,11 @@ class UploadHandler(BaseHandler):
     @tornado.gen.coroutine
     def write_file(self, file_content, key, result):
         """Write file to MongoDB GridFS system."""
-        fs = motor.MotorGridFS(self.application.db['documents'])
+        fs = motor.MotorGridFS(self.application.db, collection=u'fs')
         # default: file_id is the ObjectId of the resulting file
-        file_id = yield fs.put(file_content, _id=key, callback=self.callback, filename=result['name'],
+        file_id = yield fs.put(file_content, _id=key, filename=result['name'],
                                content_type=result['type'])
-        # start IOLoop when callback has run
-        IOLoop.instance().start(self)
-        assert id == file_id
+        assert file_id is key, "file_id is not key (%r): %r" % (key, file_id)
 
     def handle_upload_db(self):
         """Handle uploads to database.
@@ -85,12 +83,12 @@ class UploadHandler(BaseHandler):
                     key = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
                     #document = {key : f}
                     #self.application.db['documents'].insert(document, callback=self.callback)
-                    #self.write_file(filebody, key, result)
+                    self.write_file(filebody, key, result)
                     result['deleteType'] = 'DELETE'
                     result['key'] = key
-                    result['deleteUrl'] = self.request.full_url() + '/?key=' + key
+                    result['deleteUrl'] = self.request.uri + '?key=' + key
                     if 'url' not in result:
-                        result['url'] = self.request.full_url() + '/' + key + '/' + quote(result['name'].encode('utf-8'))
+                        result['url'] = self.request.uri + '/' + key + '/' + quote(result['name'].encode('utf-8'))
                     if self.access_control_allow_credentials:
                         result['deleteWithCredentials'] = True
                 results.append(result)
@@ -153,35 +151,37 @@ class UploadHandler(BaseHandler):
 
     @tornado.web.asynchronous
     def post(self):
-
-        if self.get_query_argument('_method', default=None) == 'DELETE':
+        if self.get_argument('_method', default=None) == 'DELETE':
             return self.delete()
         result = {'files': self.handle_upload_db()}
         s = json.dumps(result, separators=(',', ':'))
-        redirect = self.get_query_argument('redirect', default=None)
+        redirect = self.get_argument('redirect', default=None)
         if redirect:
             return self.redirect(str(redirect.replace('%s', quote(s, ''), 1)))
         if 'application/json' in self.request.headers.get_list('Accept'):
             self.request.set_headers('Content-Type', 'application/json')
-        print "kirjoitetaan %s" % s
+        print "Writing: %s" % s
         self.write(s)
         print "POST files:"
         print [f['filename'] for f in self.request.files[self.file_param_name]]
         print "POST arguments:"
         print self.request.arguments
-
-        print 'FINISHING'
+        print "Finishing..."
         self.finish()
 
     @tornado.gen.coroutine
     def delete(self):
-        key = self.request.get('key') or ''
-        print key
-        fs = motor.MotorGridFS(self.application.db['documents'])
-        yield fs.delete(key, callback=self.callback)
-        # start IOLoop when callback has run
-        IOLoop.instance().start(self)
-        s = json.dumps({key: True}, separators=(',', ':'))
-        if 'application/json' in self.request.headers.get('Accept'):
-            self.request.headers['Content-Type'] = 'application/json'
-        self.request.connection.write(s)
+        key = self.get_argument('key', default=None) or ''
+        print "Delete with key: %s" % key
+        fs = motor.MotorGridFS(self.application.db, collection=u'fs')
+        # get file name
+        grid_out = yield fs.get(key)
+        filename = grid_out.filename
+        # delete a file with the key
+        yield fs.delete(key)
+        # make JSON response
+        s = json.dumps({'files': {filename: True}}, separators=(',', ':'))
+        print "Writing: %s" % s
+        if 'application/json' in self.request.headers.get_list('Accept'):
+            self.request.set_headers['Content-Type'] = 'application/json'
+        self.write(s)
