@@ -5,21 +5,21 @@ import motor
 import random
 import string
 import re
-
-from tornado.web import asynchronous
-from tornado.gen import coroutine
-from tornado.ioloop import IOLoop
-from tornado.options import define, options
+from tornado import web
+from tornado import escape
+from tornado import gen
 from requests.utils import quote
-
+from time import strftime
 from base_handler import *
+
+from gridfs.errors import NoFile
 
 class UploadHandler(BaseHandler):
 
     # class attributes
     MIN_FILE_SIZE = 1  # bytes
     MAX_FILE_SIZE = 5000000  # bytes
-    DOCUMENT_TYPES = re.compile('application/pdf')  #re.compile('image/(gif|p?jpeg|(x-)?png)')
+    DOCUMENT_TYPES = re.compile("application/pdf")  # re.compile('image/(gif|p?jpeg|(x-)?png)')
     ACCEPT_FILE_TYPES = DOCUMENT_TYPES
 
     def initialize(self):
@@ -35,14 +35,14 @@ class UploadHandler(BaseHandler):
         print 'result', repr(result)
         IOLoop.instance().stop()
 
-    def validate(self, file):
+    def validate(self, f):
         """Validate a given file (a dictionary object)."""
-        if file['size'] < self.MIN_FILE_SIZE:
-            file['error'] = 'File is too small'
-        elif file['size'] > self.MAX_FILE_SIZE:
-            file['error'] = 'File is too big'
-        elif not self.ACCEPT_FILE_TYPES.match(file['type']):
-            file['error'] = 'File type not allowed'
+        if f['size'] < self.MIN_FILE_SIZE:
+            f['error'] = 'File is too small'
+        elif f['size'] > self.MAX_FILE_SIZE:
+            f['error'] = 'File is too big'
+        elif not self.ACCEPT_FILE_TYPES.match(f['type']):
+            f['error'] = 'File type not allowed'
         else:
             return True
         return False
@@ -54,7 +54,30 @@ class UploadHandler(BaseHandler):
         file.seek(0)  # Reset the file position to the beginning
         return size
 
-    @tornado.gen.coroutine
+    @staticmethod
+    def fid(file_id=None, filename=None):
+        if not file_id:
+            if not filename:
+                raise web.HTTPError(500)
+            else:
+                fid = filename
+        else:
+            fid = file_id
+        return fid
+
+    @gen.coroutine
+    def get_grid_out(self, file_id=None, filename=None):
+        fs = motor.MotorGridFS(self.application.db, collection=u'fs')
+        fid = self.fid(file_id, filename)
+        try:
+            grid_out = yield fs.get(fid)
+        except NoFile:
+            raise web.HTTPError(404)
+        if filename:
+            assert grid_out.filename is filename, "file names does not match!"
+        raise gen.Return(grid_out)
+
+    @gen.coroutine
     def write_file(self, file_content, key, result):
         """Write file to MongoDB GridFS system."""
         fs = motor.MotorGridFS(self.application.db, collection=u'fs')
@@ -62,6 +85,15 @@ class UploadHandler(BaseHandler):
         file_id = yield fs.put(file_content, _id=key, filename=result['name'],
                                content_type=result['type'])
         assert file_id is key, "file_id is not key (%r): %r" % (key, file_id)
+
+    def get_download_url(self, filename=None, key=None):
+        if filename:
+            url = self.request.uri + '?file=' + escape.url_escape(filename)
+        elif key:
+            url = self.request.uri + '?key=' + escape.url_escape(key)
+        else:
+            raise web.HTTPError(500)
+        return url + '&download=1'
 
     def handle_upload_db(self):
         """Handle uploads to database.
@@ -73,22 +105,17 @@ class UploadHandler(BaseHandler):
             for f in self.request.files[self.file_param_name]:
                 result = {}
                 result['name'] = f['filename']
-                print result['name']  # debug
-                filebody = f['body']
-                # result['type'] = magic.from_file(filebody, mime=True)  # get MIME type
+                file_body = f['body']
                 result['type'] = f['content_type']
-                # result['size'] = self.get_file_size(filebody)
-                result['size'] = len(filebody)
+                result['size'] = len(file_body)
                 if self.validate(result):
                     key = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
-                    #document = {key : f}
-                    #self.application.db['documents'].insert(document, callback=self.callback)
-                    self.write_file(filebody, key, result)
+                    self.write_file(file_body, key, result)
                     result['deleteType'] = 'DELETE'
                     result['key'] = key
                     result['deleteUrl'] = self.request.uri + '?key=' + key
                     if 'url' not in result:
-                        result['url'] = self.request.uri + '/' + key + '/' + quote(result['name'].encode('utf-8'))
+                        result['url'] = self.get_download_url(key=key)
                     if self.access_control_allow_credentials:
                         result['deleteWithCredentials'] = True
                 results.append(result)
@@ -111,8 +138,23 @@ class UploadHandler(BaseHandler):
                 results.append(result)
         return results
 
-    def download(self):
-        pass  # TODO
+    @gen.coroutine
+    def do_download(self):
+        # use either filename or file key
+        filename = self.get_argument('file', default=None)
+        key = self.get_argument('key', default=None)
+        # get a GridFS GridOut object
+        grid_out = yield self.get_grid_out(file_id=key, filename=filename)
+        # Prevent browsers from MIME-sniffing the content-type:
+        self.set_header('X-Content-Type-Options', 'nosniff')
+        self.set_header('Content-Type', 'application/octet-stream')
+        #self.set_header('Content-Type', grid_out.content_type)
+        self.set_header('Content-Disposition', 'attachment; filename=%s' % grid_out.filename)
+        self.set_header('Content-Length', grid_out.length)
+        self.set_header('Upload-Date', grid_out.upload_date.strftime('%A, %d %M %Y %H:%M:%S %Z'))
+        # stream the file content to RequestHandler
+        yield grid_out.stream_to_handler(self)
+        self.finish()
 
     def send_access_control_headers(self):
         self.set_header('Access-Control-Allow-Origin', self.access_control_allow_origin)
@@ -142,14 +184,14 @@ class UploadHandler(BaseHandler):
             self.send_access_control_headers()
         self.send_content_type_header()
 
+    @web.asynchronous
     def get(self):
-        if self.get_query_argument('download', default=None):
-            return self.download()
-
+        if self.get_argument('download', default=None):
+            return self.do_download()
         template_vars = {}
         self.render("control.html", **template_vars)
 
-    @tornado.web.asynchronous
+    @web.asynchronous
     def post(self):
         if self.get_argument('_method', default=None) == 'DELETE':
             return self.delete()
@@ -160,19 +202,13 @@ class UploadHandler(BaseHandler):
             return self.redirect(str(redirect.replace('%s', quote(s, ''), 1)))
         if 'application/json' in self.request.headers.get_list('Accept'):
             self.request.set_headers('Content-Type', 'application/json')
-        print "Writing: %s" % s
+        print "POST writing: %s" % s
         self.write(s)
-        print "POST files:"
-        print [f['filename'] for f in self.request.files[self.file_param_name]]
-        print "POST arguments:"
-        print self.request.arguments
-        print "Finishing..."
         self.finish()
 
-    @tornado.gen.coroutine
+    @gen.coroutine
     def delete(self):
         key = self.get_argument('key', default=None) or ''
-        print "Delete with key: %s" % key
         fs = motor.MotorGridFS(self.application.db, collection=u'fs')
         # get file name
         grid_out = yield fs.get(key)
@@ -181,7 +217,7 @@ class UploadHandler(BaseHandler):
         yield fs.delete(key)
         # make JSON response
         s = json.dumps({'files': {filename: True}}, separators=(',', ':'))
-        print "Writing: %s" % s
         if 'application/json' in self.request.headers.get_list('Accept'):
             self.request.set_headers['Content-Type'] = 'application/json'
+        print "DELETE writing: %s" % s
         self.write(s)
