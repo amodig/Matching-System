@@ -30,7 +30,7 @@ from upload_handler import *
 class AnalyzerHandler(BaseHandler):
     def get(self):
         messages = self.application.syncdb.messages.find()
-        
+
     def post(self):
         pass
 
@@ -75,10 +75,10 @@ class MenuTagsHandler(BaseHandler):
 
 
 class LoginHandler(BaseHandler):
-
+    @tornado.web.asynchronous
     def get(self):
         #messages = self.application.syncdb.messages.find()
-        self.render("login.html", next=self.get_argument("next","/"),
+        self.render("login.html", next=self.get_argument("next", "/"),
                     notification=self.get_flash(),
                     message=self.get_argument("error", ""))
 
@@ -86,7 +86,7 @@ class LoginHandler(BaseHandler):
     def post(self):
         username = self.get_argument("username", "")
         password = self.get_argument("password", "").encode("utf-8")
-        #user = self.application.syncdb['users'].find_one({'user': username})
+        # user = self.application.syncdb['users'].find_one({'user': username})
         user = yield self.application.db['users'].find_one({'user': username})  # returns a Future
 
         # Warning bcrypt will block IO loop:
@@ -95,7 +95,10 @@ class LoginHandler(BaseHandler):
             self.redirect(u"/login" + error_msg)
         if user['password'] and bcrypt.hashpw(password, user['password'].encode("utf-8")) == user['password']:
             self.set_current_user(username)
-            self.redirect("/index")
+            if self.get_argument('next', default=None):
+                self.redirect(self.get_argument('next', '/'))
+            else:
+                self.redirect("/index")
         else:
             self.set_secure_cookie('flash', "Login incorrect")
             error_msg = u"?error=" + tornado.escape.url_escape("Login incorrect.")
@@ -270,11 +273,11 @@ class ThreadHandler(tornado.web.RequestHandler):
 
 class IndexHandler(MainBaseHandler):
 
-    @tornado.web.authenticated        
+    @tornado.web.authenticated
     def get(self):		
         self.render("index.html")
 
-    @tornado.web.authenticated 
+    @tornado.web.authenticated
     def post(self):
         self.application.iter_num = self.application.iter_num +1
         
@@ -382,15 +385,12 @@ class FacebookDemoHandler(BaseHandler):
     def get(self):
         self.render("fb_demo.html", user=self.get_current_user(), fb_app_id=self.settings['facebook_app_id'])
 
-
 class GravatarHandler(BaseHandler):
-
     def build_grav_url(self, email):
-        #default = "http://thumbs.dreamstime.com/thumblarge_540/1284957171JgzjF1.jpg"
+        # default = "http://thumbs.dreamstime.com/thumblarge_540/1284957171JgzjF1.jpg"
         # random patterned background:
         default = 'identicon'
         size = 40
-
         # construct the url
         gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
         gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
@@ -399,7 +399,6 @@ class GravatarHandler(BaseHandler):
     def get(self):
         email = self.get_argument('email', "sample@gmail.com")
         self.render("grav.html", user=self.get_current_user(), email=email, icon=self.build_grav_url(email))
-
 
 class WildcardPathHandler(BaseHandler):
     def initialize(self):

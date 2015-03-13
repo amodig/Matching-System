@@ -1,6 +1,4 @@
 import os
-import json
-import magic
 import motor
 import random
 import string
@@ -10,9 +8,12 @@ from tornado import escape
 from tornado import gen
 from requests.utils import quote
 from time import strftime
+from bson import json_util
 from base_handler import *
+from uimodules import Gravatar
 
 from gridfs.errors import NoFile
+
 
 class UploadHandler(BaseHandler):
 
@@ -78,12 +79,12 @@ class UploadHandler(BaseHandler):
         raise gen.Return(grid_out)
 
     @gen.coroutine
-    def write_file(self, file_content, key, result):
+    def write_file(self, file_content, user, key, result):
         """Write file to MongoDB GridFS system."""
         fs = motor.MotorGridFS(self.application.db, collection=u'fs')
         # default: file_id is the ObjectId of the resulting file
-        file_id = yield fs.put(file_content, _id=key, filename=result['name'],
-                               content_type=result['type'])
+        file_id = yield fs.put(file_content, _id=key, user=user, filename=result['name'],
+                               content_type=result['type'], title=result['title'])
         assert file_id is key, "file_id is not key (%r): %r" % (key, file_id)
 
     def get_download_url(self, filename=None, key=None):
@@ -95,6 +96,35 @@ class UploadHandler(BaseHandler):
             raise web.HTTPError(500)
         return url + '&download=1'
 
+    @gen.coroutine
+    def get_files_db(self, user):
+        """Finds all files by selected user.
+        :return a list of file dictionaries (can be empty).
+        """
+        files = []
+        fs = motor.MotorGridFS(self.application.db, collection=u'fs')
+        cursor = fs.find({"user": user}, timeout=False)
+        while (yield cursor.fetch_next):
+            file = {}
+            grid_out = cursor.next_object()
+            # content = yield grid_out.read()
+            try:
+                file['title'] = grid_out.title
+            except AttributeError:
+                file['title'] = "[No title]"
+            file['name'] = grid_out.filename
+            file['key'] = grid_out._id
+            file['size'] = grid_out.length
+            file['type'] = grid_out.content_type
+            file['upload_date'] = grid_out.upload_date
+            file['deleteType'] = 'DELETE'
+            file['deleteUrl'] = self.request.uri + '?key=' + file['key']
+            file['url'] = self.get_download_url(key=file['key'])
+            if self.access_control_allow_credentials:
+                file['deleteWithCredentials'] = True
+            files.append(file)
+        raise gen.Return(files)
+
     def handle_upload_db(self):
         """Handle uploads to database.
         :return JSON list of uploaded files.
@@ -102,15 +132,17 @@ class UploadHandler(BaseHandler):
         results = []
         if self.request.files:
             # each f is a dictionary
-            for f in self.request.files[self.file_param_name]:
+            for (f, title) in zip(self.request.files[self.file_param_name], self.get_arguments('title[]')):
                 result = {}
                 result['name'] = f['filename']
                 file_body = f['body']
+                result['title'] = title
                 result['type'] = f['content_type']
                 result['size'] = len(file_body)
                 if self.validate(result):
+                    user = self.get_current_user()
                     key = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
-                    self.write_file(file_body, key, result)
+                    self.write_file(file_body, user, key, result)
                     result['deleteType'] = 'DELETE'
                     result['key'] = key
                     result['deleteUrl'] = self.request.uri + '?key=' + key
@@ -127,7 +159,7 @@ class UploadHandler(BaseHandler):
             for f in self.request.files[self.file_param_name]:
                 result = {}
                 result['name'] = f['filename']
-                result['type'] = magic.from_file(f, mime=True)
+                result['type'] = f['content_type']
                 result['size'] = self.get_file_size(f)
                 if self.validate(result):
                     extension = os.path.splitext(f['filename'])[1]
@@ -154,7 +186,6 @@ class UploadHandler(BaseHandler):
         self.set_header('Upload-Date', grid_out.upload_date.strftime('%A, %d %M %Y %H:%M:%S %Z'))
         # stream the file content to RequestHandler
         yield grid_out.stream_to_handler(self)
-        self.finish()
 
     def send_access_control_headers(self):
         self.set_header('Access-Control-Allow-Origin', self.access_control_allow_origin)
@@ -184,13 +215,28 @@ class UploadHandler(BaseHandler):
             self.send_access_control_headers()
         self.send_content_type_header()
 
-    @web.asynchronous
+    @web.authenticated
+    @gen.coroutine
     def get(self):
         if self.get_argument('download', default=None):
-            return self.do_download()
+            self.do_download()
+            return
+        # fetch files from database
+        user = self.get_current_user()
+        files = yield self.get_files_db(user)
+        # use BSON util for default date conversion
+        s = json.dumps(files, separators=(',', ':'), default=json_util.default)
+        # template_vars = {'get_files': s, 'test_string': "test"}
         template_vars = {}
+        template_vars['get_files'] = s
+        template_vars['test_string'] = "test"
+        print "Fetched files:"
+        print s
+        print type(template_vars)
         self.render("control.html", **template_vars)
+        # self.render("control.html", files=s, test_string="test")
 
+    @web.authenticated
     @web.asynchronous
     def post(self):
         if self.get_argument('_method', default=None) == 'DELETE':
@@ -206,6 +252,7 @@ class UploadHandler(BaseHandler):
         self.write(s)
         self.finish()
 
+    @web.authenticated
     @gen.coroutine
     def delete(self):
         key = self.get_argument('key', default=None) or ''

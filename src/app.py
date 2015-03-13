@@ -14,7 +14,7 @@ from tornado.web import url
 from copy import deepcopy
 
 from handlers.handlers import *
-
+from handlers import uimodules
 
 define("port", default=8899, type=int)
 define("config_file", default="app_config.yml", help="app_config file")
@@ -22,6 +22,7 @@ define("config_file", default="app_config.yml", help="app_config file")
 # MONGO_SERVER_ADDRESS = '192.168.1.68'
 MONGO_SERVER_ADDRESS = 'localhost'
 MONGO_SERVER_PORT = 27017
+
 
 class Application(tornado.web.Application):
     def __init__(self, **overrides):
@@ -75,6 +76,8 @@ class Application(tornado.web.Application):
             # template settings
             'template_path': os.path.join(os.path.dirname(__file__), 'templates'),
             'autoescape': 'None',  # Defaults to "xhtml_escape"
+            # UI modules
+            "ui_modules": uimodules,
             # authentication and security
             'cookie_secret': base64.b64encode(uuid.uuid4().bytes + uuid.uuid4().bytes),
             'twitter_consumer_key': 'KEY',
