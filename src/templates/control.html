@@ -21,6 +21,24 @@
     <!-- The Template and jQuery File Upload scripts -->
     <script>
         function scriptsLoaded(data) {
+            // fetch existing file data
+            var files = {{ get_files }};  // get tornado template variables
+
+            var $form = $('#fileupload');
+            $form.fileupload('option','done').call(
+                    $form, $.Event('done'), {result: {files: files}}
+            );
+            // add new input fields
+            $form.bind('fileuploadsubmit', function (e, data) {
+                var inputs = data.context.find(':input');
+                if (inputs.filter(function () {
+                            return !this.value && $(this).prop('required');
+                        }).first().focus().length) {
+                    data.context.find('button').prop('disabled', false);
+                    return false;
+        }
+                data.formData = inputs.serializeArray();
+            });
         }
         function downloadTemplateLoaded(data) {
             window.downloadTemplate = data;
@@ -37,6 +55,7 @@
 </head>
 <body>
 
+<div id="upload">
 <h2 class="page-title">
     Upload articles
 </h2>
@@ -81,7 +100,7 @@
         <tbody class="files" id="files"></tbody>
     </table>
 </form>
-
+</div>
 
 <div id="ajax-load-scripts"></div>
 

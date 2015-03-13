@@ -30,7 +30,7 @@ from upload_handler import *
 class AnalyzerHandler(BaseHandler):
     def get(self):
         messages = self.application.syncdb.messages.find()
-        
+
     def post(self):
         pass
 
@@ -75,7 +75,7 @@ class MenuTagsHandler(BaseHandler):
 
 
 class LoginHandler(BaseHandler):
-
+    @tornado.web.asynchronous
     def get(self):
         #messages = self.application.syncdb.messages.find()
         self.render("login.html", next=self.get_argument("next","/"),
@@ -86,7 +86,7 @@ class LoginHandler(BaseHandler):
     def post(self):
         username = self.get_argument("username", "")
         password = self.get_argument("password", "").encode("utf-8")
-        #user = self.application.syncdb['users'].find_one({'user': username})
+        # user = self.application.syncdb['users'].find_one({'user': username})
         user = yield self.application.db['users'].find_one({'user': username})  # returns a Future
 
         # Warning bcrypt will block IO loop:
@@ -270,11 +270,11 @@ class ThreadHandler(tornado.web.RequestHandler):
 
 class IndexHandler(MainBaseHandler):
 
-    @tornado.web.authenticated        
+    @tornado.web.authenticated
     def get(self):		
         self.render("index.html")
 
-    @tornado.web.authenticated 
+    @tornado.web.authenticated
     def post(self):
         self.application.iter_num = self.application.iter_num +1
         
