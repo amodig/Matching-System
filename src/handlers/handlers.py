@@ -10,7 +10,6 @@ import boto
 import cStringIO
 from PIL import Image
 
-
 import logging
 import bson.json_util
 import json
@@ -77,16 +76,22 @@ class MenuTagsHandler(BaseHandler):
 class LoginHandler(BaseHandler):
     @tornado.web.asynchronous
     def get(self):
-        #messages = self.application.syncdb.messages.find()
-        self.render("login.html", next=self.get_argument("next","/"),
+        # redirect if user is already logged in
+        if self.get_current_user():
+            print self.get_argument("next", default="no next argument")
+            self.redirect(self.get_argument("next", default="/"))
+            return
+        error_msg = self.get_argument("error", default="")
+        print self.request.arguments
+        self.render("login.html", next=self.get_argument("next", default="/"),
                     notification=self.get_flash(),
-                    message=self.get_argument("error", ""))
+                    message=self.get_argument("error", ""),
+                    error_msg=error_msg)
 
     @tornado.gen.coroutine
     def post(self):
-        username = self.get_argument("username", "")
-        password = self.get_argument("password", "").encode("utf-8")
-        # user = self.application.syncdb['users'].find_one({'user': username})
+        username = self.get_argument("username", default="")
+        password = self.get_argument("password", default="").encode("utf-8")
         user = yield self.application.db['users'].find_one({'user': username})  # returns a Future
 
         # Warning bcrypt will block IO loop:
@@ -95,14 +100,16 @@ class LoginHandler(BaseHandler):
             self.redirect(u"/login" + error_msg)
         if user['password'] and bcrypt.hashpw(password, user['password'].encode("utf-8")) == user['password']:
             self.set_current_user(username)
-            self.redirect("/index")
+            print self.request.arguments
+            print self.get_argument("next", default="next argument not found")
+            self.redirect(self.get_argument("next", default=u"/index"))
         else:
-            self.set_secure_cookie('flash', "Login incorrect")
+            self.set_secure_cookie('flash', "Login incorrect!")
             error_msg = u"?error=" + tornado.escape.url_escape("Login incorrect.")
             self.redirect(u"/login" + error_msg)
 
     def set_current_user(self, username):
-        print "setting " + username
+        print "Set current user: " + username
         if username:
             self.set_secure_cookie("user", tornado.escape.json_encode(username))
         else:
@@ -181,6 +188,7 @@ class RegisterHandler(LoginHandler):
         user['email'] = email
         user['username'] = username
         user['password'] = hashed_passwd
+        user['bio'] = ""  # empty bio
 
         #auth = self.application.syncdb['users'].save(user)
         auth = yield self.application.db['users'].save(user)
@@ -194,6 +202,7 @@ class RegisterHandler(LoginHandler):
     def _already_taken(self, entry, query):
         #return self.application.syncdb['users'].find_one({entry: query})
         yield self.application.db['users'].find_one({entry: query})
+
 
 class TwitterLoginHandler(LoginHandler,
                           tornado.auth.TwitterMixin):
@@ -269,19 +278,18 @@ class ThreadHandler(tornado.web.RequestHandler):
 
 
 class IndexHandler(MainBaseHandler):
-
     @tornado.web.authenticated
     def get(self):		
         self.render("index.html")
 
     @tornado.web.authenticated
     def post(self):
-        self.application.iter_num = self.application.iter_num +1
+        self.application.iter_num += 1
         
-        key_prase = self.get_argument('key_prase', '').split('_')
+        key_phrase = self.get_argument('key_phrase', '').split('_')
         indexes = []
         
-        for k in key_prase:
+        for k in key_phrase:
             indexes.append(self.application.keywords.index(k))
 
     def __del__(self):
@@ -290,7 +298,7 @@ class IndexHandler(MainBaseHandler):
         
 """
 #        for keyword in self.keywords:
-#            if self._lists_overlap(key_prase, keyword.split()):
+#            if self._lists_overlap(key_phrase, keyword.split()):
 #                selected_keys.append(keyword)
 """
 
@@ -352,6 +360,12 @@ class EmailMeHandler(BaseHandler):
             self.redirect('/')
 
 
+class MyStaticFileHandler(tornado.web.StaticFileHandler):
+    def set_extra_headers(self, path):
+        # Disable cache
+        self.set_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+
+
 class MessageHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
@@ -411,7 +425,7 @@ class WildcardPathHandler(BaseHandler):
         print self.request.path
         action = self.request.path.split('/')[-2]
         if action not in self.supported_path:
-            self.write('<html><body>I dont like that url</body></html>')
+            self.write("<html><body>I don't like that url</body></html>")
             self.finish()
             return
 

@@ -1,3 +1,4 @@
+markdown2
 backports.ssl-match-hostname==3.4.0.2
 bcrypt==1.0.2
 beautifulsoup4==4.3.2

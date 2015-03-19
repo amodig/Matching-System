@@ -30,7 +30,7 @@ class ChartsDataHandler(BaseHandler):
         
     def __form_person_weights_relationshp(self):
         """
-        This function implement the method of forming relationship between persons and the total weight of all the keywords
+        Form relationship between persons and the total weight of all the keywords
         """
         return {
                 "persons":["aaa", "aaa", "aaa", "aaa", "aaa", "aaa", "aaa"], 
@@ -39,7 +39,7 @@ class ChartsDataHandler(BaseHandler):
 
     def __form_person_keywords_counts_relationship(self):
         """
-        This function implements the method of forming relationship between persons and total count of each keywords
+        Form relationship between persons and total count of each keyword
         """
         word_counts, person_names = zip(*[(len(person_info["keywords"]), person_info["name"]) for person_info in self.application.corpuses_name_id.values() ])
         return {

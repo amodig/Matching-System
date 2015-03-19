@@ -1,21 +1,16 @@
-# Python imports
-
-# Tornado imports
-import pymongo
-import motor
+from copy import deepcopy
 import uuid
 
+import tornado.web
 import tornado.ioloop
 import tornado.options
-import tornado.web
-
 from tornado.options import define, options
 from tornado.web import url
-from copy import deepcopy
 
 from handlers.handlers import *
 from handlers import uimodules
 
+# tornado config
 define("port", default=8899, type=int)
 define("config_file", default="app_config.yml", help="app_config file")
 
@@ -30,6 +25,7 @@ class Application(tornado.web.Application):
         handlers = [
             url(r'/', LoginHandler, name='/'),
 
+            url(r'/index', IndexHandler, name='index'),
             url(r'/charts', ChartsHandler, name='charts'),
             url(r'/charts_data', ChartsDataHandler, name='charts_data'),
             url(r'/topic_model', TopicModelHandler, name='topic_model'),
@@ -38,11 +34,11 @@ class Application(tornado.web.Application):
             url(r'/article_matrix', ArticleMatrixHandler, name='article_matrix'),
             url(r'/related_articles', RelatedArticlesHandler, name='related_articles'),
             url(r'/control', UploadHandler, name="control"),
+            url(r'/update_bio', UpdateBioHandler, name="update_bio"),
 
             url(r'/form', FormHandler, name='form'),
             url(r'/next', NextHandler, name='next'),
             url(r'/remove_person', RemovePersonHandler, name='remove_person'),
-            url(r'/index', IndexHandler, name='index'),
             url(r'/search', SearchHandler, name='search'),
             url(r'/analyzer', AnalyzerHandler, name='analyzer'),
             url(r'/email', EmailMeHandler, name='email'),
@@ -74,7 +70,7 @@ class Application(tornado.web.Application):
             'static_path': os.path.join(os.path.dirname(__file__), 'static'),
             # template settings
             'template_path': os.path.join(os.path.dirname(__file__), 'templates'),
-            'autoescape': 'None',  # Defaults to "xhtml_escape"
+            'autoescape': "xhtml_escape",  # Defaults to "xhtml_escape"
             # UI modules
             "ui_modules": uimodules,
             # authentication and security
@@ -94,18 +90,13 @@ class Application(tornado.web.Application):
 
         tornado.web.Application.__init__(self, handlers, **settings)
 
-        # Connect to mongod.
-        #self.syncconnection = pymongo.Connection(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
+        # Connect to MongoDB
         self.client = motor.MotorClient(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
 
         if 'db' in overrides:
-            #self.syncdb = self.syncconnection[overrides['db']]
             self.db = self.client[overrides['db']]
         else:
-            #self.syncdb = self.syncconnection["test-thank"]
             self.db = self.client['test-thank']
-
-        #self.syncconnection.close()
 
         # following part is for analyzer
         def set_keywords_parameters():
@@ -225,13 +216,13 @@ class Application(tornado.web.Application):
         # selected keywords, the format is the text of keyword
         self.experienced_keywords = []
 
-    def __del__(self):
-        super(tornado.web.Application, self).__del__(*args, **kwargs)
+    #def __del__(self):
+    #    super(tornado.web.Application, self).__del__(*args, **kwargs)
 
 # to redirect log file run python with : --log_file_prefix=mylog
 def main():
     tornado.options.parse_command_line()
-    http_server = tornado.httpserver.HTTPServer(Application())
+    http_server = tornado.httpserver.HTTPServer(Application(debug=True))
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
 
