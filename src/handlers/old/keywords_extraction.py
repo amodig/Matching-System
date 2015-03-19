@@ -193,7 +193,7 @@ class KeywordExtractor():
         @return a term frequency matrix
         """
 
-        self._mm.excute_sql(sql)
+        self._mm.execute_sql(sql)
         row_iter = self._mm.fetch()
         corpus = []
         # following loop first counts
@@ -224,7 +224,7 @@ class KeywordExtractor():
         @return a term frequency matrix
         """
         sql = "select Persons.FirstName, Persons.LastName, PaperNames.PaperName, PaperNames.P_ID from PaperNames , Persons where PaperNames.P_ID = Persons.ID;"
-        self._mm.excute_sql(sql)
+        self._mm.execute_sql(sql)
         row_iter = self._mm.fetch()
         corpus = []
         # following loop first counts
@@ -298,7 +298,7 @@ class KeywordExtractor():
             pickle.dump(keyword_set,f_obj) 
             f_obj.close()                  
         sql = ""
-        self._mm.excute_sql(sql)
+        self._mm.execute_sql(sql)
         row_iter = self._mm.fetch()           
         for keyword in keyword_set:
             pass
@@ -369,7 +369,7 @@ class KeywordExtractor():
             pickle.dump(keyword_set,f_obj) 
             f_obj.close()                  
         sql = ""
-        self._mm.excute_sql(sql)
+        self._mm.execute_sql(sql)
         row_iter = self._mm.fetch()           
         for keyword in keyword_set:
             pass            

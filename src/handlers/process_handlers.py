@@ -216,7 +216,7 @@ class RelatedArticlesHandler(MainBaseHandler):
         mm = MysqlMessager(database="keyword_app")
         sql = "select AbstractID, Title, Abstract, AuthorName from Abstracts where AbstractID in %s;" \
               % str(tuple(sorted_index))
-        mm.excute_sql(sql)
+        mm.execute_sql(sql)
         iterator = mm.fetch()
         message = {
             "related_articles": [{"id": data_row[0], "distance": display_distance[element], "title": data_row[1],

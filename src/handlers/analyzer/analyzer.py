@@ -35,8 +35,9 @@ class Analyzer():
         self._X_row_num,   self._X_column_num = self._X.shape
         self._current_X = matrix(zeros((0, self._X_column_num)))
         self._current_y = matrix(zeros((1, 0))).T
+
     @property
-    def _X():
+    def _X(self):
         return self._X
         
     def reset_current(self):
@@ -51,6 +52,7 @@ class Analyzer():
 
     def feature_matrix(self):
         return self._X
+
     def _linrel_sub(self, xi, w, y):
         """
         This function calculate the relevance score for each of the images.'
@@ -64,9 +66,8 @@ class Analyzer():
         return score
         
     def linrel(self, cX, cy):
-        """
-        implementing linrel algorithm, the formulas are described in
-        paper -> "Pinview: implicit Feedback in content-based image retrieval"
+        """Implementing LinRel algorithm, the formulas are described in paper:
+            "Pinview: implicit Feedback in content-based image retrieval"
         """
         assert(type(cX) == matrixlib.defmatrix.matrix)
         mu = 1.0
@@ -101,7 +102,7 @@ class Analyzer():
         afm = tf_2_augmented_frequency(tfm)
         
         # tfidft : term frequency inverse document frequency transformer
-        tfidft = TfidfTransformer(smooth_idf = True, norm = "l2")
+        tfidft = TfidfTransformer(smooth_idf=True, norm="l2")
         # tfidfm : term frequency inverse document frequency matrix
         tfidfm = matrix(tfidft.fit_transform(afm).toarray(), dtype=float64)
         target_matrix = tfidfm
@@ -134,8 +135,3 @@ class Analyzer():
 if __name__ == "__main__":
     doc_analyzer = Analyzer()
     doc_analyzer.analyze()
-    
-            
-            
-            
-

@@ -1,16 +1,14 @@
 
 import MySQLdb
-import sys
 import time
-import string
 import codecs
 
 class MysqlMessager():
     """
-    Class :  MysqlMessager
-    Description:  Mysql Messager deals communication with mysql server.
+    Class :  MySQLMessager
+    Description:  MySQL Messager: handles communication with MySQL server.
     """    
-    #def __init__(self,table = None,  user="keyword_app", password="ohTun1ah", database = "matching_system"):
+    # def __init__(self,table = None,  user="keyword_app", password="ohTun1ah", database = "matching_system"):
     def __init__(self, table=None, user="root", password="root", database="matching_system"):
         """ Initialize database connection, open logfile
         @param self Pointer to class
@@ -35,12 +33,12 @@ class MysqlMessager():
         table = kwargs.get('table', self.table)
         if table is not None:
             sql = u"TRUNCATE TABLE %s;"%table
-            self.excute_sql(sql, self.mysql_log_file)
+            self.execute_sql(sql, self.mysql_log_file)
 
-    def excute_sql(self, sql,  log_file = None):
-        """ Excute sql, if it is failed and log file name is given, store the information in log file
+    def execute_sql(self, sql, log_file=None):
+        """ Execute SQL, if it is failed and log file name is given, store the information in log file
         @param self Pointer to class
-        @param log_file_name Name of log file used to store error information
+        @param log_file Name of log file used to store error information
         """
         try:
             self.cursor.execute(sql)
@@ -50,13 +48,13 @@ class MysqlMessager():
             self.cnx.rollback()
             log = "Error %s -> %s" % (e.args[0], e.args[1])
             if log_file is not None:
-                log_file.write(time.asctime( time.localtime(time.time()) ) + log + "\n")
+                log_file.write(time.asctime(time.localtime(time.time())) + log + '\n')
             else:
                 print log
+
     def fetch(self):
         return self.cursor
-         
-            
+
     def __del__(self):
         """ Close the cursor, disconnect the database and close the log file.
         @param self Pointer to class
@@ -65,6 +63,5 @@ class MysqlMessager():
             self.cursor.close()
         if 'cnx' in self.__dict__.keys():
             self.cnx.close()
-        if  'mysql_log_file' in self.__dict__.keys():
+        if 'mysql_log_file' in self.__dict__.keys():
             self.mysql_log_file.close()
-        

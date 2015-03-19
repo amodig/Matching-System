@@ -117,7 +117,7 @@ class Application(tornado.web.Application):
                 self.corpus_keywords_file_obj = open(self.corpus_keywords_filename,'r')
                 # set preprocessed corpuses, this is different than original corpuses
                 self.corpuses = pickle.load(self.corpus_keywords_file_obj)
-                self.original_corpuses = self.extractors.project_corpuses
+                self.original_corpuses = self.extractors.project_corpora
                 self.corpus_keywords_file_obj.close()
 
             def set_titles():

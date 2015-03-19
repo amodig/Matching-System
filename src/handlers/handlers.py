@@ -77,13 +77,12 @@ class LoginHandler(BaseHandler):
     @tornado.web.asynchronous
     def get(self):
         # redirect if user is already logged in
-        if self.get_current_user():
-            print self.get_argument("next", default="no next argument")
-            self.redirect(self.get_argument("next", default="/"))
-            return
+        #if self.get_current_user():
+        #    print self.get_argument("next", default="no next argument")
+        #    self.redirect(self.get_argument("next", default="/"))
+        #    return
         error_msg = self.get_argument("error", default="")
-        print self.request.arguments
-        self.render("login.html", next=self.get_argument("next", default="/"),
+        self.render("login.html", next=self.get_argument("next", default=u"/control"),
                     notification=self.get_flash(),
                     message=self.get_argument("error", ""),
                     error_msg=error_msg)
@@ -96,14 +95,17 @@ class LoginHandler(BaseHandler):
 
         # Warning bcrypt will block IO loop:
         if not user:
+            print "User not found"
             error_msg = u"?error=" + tornado.escape.url_escape("User not found.")
             self.redirect(u"/login" + error_msg)
         if user['password'] and bcrypt.hashpw(password, user['password'].encode("utf-8")) == user['password']:
+            print "Login correct"
             self.set_current_user(username)
-            print self.request.arguments
-            print self.get_argument("next", default="next argument not found")
-            self.redirect(self.get_argument("next", default=u"/index"))
+            self.redirect(self.get_argument("next", default=u"/control"))
+            print self.get_argument("next", default=u"/control")
+            #self.redirect("control")
         else:
+            print "Login incorrect"
             self.set_secure_cookie('flash', "Login incorrect!")
             error_msg = u"?error=" + tornado.escape.url_escape("Login incorrect.")
             self.redirect(u"/login" + error_msg)

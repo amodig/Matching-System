@@ -74,47 +74,53 @@
 <body>
 
 <div id="profile">
-    <img src="{{ modules.Gravatar(escape(user), 200, 'jpg') }}" width="200" alt="{{ escape(user) }}'s Avatar" >
+    <div class="container">
+        <h3 id="profile-title">Profile</h3>
+        <div class="row">
+            <div class="col-md-3">
+                <img src="{{ modules.Gravatar(escape(user), 200, 'jpg') }}" width="200" alt="{{ escape(user) }}'s Avatar" >
+            </div>
+            <div class="col-md-3">
+                <span>{% module Markdown(bio_text) %}</span>
+            </div>
+        </div>
+        <!-- Buttons -->
+        <div id="buttons">
+            <a href='logout' type="button" class="btn btn-danger logout" >
+                <span class="glyphicon glyphicon-off"></span> Logout
+            </a>
+            <button type="button" class="btn btn-primary update" data-toggle="modal" data-target="#bioModal">
+                <span class="glyphicon glyphicon-pencil"></span> Update bio
+            </button>
+            <a href='index' type="button" class="btn btn-primary index" >
+                <span class="glyphicon glyphicon-eye-open"></span> Engine
+            </a>
 
-    <span>
-        {% module Markdown(bio_text) %}
-    </span>
-
-    <div id="buttons">
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#bioModal">
-            <span class="glyphicon glyphicon-pencil"></span> Update bio
-        </button>
-
-        <!-- Modal -->
-        <div id="bioModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bioModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h3 class="modal-title" id="bioModalLabel">Modal header</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="bio-text" class="control-label">Markdown:</label>
-                                <textarea class="form-control" name="bio-text" id="bio-text" data-id='$idBioText'></textarea>
-                            </div>
+            <!-- Update Bio Modal -->
+            <div id="bioModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bioModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h3 class="modal-title" id="bioModalLabel">Update bio</h3>
                         </div>
-                        <div class="col-md-6">
-                            {% module Markdown(bio_text) %}
+                        <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="bio-text" class="control-label">Markdown (<a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">help</a>):</label>
+                                    <textarea class="form-control" name="bio-text" id="bio-text" data-id='$idBioText' rows="14">
+                                        {{ bio_text }}
+                                    </textarea>
+                                </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button id="btn-save" type="button" class="btn btn-primary">Save changes</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button id="btn-save" type="button" class="btn btn-primary">Save changes</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-
-    <a href='logout' class="btn btn-danger logout" ><span class="glyphicon glyphicon-off"></span>Logout</a>
 </div>
 
 <div id="upload">

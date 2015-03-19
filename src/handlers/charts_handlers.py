@@ -50,7 +50,7 @@ class ChartsDataHandler(BaseHandler):
     def __form_article_correlation_relationship(self):
         self._mm = MysqlMessager(database="keyword_app")
         sql = "select * from Abstracts;"
-        self._mm.excute_sql(sql)
+        self._mm.execute_sql(sql)
         iter = self._mm.fetch()
             
         #feature_matrix = self.application.analyzer._X()
@@ -71,7 +71,7 @@ class ArticleMatrixHandler(BaseHandler):
         self._mm = MysqlMessager(database="keyword_app")
         sql = "select AbstractID, Title, Abstract, AuthorName from Abstracts where AbstractID in %s;" % (tuple(data["articles"]),)
         print sql
-        self._mm.excute_sql(sql)
+        self._mm.execute_sql(sql)
         iter = self._mm.fetch()
         # this variable shows limit for two different representations,
         # if the web site requires more articles than this number, than we use second representations

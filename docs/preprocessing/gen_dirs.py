@@ -28,7 +28,7 @@ def mkdir(path):
 table_name = "Persons"
 mysqldb = MysqlMessager()
 sql = "select * from %s;"%table_name
-mysqldb.excute_sql(sql)
+mysqldb.execute_sql(sql)
 docs_path = "./docs/papers/"
 
 # for each row
