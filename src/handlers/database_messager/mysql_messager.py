@@ -18,7 +18,7 @@ class MysqlMessager():
         """
 
         self.table = table
-        self.mysql_log_file = codecs.open("mysql_log_file.txt", "w","utf-8")
+        self.mysql_log_file = codecs.open("mysql_log_file.txt", "w", "utf-8")
         try:
             self.cnx = MySQLdb.connect('localhost', user, password, database)
             self.cursor = self.cnx.cursor()  
@@ -32,7 +32,7 @@ class MysqlMessager():
         """
         table = kwargs.get('table', self.table)
         if table is not None:
-            sql = u"TRUNCATE TABLE %s;"%table
+            sql = u"TRUNCATE TABLE %s;" % table
             self.execute_sql(sql, self.mysql_log_file)
 
     def execute_sql(self, sql, log_file=None):

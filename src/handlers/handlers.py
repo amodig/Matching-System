@@ -1,24 +1,13 @@
-import base64
 from bson.objectid import ObjectId
-import os
 import bcrypt
 import hashlib
 import urllib
-import pickle
-
-import boto
-import cStringIO
-from PIL import Image
 
 import logging
 import bson.json_util
-import json
-import urlparse
 import time
 import threading
 import functools
-import string
-import pprint
 
 from base_handler import *
 from charts_handlers import *
@@ -145,6 +134,7 @@ class NoneBlockingLogin(BaseHandler):
                 tornado.ioloop.IOLoop.instance().add_callback(functools.partial(self._password_correct_callback, user['user']))
                 return
         tornado.ioloop.IOLoop.instance().add_callback(functools.partial(self._password_fail_callback))
+
     def _password_correct_callback(self, email):
         self.set_current_user(email)
         self.redirect(self.get_argument('next', '/'))
@@ -156,6 +146,9 @@ class NoneBlockingLogin(BaseHandler):
 
 
 class RegisterHandler(LoginHandler):
+    @tornado.gen.coroutine
+    def _already_taken(self, entry, query):
+        yield self.application.db['users'].find_one({entry: query})
 
     def get(self):
         self.render("register.html", next=self.get_argument("next", "/"))
@@ -192,22 +185,14 @@ class RegisterHandler(LoginHandler):
         user['password'] = hashed_passwd
         user['bio'] = ""  # empty bio
 
-        #auth = self.application.syncdb['users'].save(user)
         auth = yield self.application.db['users'].save(user)
         self.set_current_user(username)
 
         # Add two-step verification?
-
         self.redirect(u"/index")
 
-    @tornado.gen.coroutine
-    def _already_taken(self, entry, query):
-        #return self.application.syncdb['users'].find_one({entry: query})
-        yield self.application.db['users'].find_one({entry: query})
 
-
-class TwitterLoginHandler(LoginHandler,
-                          tornado.auth.TwitterMixin):
+class TwitterLoginHandler(LoginHandler, tornado.auth.TwitterMixin):
     @tornado.web.asynchronous
     def get(self):
         if self.get_argument("oauth_token", None):
@@ -243,7 +228,7 @@ class FacebookLoginHandler(LoginHandler, tornado.auth.FacebookGraphMixin):
                                 extra_params={'scope': 'offline_access'})  # read_stream,
 
     def _on_login(self, fb_user):
-        #user_details = self.application.syncdb['users'].find_one( {'facebook': fb_user['id']} )
+        # user_details = self.application.syncdb['users'].find_one( {'facebook': fb_user['id']} )
         # Create user if user not found
         self.set_current_user(fb_user['id'])
         self.redirect(u"/index")
@@ -257,7 +242,7 @@ class LogoutHandler(BaseHandler):
 
 class ThreadHandler(tornado.web.RequestHandler):
     def perform(self, callback):
-        #do something cuz hey, we're in a thread!
+        # do something cuz hey, we're in a thread!
         time.sleep(5)
         output = 'foo'
         tornado.ioloop.IOLoop.instance().add_callback(functools.partial(callback, output))
@@ -314,7 +299,7 @@ class TablesHandler(BaseHandler):
 class TablesDataHandler(BaseHandler):
     @tornado.web.authenticated 
     def get(self):
-        words, person_names = zip(*[(person_info["keywords"], person_info["name"])  for person_info in self.application.corpuses_name_id.values() ])
+        words, person_names = zip(*[(person_info["keywords"], person_info["name"]) for person_info in self.application.corpuses_name_id.values() ])
         message = {
             "tables":
                 [
@@ -400,9 +385,7 @@ class FacebookDemoHandler(BaseHandler):
 
 
 class GravatarHandler(BaseHandler):
-
     def build_grav_url(self, email):
-        #default = "http://thumbs.dreamstime.com/thumblarge_540/1284957171JgzjF1.jpg"
         # random patterned background:
         default = 'identicon'
         size = 40
@@ -493,8 +476,7 @@ class DataPusherHandler(BaseHandler):
             user = 'not logged in '
 
         message = self.get_argument("message")
-        msg = {}
-        msg['message'] = user + ' : ' + message
+        msg = {'message': user + ' : ' + message}
 
         self.application.syncdb['data_pusher'].insert(msg)
         self.write('done')
@@ -510,7 +492,7 @@ class DataPusherRawHandler(BaseHandler):
             print m_id
             if m_id:
                 data = list(self.application.syncdb['data_pusher'].find(
-                        {'_id': {'$gt': ObjectId(m_id)}}))
+                    {'_id': {'$gt': ObjectId(m_id)}}))
             else:
                 data = list(self.application.syncdb['data_pusher'].find())
 
@@ -518,4 +500,3 @@ class DataPusherRawHandler(BaseHandler):
             self.write(s)
             self.flush()
         _read_data()
-

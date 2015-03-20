@@ -16,7 +16,10 @@ from base_handler import *
 
 from gridfs.errors import NoFile
 from pymongo.errors import OperationFailure
+import warnings
 
+from preprocessing.crawler.abstract_extractor import AbstractExtractor
+from preprocessing.crawler import pdf2txt
 
 class UploadHandler(BaseHandler):
 
@@ -81,7 +84,7 @@ class UploadHandler(BaseHandler):
         try:
             bio = user['bio']
         except KeyError:
-            raise gen.Return("*PERUS*BIOIO\n\nmuuuu\\u\tuuu\n\nlist:\n\n* *huhu*\n\n* kova\n\n* juttu\n\n")  # return empty string if no bio
+            raise gen.Return("Empty bio")  # return empty string if no bio
         else:
             raise gen.Return(bio)
 
@@ -102,8 +105,9 @@ class UploadHandler(BaseHandler):
         """Write file to MongoDB GridFS system."""
         fs = motor.MotorGridFS(self.application.db, collection=u'fs')
         # default: file_id is the ObjectId of the resulting file
-        file_id = yield fs.put(file_content, _id=key, user=user, filename=result['name'],
-                               content_type=result['type'], title=result['title'])
+        file_id = yield fs.put(file_content, _id=key, user=user,
+                               filename=result['name'], content_type=result['type'],
+                               title=result['title'], abstract=result['abstract'])
         assert file_id is key, "file_id is not key (%r): %r" % (key, file_id)
 
     def get_download_url(self, filename=None, key=None):
@@ -147,9 +151,30 @@ class UploadHandler(BaseHandler):
         raise gen.Return(files)
 
     def handle_upload_db(self):
-        """Handle uploads to database.
+        """Handle uploads to database. Files are buffered into memory.
         :return JSON list of uploaded files.
         """
+        def _extract_abstract(body, content_type):
+            p = re.compile('pdf')
+            if not p.search(content_type):
+                warnings.warn("The file was not PDF.")
+                return "Not a PDF!"
+            # save PDF temp file
+            temp_path = "uploads/temp.pdf"
+            temp_file = open(temp_path, 'w')
+            temp_file.write(body)
+            temp_file.close()
+            # convert and write ASCII to temp file
+            pdf2txt.main(["scriptname", "-o", "uploads/output.txt", temp_path])
+            out = open("uploads/output.txt", 'r')
+            contents = out.read()
+            out.close()
+            # find and return abstract
+            abstract_start_position = contents.lower().find("abstract")
+            abstract_end_position = contents[abstract_start_position:].lower().find("\n\n") + abstract_start_position
+            len_abstract = len("abstract") + len('\n')
+            return re.sub('\s+', ' ', contents[abstract_start_position + len_abstract:abstract_end_position]).strip()
+
         results = []
         if self.request.files:
             # each f is a dictionary
@@ -163,7 +188,11 @@ class UploadHandler(BaseHandler):
                 if self.validate(result):
                     user = self.get_current_user()
                     key = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
+                    # Abstract extraction requires that the file is stored physically i.e. a file path
+                    result['abstract'] = _extract_abstract(file_body, f['content_type'])
+                    # Write file to database
                     self.write_file(file_body, user, key, result)
+                    # Set additional fields for File Upload plugin
                     result['deleteType'] = 'DELETE'
                     result['key'] = key
                     result['deleteUrl'] = self.request.uri + '?key=' + key
@@ -314,3 +343,7 @@ class UpdateBioHandler(BaseHandler):
             self.write(json.dumps({"msg": "Bio saved"}))
         else:
             print "didn't find bio_new_text"
+
+
+class UpdateKeyWords:
+    pass

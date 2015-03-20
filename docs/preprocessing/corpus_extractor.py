@@ -2,7 +2,7 @@
 This class deals with way of getting information from different sources
 Currently, it includes getting information from 
 1. name of all researchers paper
-2. 70k abstracts of paper from arxiv
+2. 70k abstracts of paper from arXiv
 """
 
 from __future__ import division
@@ -56,7 +56,7 @@ class KeywordExtractor():
                 break
         return corpus
             
-    def get_from_abstract(self, number_of_corpuses, file_name=None):
+    def get_from_abstract(self, number_of_corpora, file_name=None):
         """
         This function reads name of paper from database. and return all the words that belongs to one author in a list
         @param self: Pointer to class
@@ -69,8 +69,8 @@ class KeywordExtractor():
           root = tree.getroot()
           
         # set name of file that contains keyword and name of file that contains keyword list for each abstract
-        self._keywords_filename = "abstract_%s.txt"%number_of_corpuses
-        self._corpus_keyword_filename = "corpus_abstract_%s.txt"%number_of_corpuses
+        self._keywords_filename = "abstract_%s.txt"%number_of_corpora
+        self._corpus_keyword_filename = "corpus_abstract_%s.txt"%number_of_corpora
         
         # if the file does not exist
         if not path.isfile(self._keywords_filename):
@@ -91,7 +91,7 @@ class KeywordExtractor():
 
                         keyword_set |= set(keywords) 
                         i = i +1
-                if(i == number_of_corpuses):
+                if(i == number_of_corpora):
                     break
             pickle.dump(corpuses_representation_list, f_corpus_obj)
             pickle.dump(keyword_set,f_obj) 

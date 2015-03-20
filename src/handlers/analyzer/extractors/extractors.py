@@ -8,9 +8,7 @@ Currently, it includes getting information from
 from __future__ import division
 from lxml import etree
 
-import functools
 import nltk
-import string
 import pickle
 
 
@@ -27,14 +25,14 @@ class PhraseExtractor():
     def normalise(self, word):
         """Normalises words to lowercase and stems and lemmatizes it."""
         word = word.lower()
-        #word = self.stemmer.stem_word(word)
-        #word = self.lemmatizer.lemmatize(word)
+        # word = self.stemmer.stem_word(word)
+        # word = self.lemmatizer.lemmatize(word)
         return word
      
-    def acceptable_word(self,word):
+    def acceptable_word(self, word):
         """Checks conditions for acceptable word: length, stopword."""
         accepted = bool(2 <= len(word) <= 40
-            and word.lower() not in self.stopwords)
+                        and word.lower() not in self.stopwords)
         return accepted
 
     def get_terms(self, tree):
@@ -114,7 +112,7 @@ class Extractors():
         titles = []
         if file_name is None:
             file_name = self._file_name
-            tree = etree.parse(file_name)
+            tree = etree.parse(file_name)  # etree parses XML files
             root = tree.getroot()
         for article in root.iterchildren():
             for element in article.iterchildren():
@@ -137,7 +135,7 @@ class Extractors():
         :param number_of_corpora: number of paper corpora
         :param file_name: paper file name
         """
-        # if the file name exits then use a xml parser to parse the file
+        # if the file name exists then use a xml parser to parse the file
         if file_name is None:
             file_name = self._file_name
             tree = etree.parse(file_name)
