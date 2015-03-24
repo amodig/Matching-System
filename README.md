@@ -1,3 +1,12 @@
+# Student-Supervisor matching system
+
+Based on [Scinet3](https://github.com/xiaohan2012/rl-search) system.
+
+Contributors:
+[Gao Yuan](https://github.com/gaoyuankidult)
+[Arttu Modig](https://github.com/Dalar)
+[Kalle Ilves](https://github.com/Kaltsoon)
+
 # Index.html of Supervisor matching system
 
 ## GET /search
