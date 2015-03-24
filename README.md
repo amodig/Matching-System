@@ -1,22 +1,22 @@
-#GET /search
+# Index.html of Supervisor matching system
 
+## GET /search
 
-##Response
+### Response
 
 <code>keywords : ["keyword", ...]</code>
 
 
-#POST /search 
+## POST /search 
 
-##Params
+### Params
 
 <code>{ search_keyword: "keyword", keywords: ["keyword", "keyword", ...] }</code>
 
 
-##Response
+### Response
 
 <pre>{
-
 	keywords: [
 		{
 			id: 1,
@@ -48,13 +48,12 @@
 		},
 		...
 	]
-
 }
 </pre>
 
-#POST/next
+## POST/next
 
-##Params
+### Params
 
 <pre>
 {
@@ -73,7 +72,7 @@
 }
 </pre>
 
-##Response
+### Response
 
 <pre>{
 	keywords: [
@@ -109,7 +108,7 @@
 	]
 }</pre>
 
-#GET chart_data
+## GET chart_data
 
 {
 	charts : [],
@@ -122,9 +121,9 @@
 	]
 }
 
-#GET article_matrix
+## GET article_matrix
 
-##Params
+### Params
 
 <pre>
 {
@@ -132,9 +131,9 @@
 }
 </pre>
 
-##Response
+### Response
 
-# When more than 10 articles are selected 
+## When more than 10 articles are selected 
 <pre>
 {
 	matrix: 
@@ -147,7 +146,8 @@
 	]
 }
 </pre>
-# When less than 10 articlesare selected
+
+## When less than 10 articlesare selected
 <pre>
 {
 	matrix: 
@@ -179,9 +179,9 @@
 </pre>
 
 
-#Post related_articles
+## Post related_articles
 
-##Params
+### Params
 
 <pre>
 {
@@ -189,9 +189,9 @@
 }
 </pre>
 
-##Response
+### Response
 
-# When less than 10 articlesare selected
+## When less than 10 articlesare selected
 <pre>
 {
 	matrix: 
@@ -205,13 +205,13 @@
 	]
 }
 </pre>
-# Tasks for gao
+## Tasks for gao
 
 - topic models data
 - clean data for all authers
 - formalize the preprocessing step
 
-# Tasks
+## Tasks
 
 - <strike> merge deselete and select icon </strike> 
 - <strike> chart bug when number of astracts are big than 20</strike>

@@ -1,3 +1,5 @@
+bson
+pytz
 markdown2
 backports.ssl-match-hostname==3.4.0.2
 bcrypt==1.0.2

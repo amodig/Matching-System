@@ -13,12 +13,9 @@ import pytz
 from pytz import timezone
 from bson import json_util
 from base_handler import *
-
 from gridfs.errors import NoFile
 from pymongo.errors import OperationFailure
 import warnings
-
-from preprocessing.crawler.abstract_extractor import AbstractExtractor
 from preprocessing.crawler import pdf2txt
 
 class UploadHandler(BaseHandler):

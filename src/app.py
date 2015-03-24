@@ -1,3 +1,9 @@
+"""Provides a Tornado seb server app for Student-Supervisor matching system.
+
+Application includes setting Tornado handlers, configs and basic methods for the engine.
+"""
+
+
 from copy import deepcopy
 import uuid
 import base64
@@ -12,6 +18,14 @@ from tornado.web import url
 from handlers.handlers import *
 from handlers import uimodules
 
+__author__ = "Yuan (Alex) Gao, Arttu Modig"
+__credits__ = "Yuan (Alex) Gao, Arttu Modig, Kalle Ilves, Han Xiao"
+__license__ = "MIT"
+__version__ = "0.1"
+__maintainer__ = "Arttu Modig"
+__email__ = "arttu.modig@gmail.com"
+__status__ = "Prototype"
+
 # tornado config
 define("port", default=8899, type=int)
 define("config_file", default="app_config.yml", help="app_config file")
@@ -22,7 +36,7 @@ MONGO_SERVER_PORT = 27017
 
 class Application(tornado.web.Application):
     def __init__(self, **overrides):
-        #self.config = self._get_config()
+        # self.config = self._get_config()  # could be useful?
 
         handlers = [
             url(r'/', LoginHandler, name='/'),
@@ -103,23 +117,23 @@ class Application(tornado.web.Application):
         # following part is for analyzer
         def set_keywords_parameters():
             self.keywords_number = 10
-            self._num_of_corpuses = "all" 
+            self._num_of_corpora = "all"
             
             # this file stores information of all abstracts
             self.abstracts_filename = "../docs/abstracts/abstracts.xml"
             
             # this file stores information of all keywords as a set
-            self.keywords_filename = "../docs/keywords/abstract_%s.txt"%self._num_of_corpuses
+            self.keywords_filename = "../docs/keywords/abstract_%s.txt" % self._num_of_corpora
             
             # this file stores keywords list of each abstract
-            self.corpus_keywords_filename = "../docs/keywords/corpus_abstract_%s.txt"%self._num_of_corpuses
+            self.corpus_keywords_filename = "../docs/keywords/corpus_abstract_%s.txt" % self._num_of_corpora
             self.extractors = Extractors(self.abstracts_filename)
 
-            def set_corpuses():
-                self.corpus_keywords_file_obj = open(self.corpus_keywords_filename,'r')
-                # set preprocessed corpuses, this is different than original corpuses
-                self.corpuses = pickle.load(self.corpus_keywords_file_obj)
-                self.original_corpuses = self.extractors.project_corpora
+            def set_corpora():
+                self.corpus_keywords_file_obj = open(self.corpus_keywords_filename, 'r')
+                # set preprocessed corpora, this is different than original corpora
+                self.corpora = pickle.load(self.corpus_keywords_file_obj)
+                self.original_corpora = self.extractors.project_corpora
                 self.corpus_keywords_file_obj.close()
 
             def set_titles():
@@ -127,68 +141,65 @@ class Application(tornado.web.Application):
             
             # set all title related parameters
             set_titles()
-            # set all the corpuses related parameters
-            set_corpuses()
+            # set all the corpora related parameters
+            set_corpora()
             
         def form_persons_info():    
             # for persons_info
-            assert(len(self.original_corpuses) == len(self.corpuses) == len(self.author_names))
+            assert(len(self.original_corpora) == len(self.corpora) == len(self.author_names))
             
-            self.corpuses_name_id = {}
+            self.corpora_name_id = {}
             
             # this variable is a list that contains all information of persons
             self.persons_info = []
             
             person_id = 0
-            for title,  original_corpus,  decomposed_corpus, name in zip(self.titles,  self.original_corpuses, self.corpuses, self.author_names):
-                if name not in self.corpuses_name_id.keys():
-                    self.corpuses_name_id[name] = {}
-                    self.corpuses_name_id[name]["id"] = person_id
+            for title, original_corpus, decomposed_corpus, name in zip(self.titles, self.original_corpora,
+                                                                       self.corpora, self.author_names):
+                if name not in self.corpora_name_id.keys():
+                    self.corpora_name_id[name] = {}
+                    self.corpora_name_id[name]["id"] = person_id
                     person_id += 1
-                    self.corpuses_name_id[name]["name"] = name
-#                   self.corpuses_name_id[name]["email"] = "N.Asokan[at]cs.helsinki.fi"
-                    self.corpuses_name_id[name]["email"] = "Random@email.com"
-                    
-                    self.corpuses_name_id[name]["room"] = "D212"
-#                    self.corpuses_name_id[name]["phone"] = "+358 2941 51225"
-                    self.corpuses_name_id[name]["phone"] = "+358 9999 9999"
-#                    self.corpuses_name_id[name]["homepage"] = "http://cs.helsinki.fi/~asokan"
-                    self.corpuses_name_id[name]["homepage"] = "http://random.homepage.com"
-                    self.corpuses_name_id[name]["reception_time"] = "By appointment"
-                    self.corpuses_name_id[name]["group"] = "Secure Systems"
-                    self.corpuses_name_id[name]["keywords"] = []
-                    self.corpuses_name_id[name]["articles"] = []
-                    self.corpuses_name_id[name]["profile_picture"] = "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg"
+                    self.corpora_name_id[name]["name"] = name
+                    self.corpora_name_id[name]["email"] = "Random@email.com"
+                    self.corpora_name_id[name]["room"] = "D212"
+                    self.corpora_name_id[name]["phone"] = "+358 9999 9999"
+                    self.corpora_name_id[name]["homepage"] = "http://random.homepage.com"
+                    self.corpora_name_id[name]["reception_time"] = "By appointment"
+                    self.corpora_name_id[name]["group"] = "Secure Systems"
+                    self.corpora_name_id[name]["keywords"] = []
+                    self.corpora_name_id[name]["articles"] = []
+                    self.corpora_name_id[name]["profile_picture"] = "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg"
 
-                self.corpuses_name_id[name]["articles"].append({"author_profile_picture":"http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg", "id": 1, "title":"%s"%title ,   "abstract":"%s"%original_corpus, "url":"http://images4.fanpop.com/image/photos/14700000/Beautifull-cat-cats-14749885-1600-1200.jpg"})
+                self.corpora_name_id[name]["articles"].append({
+                    "author_profile_picture":
+                        "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg",
+                    "id": 1, "title": "%s" % title, "abstract": "%s" % original_corpus,
+                    "url": "http://images4.fanpop.com/image/photos/14700000/Beautifull-cat-cats-14749885-1600-1200.jpg"})
                 
-                # append keywords in list corpuses_name_id[name]["keywords"]
+                # append keywords in list corpora_name_id[name]["keywords"]
                 for keyword in decomposed_corpus.split(','):
                     for keyword_info in self.keywords_info:
                         if keyword == keyword_info["text"]:
-                            self.corpuses_name_id[name]["keywords"].append(keyword_info["id"])
+                            self.corpora_name_id[name]["keywords"].append(keyword_info["id"])
             
         def set_iteration_parameters():
             # number of iteration
             self.iter_num = 0
 
         def analyze_data():
-            self.analyzer = Analyzer(self.keywords_list, self.corpuses)
+            self.analyzer = Analyzer(self.keywords_list, self.corpora)
 
         def form_keywords_info():
-            
-            self.keywords_file_obj = open(self.keywords_filename,'r')
-            
+            self.keywords_file_obj = open(self.keywords_filename, 'r')
             # set of all keywords
             self.keywords_set = pickle.load(self.keywords_file_obj)
-
             # get list of author names
             self.author_names = self.extractors.author_names
-
             # length of all keywords
             self.current_selected_keyword_length = len(list(self.keywords_set))
-            
-            # list of all keywords information: it is a dictionary that contains ("id", "text",  "exploitation", "exploration" ) as keys
+            # list of all keywords information: a dictionary which contains ( "id", "text",  "exploitation",
+            # "exploration" ) as keys
             self.keywords_list = list(self.keywords_set)[:self.current_selected_keyword_length]
             self.keywords_id = range(0, self.current_selected_keyword_length)
             
@@ -205,20 +216,19 @@ class Application(tornado.web.Application):
     def form_new_keywords_information(self):
         keywords_exploitation = [0.1] * len( self.keywords_list)
         keywords_exploration = [0.9] * len( self.keywords_list)
-        self.keywords_info = zip( self.keywords_id, self.keywords_list, keywords_exploitation, keywords_exploration)
-        self.kewords_keys = ("id", "text",  "exploitation", "exploration" )
-        self.keywords_info = [dict(zip(self.kewords_keys, keyword_info)) for keyword_info in self.keywords_info]
-        self.keywords = self.keywords_list[self.keywords_number * self.iter_num:self.keywords_number*(self.iter_num +1)]
-         
+        self.keywords_info = zip(self.keywords_id, self.keywords_list, keywords_exploitation, keywords_exploration)
+        self.keywords_keys = ("id", "text",  "exploitation", "exploration" )
+        self.keywords_info = [dict(zip(self.keywords_keys, keyword_info)) for keyword_info in self.keywords_info]
+        self.keywords = self.keywords_list[self.keywords_number *
+                                           self.iter_num: self.keywords_number * (self.iter_num + 1)]
         # keywords after ranking, this variable will only be used in NextHandler
         self.ranked_keywords = deepcopy(self.keywords_info)
         # keywords after user input their preferences, this will be only be used in the SearchHandler
         self.filtered_keywords = deepcopy(self.keywords_info)
-        
         # selected keywords, the format is the text of keyword
         self.experienced_keywords = []
 
-    #def __del__(self):
+    # def __del__(self):
     #    super(tornado.web.Application, self).__del__(*args, **kwargs)
 
 # to redirect log file run python with : --log_file_prefix=mylog
