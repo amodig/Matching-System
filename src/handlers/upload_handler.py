@@ -1,32 +1,47 @@
+"""Provides control panel handlers for the Tornado app. UploadHandler handles the file uploads and downloads.
+UpdateBioHandler handles the changes to profile bio."""
+
+from base_handler import *
+from preprocessing.crawler import pdf2txt
+
+from tornado import web
+from tornado import escape
+from tornado import gen
+from gridfs.errors import NoFile
+from pymongo.errors import OperationFailure
+
 import os
 import motor
 import random
 import string
 import re
-from tornado import web
-from tornado import escape
-from tornado import gen
 from requests.utils import quote
 from time import strftime
 import datetime
 import pytz
 from pytz import timezone
 from bson import json_util
-from base_handler import *
-from gridfs.errors import NoFile
-from pymongo.errors import OperationFailure
 import warnings
-from preprocessing.crawler import pdf2txt
+
+__author__ = "Arttu Modig"
+__license__ = "MIT"
+__version__ = "0.1"
+__maintainer__ = "Arttu Modig"
+__email__ = "arttu.modig@gmail.com"
+__status__ = "Prototype"
+
 
 class UploadHandler(BaseHandler):
+    """A Tornado handler for file upload and download"""
 
     # class attributes
     MIN_FILE_SIZE = 1  # bytes
     MAX_FILE_SIZE = 5000000  # bytes
-    DOCUMENT_TYPES = re.compile("application/pdf")  # re.compile('image/(gif|p?jpeg|(x-)?png)')
+    DOCUMENT_TYPES = re.compile('application/pdf')  # re.compile('image/(gif|p?jpeg|(x-)?png)')
     ACCEPT_FILE_TYPES = DOCUMENT_TYPES
 
     def initialize(self):
+        """Tornado handler initialization"""
         self.file_param_name = 'files'
         self.access_control_allow_origin = '*'
         self.access_control_allow_credentials = False
@@ -53,14 +68,15 @@ class UploadHandler(BaseHandler):
         return False
 
     @staticmethod
-    def get_file_size(file):
-        file.seek(0, 2)  # Seek to the end of the file
-        size = file.tell()  # Get the position of EOF
-        file.seek(0)  # Reset the file position to the beginning
+    def get_file_size(f):
+        f.seek(0, 2)  # Seek to the end of the file
+        size = f.tell()  # Get the position of EOF
+        f.seek(0)  # Reset the file position to the beginning
         return size
 
     @staticmethod
     def fid(file_id=None, filename=None):
+        """Make a file ID either from original ID or filename"""
         if not file_id:
             if not filename:
                 raise web.HTTPError(500)
@@ -87,6 +103,7 @@ class UploadHandler(BaseHandler):
 
     @gen.coroutine
     def get_grid_out(self, file_id=None, filename=None):
+        """Get GridOut object from MongoDB's GridFS file system"""
         fs = motor.MotorGridFS(self.application.db, collection=u'fs')
         fid = self.fid(file_id, filename)
         try:
@@ -99,7 +116,7 @@ class UploadHandler(BaseHandler):
 
     @gen.coroutine
     def write_file(self, file_content, user, key, result):
-        """Write file to MongoDB GridFS system."""
+        """Write file to MongoDB's GridFS system."""
         fs = motor.MotorGridFS(self.application.db, collection=u'fs')
         # default: file_id is the ObjectId of the resulting file
         file_id = yield fs.put(file_content, _id=key, user=user,
@@ -201,25 +218,26 @@ class UploadHandler(BaseHandler):
                 results.append(result)
         return results
 
-    def handle_upload_dir(self):
-        results = []
-        if self.request.files[self.file_param_name]:
-            for f in self.request.files[self.file_param_name]:
-                result = {}
-                result['name'] = f['filename']
-                result['type'] = f['content_type']
-                result['size'] = self.get_file_size(f)
-                if self.validate(result):
-                    extension = os.path.splitext(f['filename'])[1]
-                    f_name = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
-                    final_filename = f_name + extension
-                    output_file = open("uploads/" + final_filename, 'w')
-                    output_file.write(f['body'])
-                results.append(result)
-        return results
+    # def handle_upload_dir(self):
+    #     results = []
+    #     if self.request.files[self.file_param_name]:
+    #         for f in self.request.files[self.file_param_name]:
+    #             result = {}
+    #             result['name'] = f['filename']
+    #             result['type'] = f['content_type']
+    #             result['size'] = self.get_file_size(f)
+    #             if self.validate(result):
+    #                 extension = os.path.splitext(f['filename'])[1]
+    #                 f_name = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
+    #                 final_filename = f_name + extension
+    #                 output_file = open("uploads/" + final_filename, 'w')
+    #                 output_file.write(f['body'])
+    #             results.append(result)
+    #     return results
 
     @gen.coroutine
     def do_download(self):
+        """Fetch a file from MongoDB's GridFS and send it to UploadHandler"""
         # use either filename or file key
         filename = self.get_argument('file', default=None)
         key = self.get_argument('key', default=None)
@@ -236,6 +254,7 @@ class UploadHandler(BaseHandler):
         yield grid_out.stream_to_handler(self)
 
     def send_access_control_headers(self):
+        """Set access control HTTP headers"""
         self.set_header('Access-Control-Allow-Origin', self.access_control_allow_origin)
         self.set_header('Access-Control-Allow-Credentials',
                         'true' if self.access_control_allow_credentials else 'false')
@@ -243,6 +262,7 @@ class UploadHandler(BaseHandler):
         self.set_header('Access-Control-Allow-Headers', ', '.join(self.access_control_allow_headers))
 
     def send_content_type_header(self):
+        """Set content type HTTP header"""
         self.set_header('Vary', 'Accept')
         if 'application/json' in self.get_server_vars('HTTP_ACCEPT'):
             self.set_header('Content-type', 'application/json')
@@ -250,10 +270,11 @@ class UploadHandler(BaseHandler):
             self.set_header('Content-type', 'text/plain')
 
     def get_server_vars(self, _id):
-        """Returns a list of header values given a header name."""
+        """Returns a list of header values given a header name"""
         return self.request.headers.get_list(_id)
 
     def head(self):
+        """Set default HTTP header"""
         self.set_header('Pragma', 'no-cache')
         self.set_header('Cache-Control', 'no-store, no-cache, must-revalidate')
         self.set_header('Content-Disposition', 'inline; filename="files.json"')
@@ -266,6 +287,7 @@ class UploadHandler(BaseHandler):
     @web.authenticated
     @gen.coroutine
     def get(self):
+        """GET files from the database that they are visible for download, or download one file"""
         if self.get_argument('download', default=None):
             self.do_download()
             return
@@ -285,6 +307,7 @@ class UploadHandler(BaseHandler):
     @web.authenticated
     @web.asynchronous
     def post(self):
+        """Receives POST arguments/files"""
         if self.get_argument('_method', default=None) == 'DELETE':
             return self.delete()
         result = {'files': self.handle_upload_db()}
@@ -301,6 +324,7 @@ class UploadHandler(BaseHandler):
     @web.authenticated
     @gen.coroutine
     def delete(self):
+        """Deletes files in the database"""
         key = self.get_argument('key', default=None) or ''
         fs = motor.MotorGridFS(self.application.db, collection=u'fs')
         # get file name
@@ -332,6 +356,7 @@ class UpdateBioHandler(BaseHandler):
 
     @gen.coroutine
     def post(self):
+        """Gets POST argument containing the new bio"""
         bio_text = self.get_argument('bio_new_text', default=None)
         if bio_text:
             bio_text = json.loads(bio_text)
@@ -342,5 +367,5 @@ class UpdateBioHandler(BaseHandler):
             print "didn't find bio_new_text"
 
 
-class UpdateKeyWords:
+class UpdateKeyWordsHandler(BaseHandler):
     pass
