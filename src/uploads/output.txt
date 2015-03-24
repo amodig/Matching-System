@@ -1,0 +1,2131 @@
+Feature Weighting in k-Means Clustering
+
+Dharmendra S. Modha and W. Scott Spangler
+({dmodha,spangles}@almaden.ibm.com)
+IBM Almaden Research Center, 650 Harry Road, San Jose, CA 95120, USA
+
+Original Version: September 15, 2000. Revised: November 1, 2001. Final Acceptance: December 26, 2001.
+
+TO APPEAR IN: Machine Learning, vol. 47, 2002.
+
+Editor: Douglas Fisher
+
+Abstract. Data sets with multiple, heterogeneous feature spaces occur frequently. We present an abstract frame-
+work for integrating multiple feature spaces in the k-means clustering algorithm. Our main ideas are (i) to represent
+each data object as a tuple of multiple feature vectors, (ii) to assign a suitable (and possibly different) distortion
+measure to each feature space, (iii) to combine distortions on different feature spaces, in a convex fashion, by
+assigning (possibly) different relative weights to each, (iv) for a ﬁxed weighting, to cluster using the proposed con-
+vex k-means algorithm, and (v) to determine the optimal feature weighting to be the one that yields the clustering
+that simultaneously minimizes the average within-cluster dispersion and maximizes the average between-cluster
+dispersion along all the feature spaces. Using precision/recall evaluations and known ground truth classiﬁcations,
+we empirically demonstrate the effectiveness of feature weighting in clustering on several different application
+domains.
+
+Keywords: clustering, convexity, convex k-means algorithm, feature combination, feature selection, Fisher’s
+discriminant analysis, text mining, unsupervised learning
+
+1. Introduction
+
+1.1. MULTIPLE, HETEROGENEOUS FEATURE SPACES
+
+The fundamental starting point for machine learning, multivariate statistics, or data min-
+ing is the assumption that a data object can be represented as a high-dimensional feature
+vector. In many traditional applications, all the features are essentially of the same “type.”
+However, many emerging real-life data sets often consist of many different feature spaces,
+for example:
+
+− Image indexing and searching systems use at least four different types of features:
+
+color, texture, shape, and location (Flickner et al., 1995).
+
+− Hypertext documents contain at least three different types of features: the words, the
+out-links (forward links), and the in-links (backward links) (Modha and Spangler,
+2000).
+
+− XML data objects may have a number of different textual, referential, graphical,
+
+numerical, and categorical features.
+
+− Proﬁle of a typical Amazon.com customer may contain purchased books, music, toys,
+
+software, DVD/video, etc.
+
+c(cid:13) 2002 Kluwer Academic Publishers. Printed in the Netherlands.
+
+ml.tex; 8/01/2002; 16:10; p.1
+
+2
+
+Modha & Spangler
+
+− For a publicly traded security, one may be interested in the time series’ of its stock
+price, traded volume, fraction held short, and earnings history as well the current
+members of the board of directors, etc.
+
+These examples illustrate that data sets with multiple, heterogeneous features are indeed
+natural and common. In addition, many data sets on the UCI Machine Learning and KDD
+repositories contain data sets with heterogeneous features (Blake and Merz, 1998; Bay,
+1999).
+
+1.2. THE PROBLEM, OUR CONTRIBUTIONS, AND OUTLINE
+
+Clustering is a fundamental technique of unsupervised learning in machine learning and
+statistics (Hartigan, 1975; Duda and Hart, 1973). Clustering is generally used to ﬁnd groups
+of similar items in a set of unlabeled data. We consider the problem of clustering data with
+multiple, heterogeneous feature spaces.
+
+Given a data set with m feature spaces, we represent each data object as a tuple of m
+feature vectors. It is implicitly assumed that features within a feature space are “homoge-
+neous” and that different feature spaces are “heterogeneous”. A practical question is: For a
+given data set, how are the various feature spaces determined?
+
+A necessary condition for a set of scalar features to be homogeneous is if an intuitively
+meaningful symmetric distortion can be deﬁned on them. A sufﬁcient condition for two sets
+of features to be considered heterogeneous is if, after clustering, we would like to interpret
+clusters along one set of features independently of the clusters along the other set of features
+or, conversly, if we would like to study “associations” or “causality” between clusters along
+different feature spaces. Finally, for computational reasons, if two features can be treated
+as homogeneous, we should only reluctantly treat them otherwise. In various applications,
+determination of appropriate feature spaces is often clear. For example, suppose we are
+interested in clustering hypertext documents using words, out-links, and in-links, then we
+may naturally group word, out-link, and in-link frequencies into three different feature
+vectors. As another example, suppose we are interested in clustering data with numerical
+and categorical features, then, at the very least, we may consider two feature spaces.
+
+We now summarize our results and outline the organization of the paper.
+
+− To cluster, we need a measure of “distortion” between two data objects. Since different
+types of features may have radically different statistical distributions, in general, it is
+unnatural to disregard fundamental differences between various different types of fea-
+tures and to impose a uniform, unweighted distortion measure across disparate feature
+spaces. In Section 2, as our ﬁrst contribution, we deﬁne a distortion between two data
+objects as a weighted sum of suitable distortion measures on individual component
+feature vectors; where the distortions on individual components are allowed to be
+different.
+
+− In Section 3, as our second contribution, using a convex optimization formulation,
+we generalize the classical Euclidean k-means algorithm to employ the weighted
+distortion measure. The generalized algorithm is termed the convex k-means, and it
+simultaneously extends the Euclidean k-means, the spherical k-means (Dhillon and
+Modha, 2001), and the toric k-means (Modha and Spangler, 2000).
+
+ml.tex; 8/01/2002; 16:10; p.2
+
+Feature Weighting
+
+3
+
+− In Section 4, as our third and main contribution, by generalizing Fisher’s discriminant
+analysis, we deﬁne the optimal feature weighting as one that leads to a clustering that
+simultaneously minimizes the average within-cluster dispersion and maximizes the
+average between-cluster dispersion along all the feature spaces. In general, optimal
+feature weightings cannot be empirically computed, since (i) much like the Euclidean
+k-means, being a form of gradient-descent heuristic, our convex k-means is also sus-
+ceptible to local minima, and (ii) for computational reasons, we search only over a
+coarse grid on the space of possible feature weightings. When discussing empirical
+results, we use the phrase optimal feature weighting to mean optimal feature weighting
+within computational and heuristic constraints.
+
+− In Section 5, we brieﬂy outline our evaluation strategy. In Sections 6 and 7, we
+demonstrate two concrete applications of our framework, respectively, clustering data
+sets with numerical and categorical features and clustering text data sets with words,
+2-phrases, and 3-phrases. Using data sets with a known ground truth classiﬁcation,
+we empirically demonstrate the surprising and reassuring fact that clusterings corre-
+sponding to optimal feature weightings deliver nearly the best precision/recall perfor-
+mance. We outline future work in Section 8, and present conclusions in Section 9.
+
+1.3. PRIOR WORK
+
+(Wettschereck et al., 1997) have pointed out that feature weighting may be thought of as
+a generalization of feature selection where the latter restricts attention to weights that are
+either 1 (retain the feature) or 0 (eliminate the feature). Feature selection in the context
+of supervised learning has a long history in machine learning, see, for example, (Blum
+and Langley, 1997; Caruana and Freitag, 1994; John et al., 1994; Koller and Sahami,
+1996). In contrast, feature selection in the context of unsupervised learning has only re-
+cently been systematically studied. For example, (Devaney and Ram, 1997; Talavera, 1999)
+have focussed on adding feature selection to conceptual clustering of (Fisher, 1987), and
+(Vaithyanathan and Dom, 1999) have considered the joint problem of feature and model
+selection for clustering. Recently, we considered the problem of clustering hypertext doc-
+uments using words, out-links, and in-links where each of the three feature spaces was
+adaptively weighted (Modha and Spangler, 2000). This last work provided the starting point
+for the developments reported in this paper.
+
+2. Data Model and a Distortion Measure
+
+2.1. DATA MODEL
+
+Assume that we are given a set of data objects where each object is a tuple of m component
+feature vectors. We write a data object as
+
+x = (F1, F2, · · · , Fm),
+
+where the l-th component feature vector Fl, 1 ≤ l ≤ m, is a column vector and lies in
+some (abstract) feature space Fl. The data object x lies on the m-fold product feature
+
+ml.tex; 8/01/2002; 16:10; p.3
+
+4
+
+Modha & Spangler
+
+space F = F1 × F2 × · · ·Fm. The feature spaces {Fl}m
+l=1 can possess different dimensions
+and topologies, hence, our data model accommodates heterogeneous types of features. We
+present two generic examples of feature spaces that are used in this paper.
+Euclidean Case Fl is either R fl , fl ≥ 1, or some compact submanifold thereof.
+
+Spherical Case Fl is the intersection of the fl-dimensional, fl ≥ 1, unit sphere with the
+set of vectors in R fl with only non-negative components, namely, the non-negative
+orthant of R fl.
+
+2.2. A WEIGHTED DISTORTION MEASURE
+
+Suppose we are interested in measuring distortion between two given two data objects x =
+(F1, F2, · · · , Fm) and ˜x = ( ˜F1, ˜F2, · · · , ˜Fm). For 1 ≤ l ≤ m, let Dl denote a distortion measure
+between the corresponding component feature vectors Fl and ˜Fl. Mathematically, we only
+demand two properties of the distortion function, namely, non-negativity and convexity,
+respectively:
+− Dl : Fl × Fl → [0, ¥ ).
+− For a ﬁxed Fl, Dl is convex in ˜Fl.
+In addition, for methodological reasons, we demand that Dl also be symmetric, that is, for
+any permutation s of {1, 2, . . . , fl}:
+
+Dl(cid:16)(g1, . . . , g fl), (g′
+
+1, . . . , g′
+
+fl)(cid:17) = Dl(cid:16)(gs (1), . . . , gs ( fl)), (g′s (1), . . . , g′s ( fl))(cid:17) ,
+
+where (g1, . . . , g fl) and (g′
+Euclidean Case The squared-Euclidean distance
+
+1, . . . , g′
+fl
+
+) are vectors in Fl.
+
+(1)
+
+Dl(Fl, ˜Fl) = (Fl − ˜Fl)T (Fl − ˜Fl)
+
+trivially satisﬁes the non-negativity and, for l ∈ [0, 1], the convexity follows from
+
+Dl(Fl, l
+
+l + (1 − l ) ˜F′′
+˜F′
+
+l ) ≤ l Dl(Fl , ˜F′
+
+l) + (1 − l )Dl(Fl, ˜F′′
+l ).
+
+Spherical Case The cosine distance
+
+trivially satisﬁes the non-negativity and, for l ∈ [0, 1], the convexity follows from
+
+Dl (Fl, ˜Fl) = 2(1 − FT
+
+l ˜Fl)
+
+Dl Fl ,
+
+kl
+
+l + (1 − l ) ˜F′′
+˜F′
+l + (1 − l ) ˜F′′
+˜F′
+
+l
+
+l k! ≤ l Dl(Fl, ˜F′
+
+l) + (1 − l )Dl(Fl, ˜F′′
+l ),
+
+where k · k denotes the Euclidean-norm. The division by kl
+l k ensures
+that the second argument of Dl is a unit vector. Geometrically, we deﬁne the convexity
+along the geodesic arc connecting the two unit vectors ˜F′
+l and not along the
+chord connecting the two (Kendall, 1991).
+
+l + (1 − l ) ˜F′′
+˜F′
+
+l and ˜F′′
+
+ml.tex; 8/01/2002; 16:10; p.4
+
+l
+Feature Weighting
+
+5
+
+Given m valid distortion measures {Dl}m
+
+l=1 (some of which may be derived from the
+same base distortion) between the corresponding m component feature vectors of x and ˜x,
+we deﬁne a weighted distortion measure between x and ˜x as
+
+D
+
+(x, ˜x) =
+
+m(cid:229)
+
+l=1
+
+lDl(Fl, ˜Fl),
+
+(2)
+
+l=1 are non-negative and sum to 1 and a = (a 1, a 2, · · · , a m).
+l}m
+is a convex combination of convex distortion measures, and,
+
+where the feature weights {a
+The weighted distortion D
+hence, for a ﬁxed x, D
+
+is convex in ˜x.
+We refer to the vector of weights a
+
+is
+tunable in our framework, and is used to assign different relative importance to component
+feature vectors. In Section 4, we will discuss a scheme for selecting a suitable feature
+weighting.
+
+as a feature weighting. Feature weighting a
+
+3. k-Means with Weighted Distortion
+
+3.1. THE PROBLEM
+
+Suppose that we are given n data objects such that
+
+xi = (F(i,1), F(i,2), · · · , F(i,m)), 1 ≤ i ≤ n,
+
+where the l-th, 1 ≤ l ≤ m, component feature vector of every data object is in the feature
+space Fl. We are interested in partitioning the data set {xi}n
+i=1 into k disjoint clusters
+{p u}k
+
+u=1.
+
+3.2. GENERALIZED CENTROIDS
+Given a partitioning {p u}k
+centroid as
+
+u=1, for each partition p u, write the corresponding generalized
+
+where, for 1 ≤ l ≤ m, the l-th component c(u,l) is in Fl. We deﬁne cu as follows:
+
+cu = (c(u,1), c(u,2), · · · , c(u,m)),
+
+D
+
+(x, ˜x)!.
+
+(3)
+
+x∈p u
+
+cu = arg min
+
+˜x∈F   (cid:229)
+to all the data objects in the cluster p u.
+The key to solving (3) is to observe that D
+
+As an empirical average, the generalized centroid may be thought of as being the closest in
+D
+
+is component-wise-convex, and, hence, we
+can solve (3) by separately solving for each of its m components c(u,l), 1 ≤ l ≤ m. In other
+words, we need to solve the following m independent convex optimization problems:
+
+c(u,l) = arg min
+
+˜Fl ∈Fl   (cid:229)
+
+x∈p u
+
+Dl(Fl , ˜Fl)! , 1 ≤ l ≤ m.
+
+(4)
+
+For the two feature spaces of interest (and for many others as well), we can write the
+
+solution of (4) in a closed form:
+
+ml.tex; 8/01/2002; 16:10; p.5
+
+a
+a
+a
+a
+a
+a
+a
+6
+
+Euclidean Case
+
+Spherical Case
+
+Modha & Spangler
+
+c(u,l) =
+
+1
+
+(cid:229) x∈p u 1
+
+x∈p u
+
+Fl, where x = (F1, F2, · · · , Fm).
+
+c(u,l) =
+
+(cid:229) x∈p u Fl
+k(cid:229) x∈p u Flk
+
+, where x = (F1, F2, · · · , Fm).
+
+3.3. THE CONVEX k-MEANS ALGORITHM
+Motivated by (3), we measure the distortion of each individual cluster p u, 1 ≤ u ≤ k, as
+
+D
+
+(x, cu),
+
+x∈p u
+
+and the quality of the entire partitioning {p u}k
+clusters:
+
+u=1 as the combined distortion of all the k
+
+k(cid:229)
+
+u=1
+
+D
+
+(x, cu).
+
+x∈p u
+
+We would like to ﬁnd k disjoint clusters p †
+
+1, p †
+
+2, · · · , p †
+
+k such that the following is mini-
+
+mized:
+
+{p †
+
+u}k
+
+u=1 = arg min
+
+u=1   k(cid:229)
+
+u=1
+
+{p u}k
+
+D
+
+x∈p u
+
+(x, cu)! ,
+
+(5)
+
+l}m
+
+where the feature weighting a = (a 1, a 2, · · · , a m) is ﬁxed. Even when only one of the
+weights {a
+l=1 is nonzero, the maximization problem (5) is known to be NP-complete
+(Kleinberg et al., 1998). We now present an adaptation of the classical k-means algorithm
+(Hartigan, 1975) to work with our notion of the weighted distortion; we refer to the adapted
+algorithm as the convex k-means algorithm. The convex k-means algorithm generalizes
+the classical Euclidean k-means algorithm, the spherical k-means algorithm (Dhillon and
+Modha, 2001), and the toric k-means algorithm (Modha and Spangler, 2000). Using results
+in (Sabin and Gray, 1986) and (Dhillon and Modha, 2001, Lemma 3.1), it can be thought
+of as a gradient descent method, and, hence, never increases the objective function (5) and
+eventually converges to a local minima.
+
+Step 1: Start with an arbitrary partitioning of the data objects, say, {p (0)
+u=1
+denote the generalized centroids associated with the given partitioning. Set the index of
+iteration t = 0. The choice of the initial partitioning is quite crucial to ﬁnding a “good” local
+minima (Bradley and Fayyad, 1998). In our experiments, we used the heuristics described
+in (Dhillon and Modha, 2001, Section 3.4).
+
+u=1. Let {c(0)
+
+u }k
+
+u }k
+
+Step 2: For each data object xi, 1 ≤ i ≤ n, ﬁnd the generalized centroid that is closest
+
+ml.tex; 8/01/2002; 16:10; p.6
+
+(cid:229)
+(cid:229)
+a
+(cid:229)
+a
+(cid:229)
+a
+Feature Weighting
+
+7
+
+to xi. Now, for 1 ≤ u ≤ k, compute the new partitioning {p (t+1)
+generalized centroids {c(t)
+
+u
+
+u }k
+
+u=1:
+
+}k
+u=1 induced by the old
+
+p (t+1)
+u
+
+=nx ∈ {xi}n
+
+i=1 : D
+
+(x, c(t)
+
+u ) ≤ D
+
+(x, c(t)
+
+v ), 1 ≤ v ≤ ko .
+
+(6)
+
+u
+
+In words, p (t+1)
+is the set of all data objects that are closest to the generalized centroid c(t)
+u .
+If some data object is simultaneously closest to more than one generalized centroid, then it
+is randomly assigned to one of the clusters. Clusters deﬁned using (6) are known as Voronoi
+or Dirichlet partitions.
+
+u
+
+Step 3: Compute the new generalized centroids {c(t+1)
+ing computed in (6) by using (3)-(4) where instead of p u we use p (t+1)
+Step 4: If some “stopping criterion” is met, then set p †
+for
+1 ≤ u ≤ k, and exit. Otherwise, increment t by 1, and go to step 2 above. An example
+of a stopping criterion is: Stop if the change in the objective function (5), between two
+successive iterations, is less than some speciﬁed threshold.
+
+}k
+u=1 corresponding to the partition-
+
+u = p (t+1)
+
+u = c(t+1)
+
+and set c†
+
+u
+
+u
+
+u
+
+.
+
+The convex k-means algorithm described above works for a ﬁxed feature weighting. We
+now turn to the crucial question of how to select the “best” feature weighting.
+
+4. The Optimal Feature Weighting
+
+Throughout this section, ﬁx the number of clusters k ≥ 2 and ﬁx the initial partitioning used
+by the k-means algorithm in Step 1. Also, we let
+
+denote the generalized centroid for the entire data set, that is, for 1 ≤ l ≤ m,
+
+¯c ≡ (¯c1, ¯c2, · · · , ¯cm)
+
+¯cl = arg min
+
+˜c∈Fl   n(cid:229)
+
+i=1
+
+Dl(F(i,l), ˜c)! .
+
+Write the set of all possible feature weightings as:
+
+D =(a
+Given a feature weighting a ∈ D
+
+m(cid:229)
+
+:
+
+l=1
+
+l = 1, a
+
+l ≥ 0, 1 ≤ l ≤ m) .
+
+, let
+P (a ) = {p †
+
+u(a ), c†
+
+u(a )}k
+
+u=1
+
+denote the partitioning and the corresponding centroids obtained by running the convex
+k-means algorithm with the ﬁxed initial partitioning and the given feature weighting. For
+later use, we write
+
+u(a ) ≡ (c†
+c†
+
+(u,1)(a ), c†
+
+(u,2)(a ), · · · , c†
+
+(u,m)(a )), 1 ≤ u ≤ k.
+
+ml.tex; 8/01/2002; 16:10; p.7
+
+a
+a
+a
+Modha & Spangler
+
+8
+Observe that the algorithm uses the feature weighting a
+tioning depends on a
+of a
+possible feature weighting in D
+
+in (6), and, hence, the ﬁnal parti-
+as a function
+. Hypothetically, suppose that we can run the convex k-means algorithm for every
+
+. We make this implicit dependence explicit by writing P
+
+. From the resulting set of all possible clusterings
+
+{P (a ) : a ∈ D }
+
+we would like to select a clustering that is in some sense the best. Towards this end, we now
+introduce a ﬁgure-of-merit to compare various clusterings. Note that each feature weighting
+. Hence, one cannot meaningfully compare the
+
+leads to a different distortion measure D
+
+k-means errors
+
+k(cid:229)
+
+u=1
+
+u(a
+x∈p †
+
+)
+
+D
+
+(x, c†(a ))
+
+achieved by the convex k-means algorithm for different feature weightings. We now present
+an elegant and natural generalization of Fisher’s discriminant analysis to overcome this
+problem.
+
+Fix a partitioning P (a ). Let’s focus on how well this partitioning clusters along the
+l-th, 1 ≤ l ≤ m, component feature vector. Deﬁne the average within-cluster distortion and
+average between-cluster distortion along the l-th component feature vector, respectively,
+as
+
+k(cid:229)
+
+u=1
+
+u(a
+x∈p †
+
+)
+
+l(a ) ≡ G
+
+l(P (a )) =
+
+Dl(Fl, c†
+
+(u,l)(a )),
+l (a )# ,
+where x = (F1, F2, · · · , Fm). Intuitively, we would like to minimize G
+l(a ) and to maximize
+l(a ), that is, we like coherent clusters that are well-separated from each other. Hence, we
+minimize
+
+l(P (a )) =" n(cid:229)
+
+Dl(F(i,l), ¯cl) − G
+
+l(a ) ≡ L
+
+i=1
+
+Ql(a ) ≡ Ql(P (a )) =(cid:18) G
+
+l(a )
+
+l (a )(cid:19)nl /n
+
+(7)
+
+where nl denotes the number of data objects that have a non-zero feature vector along the
+l-th component. The quantity nl is introduced to accommodate sparse data sets. Observe
+that while the quantities G
+, this dependence
+is implicit in the fact they are functions of P (a ) which in turn depends on a
+
+through (6).
+Minimizing Ql(a ) leads to a good discrimination along the l-th component feature
+space. Since we would like to simultaneously attain good discrimination along all the m
+feature spaces, we select the optimal feature weighting a † as
+
+l, and Ql depend on the feature weighting a
+
+l, L
+
+a † = arg min
+
+a ∈D
+
+[Q (a )] ,
+
+(8)
+
+where
+
+Q (a ) ≡ Q1(a ) × Q2(a ) × · · ·Qm(a ).
+
+ml.tex; 8/01/2002; 16:10; p.8
+
+a
+a
+(cid:229)
+a
+G
+(cid:229)
+L
+L
+L
+Feature Weighting
+
+9
+
+By taking the product of Q1, Q2, · · ·, Qm, in essence, we create a dimensionless quantity
+that can be meaningfully compared across clusterings.
+
+Remark 4.1 If the l-th feature space is R fl and Dl is the squared-Euclidean distance, then
+we can provide an intuitive interpretation of the quantities G
+
+l (a ). Write
+
+l(a ) and L
+
+l(a ) =
+
+k(cid:229)
+
+u=1
+
+u(a
+x∈p †
+
+)
+
+(Fl − c†
+
+(u,l)(a ))T (Fl − c†
+
+(u,l)(a )),
+
+where x = (F1, F2, · · · , Fm). Observe that G
+covariance matrix. Now, the quantity
+
+l(a ) is simply the trace of the within-class
+
+n(cid:229)
+
+i=1
+
+Dl (F(i,l), ¯cl) =
+
+n(cid:229)
+
+i=1
+
+(F(i,l) − ¯cl)T (F(i,l) − ¯cl)
+
+is simply the trace of the covariance matrix, and, hence, it follows from (Duda and Hart,
+1973) that L
+l (a ) is the trace of the between-class covariance matrix. In this case, assuming
+that nl = n, Ql(a ) is the ratio used by Fisher in determining the quality of a given classiﬁ-
+cation, and as the objective function underlying his multiple discriminant analysis. In this
+light, we refer to the quantity in (7) as the generalized Fisher ratio.
+
+Remark 4.2 Observe that the formulation in Section 2 continues to hold even when we
+scale distortion on each of the feature spaces by a possibly different constant. To be precise,
+we may write (2) as
+
+D
+
+(x, ˜x) =
+
+m(cid:229)
+
+lb
+
+lDl(Fl, ˜Fl),
+
+l=1
+
+where b 1, b 2, . . . , b
+l are positive constants. Clearly, such scaling will affect the numerical
+value of the optimal feature weighting. Hence, we should always interpret the optimal
+feature weighting with respect to any explicit or implicit scaling of the distortions on
+individual feature spaces.
+
+5. Evaluation Methodology
+
+Suppose that we have selected the optimal feature weighting a † by minimizing the ob-
+jective function in (8). A natural question is: How good is the clustering corresponding
+to the optimal feature weighting? In other words, Can we empirically verify that the op-
+timal feature weighting indeed leads to desirable clustering in some precise sense? To
+answer these questions, we assume that we are given pre-classiﬁed data and benchmark
+the precision/recall performance of various clusterings against the given ground truth. Pre-
+cision/recall numbers measure the “overlap” between a given clustering and the ground
+truth classiﬁcation. We stress that the precision/recall numbers are not used in selecting the
+optimal feature weighting, and are only intended to provide an independent, postfactum
+veriﬁcation of the utility of feature weighting. We shall use the precision/recall numbers to
+
+ml.tex; 8/01/2002; 16:10; p.9
+
+G
+(cid:229)
+a
+a
+10
+
+Modha & Spangler
+
+only compare partitionings with a ﬁxed number of clusters k, that is, partitionings with the
+same “model complexity”.
+
+To meaningfully deﬁne precision/recall, we convert the clusterings into classiﬁcation
+using the following simple rule: identify each cluster with the class that has the largest
+overlap with the cluster, and assign every element in that cluster to the found class. The
+rule allows multiple clusters to be assigned to a single class, but never assigns a single
+cluster to multiple classes.
+
+Suppose there are c classes {w
+
+t }c
+
+t=1 in the ground truth classiﬁcation. For a given clus-
+tering, by using the above rule, let at denote the number of data objects that are correctly
+assigned to the class w
+t, let bt denote the data objects that are incorrectly assigned to the
+class w
+t.
+We deﬁne precision and recall as
+
+t , and let ct denote the data objects that are incorrectly rejected from the class w
+
+pt =
+
+at
+
+at + bt
+
+and rt =
+
+at
+
+at + ct
+
+, 1 ≤ t ≤ c,
+
+The precision and recall are deﬁned per class. Following (Yang, 1999), we capture the per-
+formance averages across classes using macro-precision (macro-p), macro-recall (macro-r),
+micro-precision (micro-p), and micro-recall (micro-r):
+
+macro-p =
+
+c(cid:229)
+
+pt and macro-r =
+
+1
+c
+
+1
+c
+
+c(cid:229)
+
+t=1
+
+rt
+
+t=1
+micro-p (a)
+
+= micro-r =
+
+1
+n
+
+c(cid:229)
+
+t=1
+
+at ,
+
+where (a) follows since, in our case, (cid:229)
+
+c
+
+t=1(at + bt ) = (cid:229)
+
+c
+t=1(at + ct ) = n.
+
+6. Clustering Data Sets with Numerical and Categorical Attributes
+
+6.1. DATA MODEL
+
+Suppose we are given a data set with both numerical and categorical features. Standard
+k-means is designed to work with numerical data, and does not work well with categorical
+data. Hence, in our setting, at the very least, we would like to have two feature spaces.
+It is possible to further break-up numerical and categorical features into smaller feature
+spaces. However, we linearly scale each numerical feature (that is, we subtract the mean
+and divide by the square-root of the variance) and use a 1-in-q representation for each q-ary
+categorical feature. This makes all numerical features roughly homogeneous to each other,
+and all categorical features roughly homogeneous to each other; thus obviating any need for
+further division. For the numerical feature space, we use the squared-Euclidean distance.
+Assuming no missing values, all the categorical feature vectors have the same norm. We
+only retain the “direction” of the categorical feature vectors, that is, we normalize each
+
+ml.tex; 8/01/2002; 16:10; p.10
+
+Feature Weighting
+
+11
+
+Table I. The top, middle, and bottom tables correspond, respectively, to HEART, ADULT, and
+AUSTRALIAN data sets. For each data set, we show results for k = 2, 4, 6, 8, 16 clusters. We
+write optimal and uniform feature weighting, respectively, as a † and ˜a
+. The “best micro-p” and
+“worst micro-p” columns refer, respectively, to the best and worst micro-p achieved by any feature
+weighting over a ﬁne grid in [0, 1]. It can be seen the micro-p values for optimal feature weighting
+are consistently better than micro-p values for uniform feature weighting–for every data set and for
+every k. Furthermore, micro-p values for optimal feature weighting are close to the best micro-p
+values and are quite far from the worst micro-p values.
+
+HEART DATA SET
+
+Optimal Feature Weighting
+a †
+Q(a †) micro-p
+
+Uniform Feature Weighting
+
+worst
+Q( ˜a ) micro-p micro-p micro-p
+
+best
+
+˜a
+
+(.09, .91)
+(.08, .92)
+(.08, .92)
+(.10, .90)
+(.12, .88)
+
+20.49
+6.35
+3.77
+2.77
+1.15
+
+.804
+.815
+.803
+.800
+.793
+
+(.5, .5)
+(.5, .5)
+(.5, .5)
+(.5, .5)
+(.5, .5)
+
+34.64
+11.21
+7.69
+5.20
+2.38
+
+.741
+.733
+.711
+.711
+.767
+
+.830
+.826
+.819
+.811
+.822
+
+.711
+.718
+.707
+.678
+.744
+
+ADULT DATA SET
+
+Optimal Feature Weighting
+a †
+Q(a †) micro-p
+
+Uniform Feature Weighting
+
+worst
+Q( ˜a ) micro-p micro-p micro-p
+
+best
+
+˜a
+
+(.14, .86)
+(.10, .90)
+(.09, .91)
+(.11, .89)
+(.09, .91)
+
+68.69
+9.90
+5.08
+2.75
+1.17
+
+.759
+.761
+.812
+.820
+.819
+
+(.5, .5)
+(.5, .5)
+(.5, .5)
+(.5, .5)
+(.5, .5)
+
+154.44
+24.80
+13.68
+10.49
+2.68
+
+.759
+.760
+.761
+.770
+.800
+
+.759
+.761
+.818
+.822
+.820
+
+.759
+.759
+.761
+.770
+.777
+
+AUSTRALIAN DATA SET
+
+Optimal Feature Weighting
+a †
+Q(a †) micro-p
+
+Uniform Feature Weighting
+
+worst
+Q( ˜a ) micro-p micro-p micro-p
+
+best
+
+˜a
+
+(.09, .91)
+(.09, .91)
+(.08, .92)
+(.10, .90)
+(.08, .92)
+
+38.68
+10.31
+5.63
+3.89
+1.17
+
+.829
+.762
+.832
+.836
+.829
+
+(.5, .5)
+(.5, .5)
+(.5, .5)
+(.5, .5)
+(.5, .5)
+
+107.29
+30.16
+13.35
+10.75
+2.75
+
+.646
+.648
+.686
+.690
+.738
+
+.833
+.805
+.835
+.842
+.855
+
+.643
+.640
+.670
+.677
+.691
+
+k
+
+2
+4
+6
+8
+16
+
+k
+
+2
+4
+6
+8
+16
+
+k
+
+2
+4
+6
+8
+16
+
+categorical feature vector to have an unit Euclidean norm, and use the cosine distance.
+Essentially, we represent each data object x as a m-tuple, m = 2, of feature vectors (F1, F2).
+
+6.2. HEART, ADULT, AND AUSTRALIAN DATA SETS
+
+All data sets described below can be obtained from the UCI Machine Learning Repository
+(Blake and Merz, 1998).
+
+ml.tex; 8/01/2002; 16:10; p.11
+
+12
+
+Modha & Spangler
+
+)
+
+(a
+
+ 
+
+Q
+n
+o
+
+i
+t
+c
+n
+u
+
+f
+ 
+
+e
+v
+i
+t
+c
+e
+b
+o
+
+j
+
+ 
+
+e
+h
+
+t
+
+7.5
+
+7
+
+6.5
+
+6
+
+5.5
+
+5
+
+4.5
+
+4
+
+3.5
+
+3
+
+2.5
+
+0
+
+0.8
+
+0.78
+
+0.76
+
+p
+−
+o
+r
+c
+m
+
+i
+
+0.74
+
+0.72
+
+0.7
+
+0.68
+
+0.1
+
+0.2
+
+0.3
+
+0.4
+
+0.5
+
+0.6
+
+0.7
+
+0.8
+
+0.9
+
+1
+
+weight of the numerical feature space
+
+0.1
+
+0.2
+
+0.3
+
+0.4
+
+0.5
+
+0.6
+
+0.7
+
+0.8
+
+0.9
+
+weight of the numerical feature space
+
+Figure 1. For the HEART data and for k = 8, the top panel (resp. bottom panel) shows a plot of the objective
+function (resp. micro-p values) versus the weight of the numerical feature space. The solid (resp. dotted) vertical
+line indicate the position of the optimal feature weighting (resp. the uniform feature weighting). The “negative cor-
+relation” between the objective function and micro-p values is clearly evident from the plots. Finally, superiority
+of the optimal feature weighting over the uniform feature weighting is also evident.
+
+The HEART data set consists of n = 270 instances. Every instance consists of 13 fea-
+tures from which we treated 5 as numerical (age, blood pressure, serum cholesterol, heart
+rate, and oldpeak) and the remaining 8 as categorical. The data set has two classes: absence
+and presence of heart disease; 55.56% (resp. 44.44%) instances were in the former (resp.
+later) class.
+
+The ADULT data set consists of n = 32561 instances that were extracted from the 1994
+Census database. Every instance consists of 6 numerical and 8 categorical features. The
+data set has two classes: those with income less than or equal to $50, 000 and those with
+income more than $50, 000; 75.22% (resp. 24.78%) instances were in the former (resp.
+later) class.
+
+The AUSTRALIAN credit data set consists of n = 690 instances. Every instance con-
+sists of 6 numerical and 8 categorical features. The data set has two classes: 55.5% instances
+were in one class and the rest in the other.
+
+6.3. OPTIMAL FEATURE WEIGHTING
+
+In this case, the set of feasible feature weightings is
+
+D = {(a 1, a 2) : a 1 + a 2 = 1, a 1, a 2 ≥ 0},
+
+where a 1 and a 2 represent the weights of the numerical and categorical feature spaces,
+respectively. We select the number of clusters k = 2, 4, 6, 8,16, and do an exhaustive search
+
+ml.tex; 8/01/2002; 16:10; p.12
+
+Feature Weighting
+
+13
+
+0.1
+
+0.2
+
+0.3
+
+0.4
+
+0.5
+
+0.6
+
+0.7
+
+0.8
+
+0.9
+
+1
+
+weight of the numerical feature space
+
+)
+
+(a
+
+Q
+ 
+n
+o
+i
+t
+c
+n
+u
+f
+ 
+e
+v
+i
+t
+c
+e
+b
+o
+ 
+e
+h
+t
+
+j
+
+p
+−
+o
+r
+c
+m
+
+i
+
+12
+
+11
+
+10
+
+9
+
+8
+
+7
+
+6
+
+5
+
+4
+
+3
+
+2
+
+0
+
+0.82
+
+0.81
+
+0.8
+
+0.79
+
+0.78
+
+0.77
+
+0.1
+
+0.2
+
+0.3
+
+0.4
+
+0.5
+
+0.6
+
+0.7
+
+0.8
+
+0.9
+
+weight of the numerical feature space
+
+Figure 2. For the ADULT data and for k = 8, the top panel (resp. bottom panel) shows a plot of the objective
+function (resp. micro-p values) versus the weight of the numerical feature space. The solid (resp. dotted) vertical
+line indicate the position of the optimal feature weighting (resp. the uniform feature weighting). The “negative cor-
+relation” between the objective function and micro-p values is clearly evident from the plots. Finally, superiority
+of the optimal feature weighting over the uniform feature weighting is also evident.
+
+over a ﬁne grid on the interval [0, 1] to determine (heuristic approximations to) optimal
+feature weightings which minimize the objective function in (8).
+
+For all the three data sets, Table I shows micro-p values achieved by (the clusterings
+corresponding to) optimal feature weightings. In each case, we compare micro-p numbers
+for optimal feature weighting to those for uniform feature weighting. It can be clearly
+seen that optimal feature weighting consistently outperforms uniform feature weighting on
+all data sets and for every k. Furthermore, micro-p values for optimal feature weighting
+are close to (resp. far from) the best (resp. worst) micro-p values achieved by any feature
+weighting (in the ﬁne grid over [0, 1] that we used). While macro-p and macro-r numbers
+are not shown, they lead to identical conclusions.
+
+We now present ﬁne-grain analysis of the behavior of the objective function Q (a ) and
+micro-p values over the space of feature weightings. For the HEART (resp. ADULT and
+AUSTRALIAN) data, the top panel in Figure 1 (resp. Figure 2 and Figure 3) shows a plot
+of the objective function Q (a ) in (8) versus the weight a 1 for k = 8. In all cases, the
+bottom panel shows a plot of micro-p values versus the weight a 1. For all three ﬁgures,
+by comparing the top panel with the bottom panel, it can be seen that, roughly, micro-p
+values are negatively correlated with the objective function Q (a ) and that, in fact, the
+optimal feature weightings achieve nearly the best micro-p. A similar negative correlation
+also holds between the objective function and both macro-p and macro-r values. This sur-
+prising and reassuring ﬁnding underscores the usefulness of our feature weighting scheme
+
+ml.tex; 8/01/2002; 16:10; p.13
+
+14
+
+Modha & Spangler
+
+13
+
+12
+
+11
+
+10
+
+9
+
+8
+
+7
+
+6
+
+5
+
+4
+
+)
+
+(a
+
+Q
+ 
+n
+o
+i
+t
+c
+n
+u
+f
+ 
+e
+v
+i
+t
+c
+e
+b
+o
+ 
+e
+h
+t
+
+j
+
+0.85
+
+0.8
+
+p
+−
+o
+r
+c
+m
+
+i
+
+0.75
+
+0.7
+
+0.1
+
+0.2
+
+0.3
+
+0.4
+
+0.5
+
+0.6
+
+0.7
+
+0.8
+
+0.9
+
+weight of the numerical feature space
+
+0.1
+
+0.2
+
+0.3
+
+0.4
+
+0.5
+
+0.6
+
+0.7
+
+0.8
+
+0.9
+
+weight of the numerical feature space
+
+Figure 3. For the AUSTRALIAN data and for k = 8, the top panel (resp. bottom panel) shows a plot of the
+objective function (resp. micro-p values) versus the weight of the numerical feature space. The solid (resp. dotted)
+vertical line indicate the position of the optimal feature weighting (resp. the uniform feature weighting). The
+“negative correlation” between the objective function and micro-p values is clearly evident from the plots. Finally,
+superiority of the optimal feature weighting over the uniform feature weighting is also evident.
+
+in clustering data sets with multiple, heterogeneous feature spaces. To put it another way,
+from the class of all clusterings parameterized by the set of feasible weightings D
+, our
+feature weighting scheme identiﬁes essentially the best clustering–when compared to a
+known ground truth classiﬁcation. The results of the next section also testify to the same
+end, but on an altogether different application.
+
+7. Clustering Text Data with Words and Phrases
+
+7.1. PHRASES IN INFORMATION RETRIEVAL
+
+Vector space models (Salton and McGill, 1983) represent each document as a vector of
+certain (possibly weighted and normalized) term frequencies. Typically, terms are single
+words. However, to capture word ordering, it is intuitively desirable to also include multi-
+word sequences, namely, phrases, as terms.
+
+The use of phrases as terms in vector space models has been well studied. For example,
+(Salton et al., 1975; Mitra et al., 1997) showed that statistical phrases enhance precision
+of information retrieval systems. Recently, for supervised learning using a naïve-Bayesian
+classiﬁer, (Mladeni´c and Grobelnik, 1998) have used words and phrases as terms. Unlike
+these studies, we do not group the phrases along with the words in a single vector space
+model. This direction was anticipated and suggested by (Smeaton and Kelledy, 1998) who
+
+ml.tex; 8/01/2002; 16:10; p.14
+
+Feature Weighting
+
+15
+
+noted that “Phrases and single word terms have different frequency distributions and this
+should really be taken into account in applying 2 different term weighting functions as part
+of retrieval instead of bundling phrase and single word representations into one as we have
+done.”
+
+For information retrieval, when single words are also simultaneously used, (Mitra et al.,
+1997) found that natural language phrases do not perform signiﬁcantly better than sta-
+tistical phrases. Hence, we shall focus on statistical phrases which are simpler to extract,
+see, for example, (Agrawal and Srikant, 1995; Ahonen-Myka, 1999). Also, (Mladeni´c and
+Grobelnik, 1998) found that while adding 2- and 3-word phrases improved the classiﬁer
+performance, longer phrases did not. Hence, we shall restrict attention to single words,
+2-word phrases, and 3-word phrases.
+
+7.2. DATA MODEL
+
+We represent each document as a triplet of three vectors: a vector of word frequencies, a
+vector of 2-word phrase frequencies, and a vector of 3-word phrase frequencies, that is,
+x = (F1, F2, F3). We now show how to compute such representations for every document
+in a given corpus.
+
+The creation of the ﬁrst feature vector is a standard exercise in information retrieval
+(Salton and McGill, 1983). The basic idea is to construct a word dictionary of all the words
+that appear in any of the documents in the corpus, and to prune or eliminate stopwords
+words from this dictionary; for a list of standard stopwords, see, (Frakes and Baeza-Yates,
+1992). Sometimes, the size of the word dictionary is further reduced using stemming
+(Frakes and Baeza-Yates, 1992). For the present application, we also eliminated those low-
+frequency words which appeared in less than 0.64% of the documents. Suppose f1 unique
+words remain in the dictionary after such elimination. Assign an unique identiﬁer from 1
+to f1 to each of these words. Now, for each document x in the corpus, the ﬁrst vector F1 in
+the triplet will be a f1-dimensional vector. The jth column entry, 1 ≤ j ≤ f1, of F1 is the
+number of occurrences of the jth word in the document x.
+
+Creation of the second (resp. third) feature vector is essentially the same as the ﬁrst,
+except we set the low-frequency 2-word (resp. 3-word) phrase elimination threshold to one-
+half (resp. one-quarter) that for the words. The lower threshold somewhat compensates for
+the fact that a 2-word (resp. 3-word) phrase is generally less likely than a single word. Let
+f2 (resp. f3) denote the dimensionalities of the second (resp. third) feature vector.
+
+Finally, each of the three components F1, F2, and F3 is normalized to have a unit
+Euclidean norm, that is, their directions are retained and their lengths are discarded (Sing-
+hal et al., 1996). There are a large number of term-weighting schemes in information
+retrieval for assigning different relative importance to various terms in the feature vectors
+(Salton and Buckley, 1988). Our feature vectors correspond to a popular scheme known as
+normalized term frequency.
+
+We let the distortion measures D1, D2, and D3 to be the cosine distances.
+
+7.3. NEWSGROUPS DATA
+
+We picked out the following 10 newsgroups from the “Newsgroups data” (Bay, 1999;
+Joachims, 1997) to illustrate our results.
+
+ml.tex; 8/01/2002; 16:10; p.15
+
+16
+
+Modha & Spangler
+
+3	wdhae
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+1111111111111111111111111111111111111111111
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+(cid:15)
+2	wdhae
+wd
+
+Figure 4. When m = 3, D
+is the triangular region formed by the intersection of the plane a 1 + a 2 + a 3 = 1 with
+the nonnegative orthant of R3. The left-vertex, the right-vertex, and the top-vertex of the triangle corresponds to
+the points (1, 0, 0), (0, 1, 0), and (0, 0, 1), respectively.
+
+sci.crypt
+rec.autos
+sci.space
+misc.forsale
+
+comp.windows.x
+rec.sport.baseball
+talk.politics.guns
+
+comp.sys.mac.hardware
+soc.religion.christian
+talk.politics.mideast
+
+Each newsgroup contains 1000 documents; after removing empty documents, we had a
+total of n = 9961 documents.
+
+For this data set, the unpruned word (resp. 2-word phrase and 3-word phrase) dictionary
+had size 72586 (resp. 429604 and 461132) out of which we retained f1 = 2583 (resp. f2 =
+2144 and f3 = 2268) elements that appeared in at least 64 (resp. 32 and 16) documents. All
+the three features spaces were highly sparse; on an average, after pruning, each document
+had only 50 (resp. 7.19 and 8.34) words (resp. 2-word and 3-word phrases). Finally, n1 =
+n = 9961 (resp. n2 = 8639 and n3 = 4664) documents had at least one word (resp. 2-word
+phrase and 3-word phrase). Observe that the numbers n1, n2, and n3 are used in (7).
+
+7.4. OPTIMAL FEATURE WEIGHTING
+
+In this case, the set of feasible feature weightings is the triangular region shown in Figure 4.
+For each k = 10, 15, 20, to determine (heuristic approximations to) the optimal feature
+weightings, we ran the convex k-means algorithm with 31 different feature weightings
+that are shown using the symbol • in Figure 4. Table II shows optimal feature weight-
+ing a †, the corresponding objective function Q(a †), and corresponding micro-p value for
+k = 10, 15, 20. For ˜a = (.33, .33, .33) which corresponds to an uniform feature weighting,
+we also display the corresponding objective function Q( ˜a ) and micro-p value. Finally, we
+show the best and the worst micro-p numbers achieved by one of the 31 feature weightings
+
+ml.tex; 8/01/2002; 16:10; p.16
+
+Feature Weighting
+
+17
+
+Table II. For the Newsgroups data set, we show results for k = 10, 15, 20 clusters. We write optimal and
+uniform feature weighting, respectively, as a † and ˜a
+. The “best micro-p” and “worst micro-p” columns
+refer, respectively, to the best and worst micro-p achieved by any feature weighting over a ﬁne grid (see
+Figure 4) in D
+. It can be seen that micro-p values for optimal feature weighting are consistently better than
+micro-p values for uniform feature weighting–for every k. Furthermore, micro-p values for optimal feature
+weighting are close to the best micro-p values and are quite far from the worst micro-p values.
+
+Optimal Feature Weighting
+a †
+
+Q(a †) micro-p
+
+Uniform Feature Weighting
+
+worst
+micro-p micro-p micro-p
+
+best
+
+˜a
+
+Q( ˜a )
+
+(.50, .25, .25)
+(.75, .00, .25)
+(.75, .00, .25)
+
+21.06
+14.38
+11.03
+
+.686
+.656
+.664
+
+(.33, .33, .33)
+(.33, .33, .33)
+(.33, .33, .33)
+
+24.01
+16.20
+13.39
+
+.593
+.616
+.602
+
+.700
+.690
+.693
+
+.320
+.378
+.394
+
+k
+
+10
+15
+20
+
+in Figure 4. It can be clearly seen that micro-p values for optimal feature weighting are con-
+sistently better than those for uniform feature weighting–for every k. Furthermore, micro-p
+values for optimal feature weighting are close to the best micro-p values and are quite far
+from the worst micro-p values. While macro-p and macro-r numbers are not shown, they
+lead to identical conclusions.
+
+In Figure 5, for k = 10, we plot the objective function Q (a ) versus micro-p values
+for all the 31 feature weightings. It can be seen that, roughly, as the objective function
+decreases, micro-p increases. The optimal feature weighting is distinguished by putting the
+symbol 2 around it; by deﬁnition, this is the lowest point on the plot. Surprisingly, it is
+also almost the right-most point on the plot, that is, it has almost the highest micro-p value.
+Although macro-p and macro-r results are not shown, they lead to the same conclusions.
+Similar conclusions also hold for k = 15, 20.
+
+This ﬁnding reiterates the conclusion outlined at the end of Section 6 that: optimal
+
+feature weighting achieves nearly the best precision and recall.
+
+8. Future Work
+
+u(a †)}k
+
+u(a †), c†
+
+The most important problem that we leave open is: how to efﬁciently determine the optimal
+feature weighting. Ideally, instead of the two step process offered in this paper, we would
+like a single algorithm that jointly ﬁnds the optimal feature weighting a † and the corre-
+sponding clustering P (a †) = {p †
+u=1. Observe that (i) the objective function
+Q (a ) is an implicit function of a
+, and, hence, analytic computation of its derivatives is
+not possible and numerical computation may be expensive and (perhaps) unstable; (ii)
+Figures 1, 2, 3 lead us to conjecture that that the objective function Q (a ) is generally well-
+behaved. This observations suggest the tantalizing possibility of combining the downhill
+simplex method (Nelder and Mead, 1965; Press et al., 1993) with the convex k-means
+algorithm. We now offer a tentative scheme for this marriage. The idea is to start the convex
+k-means algorithm with an initial feature weighting (which may simply be the uniform
+feature weighting) and D
+as the starting simplex. Now, the moves of the downhill simplex
+algorithm (consisting of either reﬂection, contraction, or reﬂection with expansion of the
+simplex) are interspersed with the moves of the convex k-means algorithm. In particular,
+
+ml.tex; 8/01/2002; 16:10; p.17
+
+18
+
+Modha & Spangler
+
+)
+
+(a
+
+Q
+ 
+n
+o
+i
+t
+c
+n
+u
+f
+ 
+e
+v
+i
+t
+c
+e
+b
+o
+ 
+e
+h
+t
+
+j
+
+55
+
+50
+
+45
+
+40
+
+35
+
+30
+
+25
+
+20
+
+0.3
+
+0.4
+
+0.5
+
+micro−p
+
+0.6
+
+0.7
+
+Figure 5. For the Newsgroups data set and for k = 10, we plot the objective function Q (a ) versus micro-p
+values for all the feature weightings in Figure 4. The micro-p value corresponding to optimal feature weighting is
+distinguished by putting the symbol 2 around it. The “negative correlation” between the objective function and
+micro-p values is clearly evident from the plot.
+
+one may insert a downhill simplex step between Steps 3 and 4 of the convex k-means
+algorithm. Finally, the algorithm is said to converge when the stopping criteria for both the
+algorithms are met.
+
+In this paper, we have employed the new weighted distortion measure D
+
+in the k-
+means algorithm; it may also be possible to use it with a graph-based algorithm such as the
+complete link method or with hierarchical agglomerative clustering algorithms.
+
+Throughout this paper, we assumed that the number of clusters k is given; however, an
+important future problem is to automatically determine the number of clusters in an adap-
+tive or data-driven fashion using information-theoretic criteria such as the MDL principle.
+
+9. Conclusion
+
+We have presented a framework for integrating multiple, heterogeneous feature spaces in
+the k-means clustering algorithm. Our methodology adaptively selects, in an unsupervised
+fashion, the relative weights assigned to various feature spaces with the objective of si-
+multaneously attaining good separation along all the feature spaces. Using precision/recall
+evaluations, we have empirically demonstrated that optimal feature weighting is extremely
+effective in locating essentially the best clustering when compared against known ground
+truth classiﬁcations.
+
+ml.tex; 8/01/2002; 16:10; p.18
+
+a
+Feature Weighting
+
+References
+
+19
+
+Agrawal, R. and R. Srikant: 1995, ‘Mining sequential patterns’. In: Proc. Int. Conf. Data Eng. pp. 3–14.
+Ahonen-Myka, H.: 1999, ‘Finding all maximal frequent sequences in text’. In: D. Mladenic and M. Grobelnik
+
+(eds.): ICML-99 Workshop: Machine Learning in Text Data Analysis. pp. 11–17.
+
+Bay, S. D.: 1999, ‘The UCI KDD Archive [http://kdd.ics.uci.edu]’. Dept. Inform. and Comput. Sci., Univ.
+
+California, Irvine, CA.
+
+Blake,
+
+C.
+
+and
+
+learning
+
+databases
+[http://www.ics.uci.edu/∼mlearn/MLRepository.html]’. Dept. Inform. and Comput. Sci., Univ. California,
+Irvine, CA.
+
+of machine
+
+C. Merz:
+
+1998,
+
+‘UCI
+
+Repository
+
+Blum, A. L. and P. Langley: 1997, ‘Selection of relevant features and examples in machine learning’. Artiﬁcial
+
+Intelligence 97, 245–271.
+
+Bradley, P. and U. Fayyad: 1998, ‘Reﬁning Initial Points for K-Means Clustering’. In: Proc. 16th Int. Machine
+
+Learning Conf., Bled, Slovenia. pp. 91–99.
+
+Caruana, R. and D. Freitag: 1994, ‘Greedy attribute selection’. In: Proc. 11th Int. Machine Learning Conf. pp.
+
+28–36.
+
+Devaney,M. and A. Ram: 1997, ‘Efﬁcient Feature Selection in Conceptual Clustering’. In: Proc. 14th Int. Machine
+
+Learning Conf., Nashville, TN. pp. 92–97.
+
+Dhillon, I. S. and D. S. Modha: 2001, ‘Concept decompositions for large sparse text data using clustering’.
+
+Machine Learning 42(1/2), 143–175.
+
+Duda, R. O. and P. E. Hart: 1973, Pattern Classiﬁcation and Scene Analysis. Wiley.
+Fisher, D. H.: 1987, ‘Knowledge acquisition via incremental conceptual clustering’. Machine Learning pp. 139–
+
+172.
+
+Flickner, M., H. Sawhney, W. Niblack, J. Ashley, Q. Huang, B. Dom, M. Gorkani, J. Hafner, D. Lee, D. Petkovic,
+D. Steele, and P. Yanker: 1995, ‘Query by image and video content: the QBIC system’. IEEE Computer
+28(9), 23–32.
+
+Frakes, W. B. and R. Baeza-Yates: 1992, Information Retrieval: Data Structures and Algorithms. Prentice Hall,
+
+Englewood Cliffs, New Jersey.
+
+Hartigan, J. A.: 1975, Clustering Algorithms. Wiley.
+Joachims, T.: 1997, ‘A probabilistic analysis of the Rocchio Algorithm with TFIDF for text categorization’. In:
+
+Proc. 14th Int. Conf. Machine Learning. pp. 143–151.
+
+John, G. H., R. Kohavi, and K. Pﬂeger: 1994, ‘Irrelevant features and the subset selection problem’. In: Proc.
+
+11th Int. Machine Learning Conf. pp. 121–129.
+
+Kendall, W. S.: 1991, ‘Convexity and the hemisphere’. J. London Math. Soc. 43, 567–576.
+Kleinberg, J., C. H. Papadimitriou, and P. Raghavan: 1998, ‘A microeconomic view of data mining’. Data Mining
+
+and Knowledge Discovery 2(4), 311–324.
+
+Koller, D. and M. Sahami: 1996, ‘Towards optimal feature selection’. In: Proc. 13th Int. Conf. Machine Learning,
+
+Bari, Italy. pp. 284–292.
+
+Mitra, M., C. Buckley, A. Singhal, and C. Cardie: 1997, ‘An analysis of statistical and syntactic phrases’. In:
+
+Proc. RIAO97: Computer-Assisted Inform. Searching on the Internet, Montreal, Canada. pp. 200–214.
+
+Mladeni´c, D. and M. Grobelnik: 1998, ‘Word sequences as features in text-learning’. In: Proc. 7th Electrotech.
+
+Comput. Sci. Conf. ERK’98, Ljubljana, Slovenia. pp. 145–148.
+
+Modha, D. S. and W. S. Spangler: 2000, ‘Clustering hypertext with applications to web searching’. In: Proc. ACM
+
+Hypertext Conf., San Antonio, TX. pp. 143–152.
+
+Nelder, J. and R. Mead: 1965, ‘A Simplex Method for Function Minimization’. Computer Journal 7, 308.
+Press, W. H., S. A. Teukolsky, W. T. Vetterling, and B. P. Flannery: 1993, Numerical Recipes in C. New York:
+
+Cambridge University Press.
+
+Sabin, M. J. and R. M. Gray: 1986, ‘Global convergence and empirical consistency of the generalized Lloyd
+
+algorithm’. IEEE Trans. Inform. Theory 32(2), 148–155.
+
+Salton, G. and C. Buckley: 1988, ‘Term-weighting approaches in automatic text retrieval’.
+
+Inform. Proc. &
+
+Management pp. 513–523.
+
+Salton, G. and M. J. McGill: 1983, Introduction to Modern Retrieval. McGraw-Hill Book Company.
+Salton, G., C. S. Yang, and C. T. Yu: 1975, ‘A theory of term importance in automatic text analysis’. J. Amer. Soc.
+
+Inform. Sci. 26(1), 33–44.
+
+Singhal, A., C. Buckley, M. Mitra, and G. Salton: 1996, ‘Pivoted Document Length Normalization’. In: Proc.
+
+ACM SIGIR. pp. 21–29.
+
+ml.tex; 8/01/2002; 16:10; p.19
+
+20
+
+Modha & Spangler
+
+Smeaton, A. F. and F. Kelledy: 1998, ‘User-chosen phrases in interactive query formulation for information re-
+trieval’. In: Proc. 20th BCS-IRSG Colloquium, Springer-Verlag Electronic Workshops in Comput., Grenoble,
+France.
+
+Talavera, L.: 1999, ‘Feature Selection as a Preprocessing Step for Hierarchical Clustering’. In: Proc. 16th Int.
+
+Machine Learning Conf., Bled, Slovenia. pp. 389–397.
+
+Vaithyanathan, S. and B. Dom: 1999, ‘Model selection in unsupervised learning with applications to document
+
+clustering’. In: Proc. 16th Int. Machine Learning Conf., Bled, Slovenia.
+
+Wettschereck, D., D. W. Aha, and T. Mohri: 1997, ‘A review and empirical evaluation of feature weighting
+
+methods for a class of lazy learning algorithms’. Artiﬁcial Intelligence Review 11, 273–314.
+
+Yang, Y.: 1999, ‘An Evaluation of statistical approaches to text categorization’. Inform. Retrieval J. 1(1/2), 67–88.
+
+ml.tex; 8/01/2002; 16:10; p.20
+
+
