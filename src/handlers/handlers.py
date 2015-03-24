@@ -1,7 +1,7 @@
 from base_handler import *
 from charts_handlers import *
 from process_handlers import *
-from upload_handler import *
+from control_handlers import *
 
 from bson.objectid import ObjectId
 import bcrypt
