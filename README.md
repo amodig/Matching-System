@@ -7,7 +7,7 @@ Contributors:
 * [Arttu Modig](https://github.com/Dalar)
 * [Kalle Ilves](https://github.com/Kaltsoon)
 
-# Index.html of Supervisor matching system
+# Index.html
 
 ## GET /search
 
