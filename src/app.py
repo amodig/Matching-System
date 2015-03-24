@@ -3,20 +3,20 @@
 Application includes setting Tornado handlers, configs and basic methods for the engine.
 """
 
+from handlers.handlers import *
+from handlers import uimodules
 
-from copy import deepcopy
-import uuid
-import base64
-import pickle
-
+import tornado.httpserver
 import tornado.web
 import tornado.ioloop
 import tornado.options
 from tornado.options import define, options
 from tornado.web import url
 
-from handlers.handlers import *
-from handlers import uimodules
+from copy import deepcopy
+import uuid
+import base64
+import pickle
 
 __author__ = "Yuan (Alex) Gao, Arttu Modig"
 __credits__ = "Yuan (Alex) Gao, Arttu Modig, Kalle Ilves, Han Xiao"

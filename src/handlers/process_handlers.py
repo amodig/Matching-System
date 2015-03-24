@@ -65,8 +65,8 @@ class SearchHandler(MainBaseHandler):
                 temp.append(keyword_info)
         self.application.filtered_keywords = temp
         self.application.keywords = self.application.filtered_keywords[self.application.keywords_number *
-                                                        self.application.iter_num:self.application.keywords_number *
-                                                        (self.application.iter_num + 1)]
+                                                        self.application.iter_num: self.application.keywords_number *
+                                                                                (self.application.iter_num + 1)]
 
         # sort the persons
         keywords_id = [keyword["id"] for keyword in self.application.keywords]
@@ -99,10 +99,11 @@ class NextHandler(MainBaseHandler):
 
     def post(self):
         def sort_keywords(scores):
-            """
-            This function sorts the keywords according to their scores. This function also will filter out the keywords contained in the 
-            @params scores: scores of h=the keywords , the order is the same as how keywords are order in self.application keywords
-            @return 
+            """Sorts the keywords according to their scores. Will also filter out the keywords contained in
+            the already experienced keywords.
+
+            @params scores: scores of the keywords, the order is the same as in self.application keywords
+            @return: sorted keyword pairs
             """
 
             # sort keywords according to their scores
@@ -115,10 +116,10 @@ class NextHandler(MainBaseHandler):
             return sorted_pair[1]
 
         def update_keywords_info(scores):
-            """
-            This function update information stored in the self.application.keywords_info
+            """Update information stored in the self.application.keywords_info
+
             @params Scores is a list of tuples. First element of tuple stores exploitation rate of the keyword.
-                    Second element of tuple stores exploration rate of the keyword
+                    Second element of tuple stores exploration rate of the keyword.
             """
             for i in xrange(len(self.application.keywords_info)):
                 self.application.keywords_info[i]["exploitation"] = scores[i][0]
@@ -136,7 +137,7 @@ class NextHandler(MainBaseHandler):
         # One of them contains keywords, another of them contains weights of keywords
         keywords, weights = zip(*keywords_info)
         # increase the iteration number
-        self.application.iter_num = self.application.iter_num + 1
+        self.application.iter_num += 1
 
         # get scores of all the keywords ordered in list order 
         before = datetime.datetime.now()
@@ -174,18 +175,15 @@ class NextHandler(MainBaseHandler):
 
 
 class RelatedArticlesHandler(MainBaseHandler):
-    """
-    This class implements the related article handler. The related article handler will hand the url /related_articles
-    """
+    """Implements the related article handler. The related article handler will hand the url /related_articles."""
 
     def get(self):
         pass
 
     def post(self):
-        """
-        This function receives information of paper's ID and then send back the cosine distance between this paper and
-        other papers
-        :return:
+        """Receives information of paper's ID and sends back the cosine distance between this paper and other papers.
+
+        :return: JSON object which has article distances and metadata
         """
         # load the data from the front end
         data = json.loads(self.request.body)
@@ -226,6 +224,3 @@ class RelatedArticlesHandler(MainBaseHandler):
         }
         print message
         self.json_ok(message)
-
-
-

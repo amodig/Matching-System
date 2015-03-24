@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Upload a file</title>
+    <title>Control Panel</title>
 
     <!-- Bootstrap styles -->
     <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
@@ -21,7 +21,7 @@
     <script>
         function scriptsLoaded(data) {
             // fetch existing file data
-            var files = {% raw files %};  // get tornado template variables
+            var files = {% raw files %};  // get files in Tornado template variable
 
             var $form = $('#fileupload');
             $form.fileupload('option', 'done').call(
@@ -63,10 +63,10 @@
         }
         function uploadTemplateLoaded(data) {
             window.uploadTemplate = data;
-            $.get('static/js/template-download.tmpl', downloadTemplateLoaded);
+            $.get('static/template-download.tmpl', downloadTemplateLoaded);
         }
         $(function () {
-            $.get('static/js/template-upload.tmpl', uploadTemplateLoaded);
+            $.get('static/template-upload.tmpl', uploadTemplateLoaded);
         });
     </script>
 </head>

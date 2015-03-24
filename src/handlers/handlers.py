@@ -1,3 +1,8 @@
+from base_handler import *
+from charts_handlers import *
+from process_handlers import *
+from upload_handler import *
+
 from bson.objectid import ObjectId
 import bcrypt
 import hashlib
@@ -8,11 +13,6 @@ import bson.json_util
 import time
 import threading
 import functools
-
-from base_handler import *
-from charts_handlers import *
-from process_handlers import *
-from upload_handler import *
 
 
 class AnalyzerHandler(BaseHandler):
