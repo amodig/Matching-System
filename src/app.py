@@ -217,7 +217,7 @@ class Application(tornado.web.Application):
         keywords_exploitation = [0.1] * len( self.keywords_list)
         keywords_exploration = [0.9] * len( self.keywords_list)
         self.keywords_info = zip(self.keywords_id, self.keywords_list, keywords_exploitation, keywords_exploration)
-        self.keywords_keys = ("id", "text",  "exploitation", "exploration" )
+        self.keywords_keys = ("id", "text",  "exploitation", "exploration")
         self.keywords_info = [dict(zip(self.keywords_keys, keyword_info)) for keyword_info in self.keywords_info]
         self.keywords = self.keywords_list[self.keywords_number *
                                            self.iter_num: self.keywords_number * (self.iter_num + 1)]
