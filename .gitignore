@@ -1,5 +1,4 @@
 # databases etc.
-database/
 src/handlers/preprocessing/crawler/crawler_logs
 .idea
 
