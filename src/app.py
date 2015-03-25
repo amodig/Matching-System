@@ -108,11 +108,8 @@ class Application(tornado.web.Application):
 
         # Connect to MongoDB
         self.client = motor.MotorClient(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
-
-        if 'db' in overrides:
-            self.db = self.client[overrides['db']]
-        else:
-            self.db = self.client['test-thank']
+        # Choose correct database
+        self.db = self.client['app']
 
         # following part is for analyzer
         def set_keywords_parameters():

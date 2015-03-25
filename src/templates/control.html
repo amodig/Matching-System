@@ -78,7 +78,7 @@
         <h3 id="profile-title">Profile</h3>
         <div class="row">
             <div class="col-md-3">
-                <img src="{{ modules.Gravatar(escape(user), 200, 'jpg') }}" width="200" alt="{{ escape(user) }}'s Avatar" >
+                <img src="{{ modules.Gravatar(escape(email), 200, 'jpg') }}" width="200" alt="{{ escape(user) }}'s Avatar" >
             </div>
             <div class="col-md-3">
                 <span>{% module Markdown(bio_text) %}</span>

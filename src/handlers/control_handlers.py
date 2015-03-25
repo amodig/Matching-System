@@ -134,6 +134,12 @@ class UploadHandler(BaseHandler):
         return url + '&download=1'
 
     @gen.coroutine
+    def get_user_email(self, user):
+        doc = yield self.application.db['users'].find_one({'user': user})
+        email = doc['email']
+        raise gen.Return(email)
+
+    @gen.coroutine
     def get_files_db(self, user):
         """Finds all files by selected user.
         :return a list of file dictionaries (can be empty).
@@ -293,12 +299,14 @@ class UploadHandler(BaseHandler):
             return
         # fetch files from database
         user = self.get_current_user()
+        email = yield self.get_user_email(user)
         files = yield self.get_files_db(user)
         # use BSON util for default date conversion
         s = json.dumps(files, separators=(',', ':'), default=json_util.default)
         template_vars = {}
         template_vars['files'] = s
         template_vars['user'] = self.get_current_user()
+        template_vars['email'] = email
         template_vars['bio_text'] = yield self.get_bio()
         print "Fetched files:"
         print s
@@ -319,6 +327,7 @@ class UploadHandler(BaseHandler):
             self.request.set_headers('Content-Type', 'application/json')
         print "POST writing: %s" % s
         self.write(s)
+
         self.finish()
 
     @web.authenticated

@@ -3,6 +3,7 @@ from charts_handlers import *
 from process_handlers import *
 from control_handlers import *
 
+from tornado import escape
 from bson.objectid import ObjectId
 import bcrypt
 import hashlib
@@ -65,11 +66,6 @@ class MenuTagsHandler(BaseHandler):
 class LoginHandler(BaseHandler):
     @tornado.web.asynchronous
     def get(self):
-        # redirect if user is already logged in
-        #if self.get_current_user():
-        #    print self.get_argument("next", default="no next argument")
-        #    self.redirect(self.get_argument("next", default="/"))
-        #    return
         error_msg = self.get_argument("error", default="")
         self.render("login.html", next=self.get_argument("next", default=u"/control"),
                     notification=self.get_flash(),
@@ -81,28 +77,26 @@ class LoginHandler(BaseHandler):
         username = self.get_argument("username", default="")
         password = self.get_argument("password", default="").encode("utf-8")
         user = yield self.application.db['users'].find_one({'user': username})  # returns a Future
-
         # Warning bcrypt will block IO loop:
-        if not user:
+        if user is None:
             print "User not found"
-            error_msg = u"?error=" + tornado.escape.url_escape("User not found.")
+            error_msg = u"?error=" + escape.url_escape("User not found.")
             self.redirect(u"/login" + error_msg)
-        if user['password'] and bcrypt.hashpw(password, user['password'].encode("utf-8")) == user['password']:
-            print "Login correct"
+        elif user['password'] and bcrypt.hashpw(password, user['password'].encode("utf-8")) == user['password']:
+            print "Login correct: " + username
             self.set_current_user(username)
             self.redirect(self.get_argument("next", default=u"/control"))
             print self.get_argument("next", default=u"/control")
-            #self.redirect("control")
         else:
-            print "Login incorrect"
+            print "Login incorrect: " + username
             self.set_secure_cookie('flash', "Login incorrect!")
-            error_msg = u"?error=" + tornado.escape.url_escape("Login incorrect.")
+            error_msg = u"?error=" + escape.url_escape("Login incorrect.")
             self.redirect(u"/login" + error_msg)
 
     def set_current_user(self, username):
         print "Set current user: " + username
         if username:
-            self.set_secure_cookie("user", tornado.escape.json_encode(username))
+            self.set_secure_cookie("user", escape.json_encode(username))
         else:
             self.clear_cookie("user")
 
@@ -141,55 +135,63 @@ class NoneBlockingLogin(BaseHandler):
 
     def _password_fail_callback(self):
         self.set_flash('Error Login incorrect')
-        error_msg = u"?error=" + tornado.escape.url_escape("Password fail")
+        error_msg = u"?error=" + escape.url_escape("Password fail")
         self.redirect(u"/login" + error_msg)
 
 
 class RegisterHandler(LoginHandler):
     @tornado.gen.coroutine
-    def _already_taken(self, entry, query):
-        yield self.application.db['users'].find_one({entry: query})
+    def _find_one(self, entry, query):
+        print "Checking db: " + self.application.db.name + ", collection: " + self.application.db['users'].name
+        # find_one returns None if no matching document
+        doc = yield self.application.db['users'].find_one({entry: query})
+        raise gen.Return(doc)  # has to raise a gen.Return in Python 2
 
+    @tornado.web.asynchronous
     def get(self):
         self.render("register.html", next=self.get_argument("next", "/"))
 
+    @tornado.gen.coroutine
     def post(self):
         # Validate registration
         # (add a spam trap perhaps?)
 
-        # No need to sanitize inputs with MongoDB
-
-        # Collect inputs
+        # Collect inputs (no need to sanitize inputs with MongoDB)
         name = self.get_argument("name", "")
         email = self.get_argument("email", "")
         username = self.get_argument("username", "")
         password = self.get_argument("password", "")
 
         # Save to database
-        # (should ensure an initial table?)
+        # (should this ensure an initial users collection?)
 
         # Check unique fields
-        if self._already_taken('email', email):
-            error_msg = u"?error=" + tornado.escape.url_escape("This email is already registered.")
+        query_email = yield self._find_one("email", email)
+        query_username = yield self._find_one("user", username)
+
+        if query_email is not None:
+            print email + " already taken:"
+            print query_email
+            error_msg = u"?error=" + escape.url_escape("This email is already registered.")
             self.redirect(u"/register" + error_msg)
-        if self._already_taken('username', username):
-            error_msg = u"?error=" + tornado.escape.url_escape("This username is already taken.")
+        elif query_username is not None:
+            print username + " already taken"
+            print query_username
+            error_msg = u"?error=" + escape.url_escape("This username is already taken.")
             self.redirect(u"/register" + error_msg)
-
-        hashed_passwd = bcrypt.hashpw(password, bcrypt.gensalt(8))  # warning bcrypt will block IO loop!
-
-        user = {}
-        user['name'] = name
-        user['email'] = email
-        user['username'] = username
-        user['password'] = hashed_passwd
-        user['bio'] = ""  # empty bio
-
-        auth = yield self.application.db['users'].save(user)
-        self.set_current_user(username)
-
-        # Add two-step verification?
-        self.redirect(u"/index")
+        else:
+            hashed_passwd = bcrypt.hashpw(password, bcrypt.gensalt(8))  # warning bcrypt will block IO loop!
+            user = {}
+            user['user'] = username  # use username as the "user" field when using "users" collection
+            user['email'] = email
+            user['name'] = name
+            user['password'] = hashed_passwd
+            user['bio'] = name  # empty bio with just name
+            # save user data into database
+            auth = yield self.application.db['users'].save(user)
+            self.set_current_user(username)
+            # Add two-step verification?
+            self.redirect(u"/control")
 
 
 class TwitterLoginHandler(LoginHandler, tornado.auth.TwitterMixin):
@@ -334,7 +336,7 @@ class EmailMeHandler(BaseHandler):
         }
         mail_url = self.settings["mandrill_url"] + "/users/info.json"
 
-        body = tornado.escape.json_encode(mail_data)
+        body = escape.json_encode(mail_data)
         response = yield tornado.gen.Task(http_client.fetch, mail_url, method='POST', body=body)
         logging.info(response)
         logging.info(response.body)
