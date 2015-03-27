@@ -4,7 +4,7 @@ Given abstracts stored in database, this file extract topic models from the all 
 import onlineldavb
 import sys
 import numpy
-from database_messager.mysql_messager import MysqlMessager
+from database_messager.mysql_messager import MysqlMessenger
 from pickle import load
 from contextlib import contextmanager
 from sys import stderr
@@ -41,9 +41,9 @@ def main():
     number_of_topics = 1
 
     # establish mysql database connection
-    database = MysqlMessager(database="keyword_app")
+    database = MysqlMessenger(database="keyword_app")
     sql = "select Abstract from PreprocessedAbstracts;"
-    database.excute_sql(sql)
+    database.execute_sql(sql)
     row_iteration = database.fetch()
     abstracts = [row[0] for row in row_iteration]
 
