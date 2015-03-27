@@ -30,3 +30,6 @@ brew install scipy
 sudo mysql -u root -p -e "CREATE DATABASE matching_system;"
 sudo mysql -u root -p matching_system < database/matching_system.sql 
 mongorestore database/dump
+
+# Run MongoDB daemon like this (default port should be correct):
+# mongod -dbpath database/
