@@ -9,7 +9,7 @@ from __future__ import division
 from lxml import etree
 from os import path
 
-from ..database_messager.mysql_messager import MysqlMessager
+from ..database_messager.mysql_messager import MysqlMessenger
 from ..analyzer.extractors.extractors import PhraseExtractor
 
 import pickle
@@ -25,7 +25,7 @@ class KeywordExtractor():
             self._file_name = "/home/fs/yuangao/Desktop/matching_system/src_html/handlers/articles_70k.xml"
         else:
             self._file_name = file_name
-        self._mm = MysqlMessager() 
+        self._mm = MysqlMessenger()
         
     def get_corpus(self, number_of_corpus, file_name=None):
         """

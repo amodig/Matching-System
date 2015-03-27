@@ -1,12 +1,12 @@
-
 import MySQLdb
 import time
 import codecs
 
-class MysqlMessager():
+
+class MysqlMessenger():
     """
-    Class :  MySQLMessager
-    Description:  MySQL Messager: handles communication with MySQL server.
+    Class :  MySQLMessenger
+    Description:  MySQL Messenger: handles communication with MySQL server.
     """    
     # def __init__(self,table = None,  user="keyword_app", password="ohTun1ah", database = "matching_system"):
     def __init__(self, table=None, user="root", password="root", database="matching_system"):

@@ -1,1 +1,1 @@
-from mysql_messager import MysqlMessager
+from mysql_messager import MysqlMessenger

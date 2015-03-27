@@ -1,4 +1,4 @@
-from ..database_messager import MysqlMessager
+from ..database_messager import MysqlMessenger
 
 from numpy import nan
 from numpy import set_printoptions
@@ -21,16 +21,17 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.preprocessing import normalize
 
+
 class Analyzer():
     def __init__(self, all_keywords, all_corpus):
         """
         This constructor initializes the connection with mysql database
         """
         set_printoptions(threshold=nan)
-        self._mm = MysqlMessager()
+        self._mm = MysqlMessenger()
 
         self._all_keywords = all_keywords
-        self._X = self. calculate_X(all_keywords, all_corpus)
+        self._X = self.calculate_X(all_keywords, all_corpus)
 
         self._X_row_num,   self._X_column_num = self._X.shape
         self._current_X = matrix(zeros((0, self._X_column_num)))
@@ -72,7 +73,7 @@ class Analyzer():
         assert(type(cX) == matrixlib.defmatrix.matrix)
         mu = 1.0
 
-        w =  (cX.T * cX + mu * eye(self._current_X_column_num, dtype=float)).I * cX.T
+        w = (cX.T * cX + mu * eye(self._current_X_column_num, dtype=float)).I * cX.T
         scores = [None] * self._X_row_num
         
         for i in xrange(0, self._X_row_num):
@@ -91,9 +92,9 @@ class Analyzer():
             This function transforms the term frequency matrix to augmented frequency matrix
             defined as in http://stackoverflow.com/questions/24731626/is-there-any-function-in-sklearn-that-implements-augmented-frequency?noredirect=1#comment38364544_24731626
             """
-            return where(max(tfm, axis=0) == 0, tfm, 0.5 + (0.5 * tfm * 1./max(tfm,axis=0)))
+            return where(max(tfm, axis=0) == 0, tfm, 0.5 + (0.5 * tfm * 1./max(tfm, axis=0)))
             
-        vectorizer = CountVectorizer(vocabulary= keywords, tokenizer = tokenizer)  
+        vectorizer = CountVectorizer(vocabulary=keywords, tokenizer=tokenizer)
 
         # tfm: term frequency matrix
         # the shape of the matrix is number of articles times number of keywords
@@ -117,7 +118,7 @@ class Analyzer():
         
     def analyze(self, keywords, all_corpus, weights):
         """
-        This function analyzes the relativeness of keywords according to the experiances  
+        This function analyzes the relativity of keywords according to the experiences
         @params keywords of last time
         @params all_corpus of abstracts
         @params weights of each keywords

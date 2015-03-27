@@ -13,7 +13,7 @@ from __future__ import print_function
 import sys
 import os
 
-from ..database_messager.mysql_messager import MysqlMessager
+from ..database_messager.mysql_messager import MysqlMessenger
 
 
 def warning(*objs):
@@ -26,7 +26,7 @@ def mkdir(path):
         warning(e)
 
 table_name = "Persons"
-mysqldb = MysqlMessager()
+mysqldb = MysqlMessenger()
 sql = "select * from %s;" % table_name
 mysqldb.execute_sql(sql)
 docs_path = "./docs/papers/"

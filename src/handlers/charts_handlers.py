@@ -1,6 +1,6 @@
 from analyzer.analyzer import Analyzer
 from analyzer.extractors import Extractors
-from database_messager.mysql_messager import MysqlMessager
+from database_messager.mysql_messager import MysqlMessenger
 
 import numpy
 
@@ -48,7 +48,7 @@ class ChartsDataHandler(BaseHandler):
         }
 
     def __form_article_correlation_relationship(self):
-        self._mm = MysqlMessager(database="keyword_app")
+        self._mm = MysqlMessenger(database="keyword_app")
         sql = "select * from Abstracts;"
         self._mm.execute_sql(sql)
         iter = self._mm.fetch()
@@ -68,7 +68,7 @@ class ArticleMatrixHandler(BaseHandler):
         representatio_limit =20
         correlation_matrix = numpy.sqrt(self.application.analyzer._X.T * self.application.analyzer._X)  
         
-        self._mm = MysqlMessager(database="keyword_app")
+        self._mm = MysqlMessenger(database="keyword_app")
         sql = "select AbstractID, Title, Abstract, AuthorName from Abstracts where AbstractID in %s;" % (tuple(data["articles"]),)
         print sql
         self._mm.execute_sql(sql)

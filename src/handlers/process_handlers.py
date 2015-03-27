@@ -1,7 +1,7 @@
 from base_handler import *
 from random import sample
 import datetime
-from database_messager.mysql_messager import MysqlMessager
+from database_messager.mysql_messager import MysqlMessenger
 from numpy.linalg import norm
 from numpy import apply_along_axis
 from numpy import matrix
@@ -211,7 +211,7 @@ class RelatedArticlesHandler(MainBaseHandler):
         sorted_index = [i[0] for i in
                         sorted(enumerate(display_distance), key=lambda x: x[1])]  # get index of element in sorted array
         # setup the connection with database
-        mm = MysqlMessager(database="keyword_app")
+        mm = MysqlMessenger(database="keyword_app")
         sql = "select AbstractID, Title, Abstract, AuthorName from Abstracts where AbstractID in %s;" \
               % str(tuple(sorted_index))
         mm.execute_sql(sql)

@@ -111,7 +111,7 @@ class Application(tornado.web.Application):
         # Choose correct database
         self.db = self.client['app']
 
-        # following part is for analyzer
+        # following part is for Analyzer
         def set_keywords_parameters():
             self.keywords_number = 10
             self._num_of_corpora = "all"

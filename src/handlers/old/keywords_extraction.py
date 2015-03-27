@@ -11,7 +11,7 @@ from os import path
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk.corpus import stopwords
 from nltk import word_tokenize
-from mysql_messager import MysqlMessager 
+from mysql_messager import MysqlMessenger
 
 import functools
 import operator
@@ -183,7 +183,7 @@ class KeywordExtractor():
             self._file_name = "/home/fs/yuangao/Desktop/matching_system/src_html/handlers/articles_70k.xml"
         else:
             self._file_name = file_name
-        self._mm = MysqlMessager()
+        self._mm = MysqlMessenger()
 
         
     def get_from_abstracts(self):
