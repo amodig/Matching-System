@@ -2,41 +2,34 @@
 <head>
     <title>Login</title>
 
-	<link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="static/css/site.css">
-    <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
-
-    <link href="/static/css/jcarousel.css" rel="stylesheet" />
-    <link href="/static/css/notification.css" rel="stylesheet" />
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
+	  <link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/bower_components/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="static/css/styles.min.css">
 </head>
-<body>
-<h2 class="page-title">
-    Login page
-</h2>
-<div class="box">
-    <form id="login_form" action="login" method="post">
-        <fieldset>
-            <legend>Please login</legend>
-            <label class="grey" for="log">Username</label><br />
-            <input type="text" name="username" style="width:99%" id="username"><br>
-            <label class="grey" for="pwd">Password</label><br />
-            <input type="password" name="password" style="width:99%" id="password"><br />
-            <input type="submit" id="loginbtn" name="login" value="LOGIN" class="button"><br />
-        </fieldset>
-        <span class="error">{{error_msg}}</span>
+  <body class="signin">
+
+    <div class="container">
+      <form class="form-signin" action="login" method="post">
+        <h2 class="form-signin-heading">Please login</h2>
+        {% if error_msg %}
+          <div class="alert alert-danger">
+            {{error_msg}}
+          </div>
+        {% end %}
+        <label for="inputUsername" class="sr-only">Username</label>
+        <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
         <input type="hidden" name="next" value={{ next }}>
-    </form>
-</div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+        <a href="register" class="btn btn-lg btn-default btn-block" type="submit">Register</a>
+      </form>
+    </div>
+  <!--
+  <a href='twitter_login'> Login with Twitter </a> <br/>
+  <a href='facebook_login'> Login with Facebook </a> <br/>
+  <a href='file_upload'> Upload the Pdf(Test)</a> <br/>
+  <a href='control'> Control Panel</a> <br/>-->
 
-<br/>
-<a href='register'>Register</a>
-<br/>
-<a href='twitter_login'> Login with Twitter </a> <br/>
-<a href='facebook_login'> Login with Facebook </a> <br/>
-<a href='file_upload'> Upload the Pdf(Test)</a> <br/>
-<a href='control'> Control Panel</a> <br/>
-
-</body>
+  </body>
 </html>

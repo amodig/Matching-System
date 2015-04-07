@@ -1,29 +1,35 @@
+
 <html>
-<body>
-	Hello
-	REGISTER
-	<br/>
-	<br/>
-	<br/>
+<head>
+    <title>Register</title>
 
-	<form id="login_form" action="register" method="post">
-        <label class="grey" for="log">Name</label><br />
-		<input type="text" name="name" style="width:99%" id="name"><br>
+	  <link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/bower_components/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="static/css/styles.min.css">
+</head>
+  <body class="signin">
 
-		<label class="grey" for="pwd">Email</label><br />
-		<input type="text" name="email" style="width:99%" id="email"><br />
+    <div class="container">
+      <form class="form-signin" action="register" method="post">
+        <h2 class="form-signin-heading">Register</h2>
+        <label for="inputName" class="sr-only">Name</label>
+        <input type="text" name="name" id="inputName" class="form-control" placeholder="Name" required autofocus>
+				<label for="inputEmail" class="sr-only">Email</label>
+        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+				<label for="inputUsername" class="sr-only">Username</label>
+        <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <input type="hidden" name="next" value={{ next }}>
+        <button class="btn btn-lg btn-success btn-block" type="submit">Register</button>
+        <a href="login" class="btn btn-lg btn-default btn-block" type="submit">Login</a>
+      </form>
+    </div>
+  <!--
+  <a href='twitter_login'> Login with Twitter </a> <br/>
+  <a href='facebook_login'> Login with Facebook </a> <br/>
+  <a href='file_upload'> Upload the Pdf(Test)</a> <br/>
+  <a href='control'> Control Panel</a> <br/>-->
 
-        <label class="grey" for="log">Username</label><br />
-		<input type="text" name="username" style="width:99%" id="username"><br>
-
-		<label class="grey" for="pwd">Password</label><br />
-		<input type="password" name="password" style="width:99%" id="password"><br />
-
-        <label />
-		<input type="submit" id="loginbtn" name="login" value="LOGIN" class="button"><br />
-	</form>
-	<br/>
-	<br/>
-</body>
-
+  </body>
 </html>
