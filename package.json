@@ -1,0 +1,29 @@
+{
+  "name": "Matching-System",
+  "version": "1.0.0",
+  "description": "Based on [Scinet3](https://github.com/xiaohan2012/rl-search) system.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dalar/Matching-System.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dalar/Matching-System/issues"
+  },
+  "homepage": "https://github.com/Dalar/Matching-System",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.1",
+    "grunt-contrib-less": "^1.0.0",
+    "grunt-contrib-uglify": "^0.8.1",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}
