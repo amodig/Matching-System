@@ -302,7 +302,8 @@ class KeywordExtractor():
         row_iter = self._mm.fetch()           
         for keyword in keyword_set:
             pass
-    def get_from_arxiv_num(self,number_of_corpuses, file_name = None):
+
+    def get_from_arxiv_num(self, number_of_corpuses, file_name=None):
         """
         This funciton reads name of paper from database. and return all the words that belongs to one author in a list
         @param self: Pointer to class
@@ -340,9 +341,8 @@ class KeywordExtractor():
             pickle.dump(keyword_set,f_obj) 
             f_obj.close()                  
             f_corpus_obj.close()
-            
-            
-    def get_from_arxiv_bag_of_word_model(self,file_name = None):
+
+    def get_from_arxiv_bag_of_word_model(self, file_name=None):
         """
         This funciton reads name of paper from database. and return all the words that belongs to one author in a list
         @param self: Pointer to class
@@ -373,14 +373,11 @@ class KeywordExtractor():
         row_iter = self._mm.fetch()           
         for keyword in keyword_set:
             pass            
-            
-        
+
     def filter(self):
-        with open(self._keywords_filename,'r') as f:
+        with open(self._keywords_filename, 'r') as f:
             keywords_set = pickle.load(f)
  
 if __name__ == "__main__":
-    keyword_extractor = KeywordExtractor("abstracts.xml",4)
+    keyword_extractor = KeywordExtractor("abstracts.xml", 4)
     keyword_extractor.get_from_arxiv_num(109)
-    
-        

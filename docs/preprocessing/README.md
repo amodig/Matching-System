@@ -15,7 +15,6 @@ store abstracts stored in abstracts/abstracts.xml to database
 
 Files in this folder deals with "Given abstracts stored in database(keyword_app), this file extract topic models from the all abstracts."
 
-
 #### gen_dirs.py
 
 This file generate all folders under folder papers according to author's names.

@@ -64,18 +64,18 @@ class KeywordExtractor():
         """
         # if the file name exits then use a xml parser to parse the file
         if file_name is None:
-          file_name = self._file_name
-          tree = etree.parse(file_name)
-          root = tree.getroot()
+            file_name = self._file_name
+            tree = etree.parse(file_name)
+            root = tree.getroot()
           
         # set name of file that contains keyword and name of file that contains keyword list for each abstract
-        self._keywords_filename = "abstract_%s.txt"%number_of_corpora
-        self._corpus_keyword_filename = "corpus_abstract_%s.txt"%number_of_corpora
+        self._keywords_filename = "abstract_%s.txt" % number_of_corpora
+        self._corpus_keyword_filename = "corpus_abstract_%s.txt" % number_of_corpora
         
         # if the file does not exist
         if not path.isfile(self._keywords_filename):
             keyword_set = set()
-            corpuses_representation_list = []
+            corpora_representation_list = []
             f_obj = open(self._keywords_filename, 'w')
             f_corpus_obj = open(self._corpus_keyword_filename, 'w')
             i = 0
@@ -87,14 +87,14 @@ class KeywordExtractor():
 
                         keywords = list(phase_extractor.extract(abstract))
                         keywords = [' '.join(sublist) for sublist in keywords]
-                        corpuses_representation_list.append(','.join(keywords))
+                        corpora_representation_list.append(','.join(keywords))
 
-                        keyword_set |= set(keywords) 
-                        i = i +1
-                if(i == number_of_corpora):
+                        keyword_set |= set(keywords)
+                        i += 1
+                if i == number_of_corpora:
                     break
-            pickle.dump(corpuses_representation_list, f_corpus_obj)
-            pickle.dump(keyword_set,f_obj) 
+            pickle.dump(corpora_representation_list, f_corpus_obj)
+            pickle.dump(keyword_set, f_obj)
             f_obj.close()                  
             f_corpus_obj.close()
  

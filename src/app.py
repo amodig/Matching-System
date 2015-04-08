@@ -34,6 +34,7 @@ define("config_file", default="app_config.yml", help="app_config file")
 MONGO_SERVER_ADDRESS = 'localhost'
 MONGO_SERVER_PORT = 27017
 
+
 class Application(tornado.web.Application):
     def __init__(self, **overrides):
         # self.config = self._get_config()  # could be useful?
