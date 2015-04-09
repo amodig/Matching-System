@@ -1,40 +1,40 @@
-{% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class="template-download fade">
+<table class="table">
+  <thead>
+    <th>File</th>
+    <th>Title</th>
+    <th>Date</th>
+    <th>Size</th>
+    <th></th>
+  </thead>
+  <tbody>
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+      <tr div class="template-download">
         <td>
-            <span class="preview">
-                {% if (file.thumbnailUrl) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
-                {% } %}
-            </span>
+          {% if (file.url) { %}
+              <a href="{%=file.url%}" class="btn btn-default btn-sm" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}><i class="fa fa-file"></i> {%=file.name%}</a>
+          {% } else { %}
+              <button class="btn btn-default btn-sm" disabled><i class="fa fa-file"></i> {%=file.name%}</button>
+          {% } %}
         </td>
         <td>
-            <p class="title">
-                <span>{%=file.title%}</span>
-            </p>
-            <p class="name">
-                {% if (file.url) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
-                {% } else { %}
-                    <span>{%=file.name%}</span>
-                {% } %}
-            </p>
-            {% if (file.error) { %}
-                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
-            {% } %}
+          {%=file.title%}
+          {% if (file.error) { %}
+            <span class="text-danger"></span>
+          {% } %}
         </td>
         <td>
-            <span class="date">Uploaded: {%=file.uploadDate%}</span>
+          {%=file.uploadDate%}
         </td>
         <td>
-            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+            {%=o.formatFileSize(file.size)%}
         </td>
         <td>
             {% if (file.deleteUrl) { %}
-                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                <button class="btn btn-danger delete btn-sm" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                     <i class="glyphicon glyphicon-trash"></i>
                     <span>Delete</span>
                 </button>
-                <input type="checkbox" name="delete" value="1" class="toggle">
+                <!--<input type="checkbox" name="delete" value="1" class="toggle">-->
             {% } else { %}
                 <button class="btn btn-warning cancel">
                     <i class="glyphicon glyphicon-ban-circle"></i>
@@ -42,5 +42,7 @@
                 </button>
             {% } %}
         </td>
-    </tr>
-{% } %}
+      </tr>
+    {% } %}
+  </tbody>
+</table>

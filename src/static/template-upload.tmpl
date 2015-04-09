@@ -1,4 +1,31 @@
 {% for (var i=0, file; file=o.files[i]; i++) { %}
+<div class="media template-upload">
+  <div class="media-body">
+    <h4 class="media-heading">Upload {%=file.name%}</h4>
+
+    <div class="form-group">
+      <label>Title</label>
+      <input placeholder="Title" class="form-control" type="text" name="title[]" required>
+    </div>
+    <div class="form-group">
+      {% if (!i && !o.options.autoUpload) { %}
+          <button class="btn btn-primary start" disabled>
+              <i class="glyphicon glyphicon-upload"></i>
+              <span>Start</span>
+          </button>
+      {% } %}
+      {% if (!i) { %}
+          <button class="btn btn-warning cancel">
+              <i class="glyphicon glyphicon-ban-circle"></i>
+              <span>Cancel</span>
+          </button>
+      {% } %}
+    </div>
+  </div>
+</div>
+{% } %}
+<!--
+{% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
         <td>
             <span class="preview"></span>
@@ -29,4 +56,4 @@
             {% } %}
         </td>
     </tr>
-{% } %}
+{% } %}-->

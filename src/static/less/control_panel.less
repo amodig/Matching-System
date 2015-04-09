@@ -1,0 +1,35 @@
+@layoutWidth: 1300px;
+
+body{
+  &.control-panel{
+    padding-top: 70px;
+
+    .wrapper{
+      max-width: @layoutWidth;
+      margin: 0px auto;
+      padding: 0px 20px;
+    }
+
+    #profile-bio{
+      &:not(.editing-bio){
+        #edit-bio{
+          display: inline-block;
+        }
+
+        #new-bio{
+          display: none;
+        }
+      }
+
+      &.editing-bio{
+        #edit-bio{
+          display: none;
+        }
+
+        #new-bio{
+          display: inline;
+        }
+      }
+    }
+  }
+}

@@ -62,5 +62,8 @@ target/
 # Npm
 node_modules/
 
+# .DS_Store >:(
+.DS_Store
+
 # Bower
 src/static/bower_components/

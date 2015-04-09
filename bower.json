@@ -16,6 +16,7 @@
     "lodash": "~3.6.0",
     "raphael": "~2.1.4",
     "tinycolor": "~1.1.2",
-    "fontawesome": "~4.3.0"
+    "fontawesome": "~4.3.0",
+    "jquery-file-upload": "~9.9.3"
   }
 }

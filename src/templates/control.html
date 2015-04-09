@@ -1,13 +1,13 @@
-<html>
+<html ng-app="MatchingApp">
 <head>
     <title>Control Panel</title>
 
     <!-- Bootstrap styles -->
-    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.min.css">
 
     <link rel="stylesheet" href="static/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="static/css/site.css">
-    <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="static/css/styles.min.css">
 
     <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
     <link rel="stylesheet" href="static/css/jquery.fileupload.css">
@@ -16,6 +16,13 @@
     <script src="static/js/jquery.js"></script>
     <script src="static/js/jquery-ui.min.js"></script>
     <script src="static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="static/bower_components/angular/angular.min.js"></script>
+    <script src="static/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="static/bower_components/showdown/src/showdown.js"></script>
+    <script src="static/bower_components/angular-markdown-directive/markdown.js"></script>
+    <script src="static/bower_components/angular-route/angular-route.min.js"></script>
+
+    <script src="static/app/app.min.js"></script>
 
     <!-- The Template and jQuery File Upload scripts -->
     <script>
@@ -23,10 +30,18 @@
             // fetch existing file data
             var files = {% raw files %};  // get files in Tornado template variable
 
-            var $form = $('#fileupload');
-            $form.fileupload('option', 'done').call(
-                    $form, $.Event('done'), {result: {files: files}}
-            );
+            var $form = $('#fileupload')
+
+            $form.fileupload()
+              .bind('fileuploadadd', function (e, data) {
+                console.log(data);
+              })
+              .bind('fileuploaddone', function (e, data) {
+                console.log('We are done!');
+              });
+
+            $form.fileupload('option', 'done').call($form, $.Event('done'), { result: {files: files } })
+
 
             // add new input fields
             $form.bind('fileuploadsubmit', function (e, data) {
@@ -71,103 +86,111 @@
     </script>
 </head>
 
-<body>
+<body class="control-panel" ng-controller="ProfileController">
 
-<div id="profile">
-    <div class="container">
-        <h3 id="profile-title">Profile</h3>
-        <div class="row">
-            <div class="col-md-3">
-                <img src="{{ modules.Gravatar(escape(email), 200, 'jpg') }}" width="200" alt="{{ escape(user) }}'s Avatar" >
-            </div>
-            <div class="col-md-3">
-                <span>{% module Markdown(bio_text) %}</span>
-            </div>
-        </div>
-        <!-- Buttons -->
-        <div id="buttons">
-            <a href='logout' type="button" class="btn btn-danger logout" >
-                <span class="glyphicon glyphicon-off"></span> Logout
-            </a>
-            <button type="button" class="btn btn-primary update" data-toggle="modal" data-target="#bioModal">
-                <span class="glyphicon glyphicon-pencil"></span> Update bio
-            </button>
-            <a href='index' type="button" class="btn btn-primary index" >
-                <span class="glyphicon glyphicon-eye-open"></span> Engine
-            </a>
-
-            <!-- Update Bio Modal -->
-            <div id="bioModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bioModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h3 class="modal-title" id="bioModalLabel">Update bio</h3>
-                        </div>
-                        <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="bio-text" class="control-label">Markdown (<a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">help</a>):</label>
-                                    <textarea class="form-control" name="bio-text" id="bio-text" data-id='$idBioText' rows="14">
-                                        {{ bio_text }}
-                                    </textarea>
-                                </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button id="btn-save" type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid wrapper">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Matching System</a>
     </div>
-</div>
 
-<div id="upload">
-    <h2 class="page-title">
-        Upload articles
-    </h2>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+        <li><a href="#"><i class="fa fa-cogs"></i> Engine</a></li>
+      </ul>
+      <form class="navbar-form navbar-right" role="search">
+        <a class="btn btn-default" href="logout"><i class="fa fa-sign-out"></i> Logout</a>
+      </form>
+    </div>
+  </div>
+</nav>
 
-    <form id="fileupload" action="/control" method="POST" enctype="multipart/form-data">
-        <div class="row fileupload-buttonbar">
-            <div class="col-lg-7">
-                <!-- The fileinput-button span is used to style the file input field as button -->
-                <span class="btn btn-success fileinput-button">
-                    <i class="glyphicon glyphicon-plus"></i>
-                    <span>Add files...</span>
-                    <input type="file" name="files" multiple>
-                </span>
-                <button type="submit" class="btn btn-primary start">
-                    <i class="glyphicon glyphicon-upload"></i>
-                    <span>Start upload</span>
-                </button>
-                <button type="reset" class="btn btn-warning cancel">
-                    <i class="glyphicon glyphicon-ban-circle"></i>
-                    <span>Cancel upload</span>
-                </button>
-                <button type="button" class="btn btn-danger delete">
-                    <i class="glyphicon glyphicon-trash"></i>
-                    <span>Delete</span>
-                </button>
-                <input type="checkbox" class="toggle">
-                <!-- The global file processing state -->
-                <span class="fileupload-process"></span>
-            </div>
-            <!-- The global progress state -->
-            <div class="col-lg-5 fileupload-progress fade">
-                <!-- The global progress bar -->
-                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
-                </div>
-                <!-- The extended global progress state -->
-                <div class="progress-extended">&nbsp;</div>
-            </div>
+<div class="wrapper">
+  <div class="row">
+    <div class="col-md-6">
+      <h1>My profile</h1>
+      <div class="media">
+        <div class="media-left">
+          <img src="{{ modules.Gravatar(escape(email), 150, 'jpg') }}" class="media-object" width="150" alt="{{ escape(user) }}'s Avatar" >
         </div>
-        <!-- The table listing the files available for upload/download -->
-        <table role="presentation" class="table table-striped">
-            <tbody class="files" id="files"></tbody>
-        </table>
-    </form>
+
+        <div class="media-body">
+          <div id="profile-bio" ng-class="{ 'editing-bio': bio.editing }">
+            <div id="bio-content">
+              <p btf-markdown="bio.content">
+              </p>
+              <p>
+                <button class="btn btn-default" id="edit-bio" ng-click="editBio()"><i class="fa fa-pencil"></i> Edit</button>
+              </p>
+            </div>
+
+            <div id="new-bio">
+              <div class="form-group">
+                <textarea class="form-control" rows="8" ng-model="bio.content"></textarea>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-success" ng-click="updateBio()"><i class="fa fa-check"></i> Done</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <h1>Upload articles</h1>
+      <div id="upload">
+          <form id="fileupload" action="/control" method="POST" enctype="multipart/form-data">
+              <div class="row fileupload-buttonbar">
+                  <div class="col-lg-7">
+                      <!-- The fileinput-button span is used to style the file input field as button -->
+                      <span class="btn btn-success fileinput-button">
+                          <i class="glyphicon glyphicon-plus"></i>
+                          <span>Add files...</span>
+                          <input type="file" name="files" multiple>
+                      </span>
+                      <button type="submit" class="btn btn-primary start">
+                          <i class="glyphicon glyphicon-upload"></i>
+                          <span>Start upload</span>
+                      </button>
+                      <button type="reset" class="btn btn-warning cancel">
+                          <i class="glyphicon glyphicon-ban-circle"></i>
+                          <span>Cancel upload</span>
+                      </button>
+                      <button type="button" class="btn btn-danger delete">
+                          <i class="glyphicon glyphicon-trash"></i>
+                          <span>Delete</span>
+                      </button>
+                      <input type="checkbox" class="toggle">
+                      <!-- The global file processing state -->
+                      <span class="fileupload-process"></span>
+                  </div>
+                  <!-- The global progress state -->
+                  <div class="col-lg-5 fileupload-progress fade">
+                      <!-- The global progress bar -->
+                      <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                          <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                      </div>
+                      <!-- The extended global progress state -->
+                      <div class="progress-extended">&nbsp;</div>
+                  </div>
+              </div>
+              <!-- The table listing the files available for upload/download -->
+
+                  <div class="files" id="files"></div>
+
+          </form>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="ajax-load-scripts"></div>
