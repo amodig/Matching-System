@@ -51,7 +51,8 @@ class Application(tornado.web.Application):
             url(r'/article_matrix', ArticleMatrixHandler, name='article_matrix'),
             url(r'/related_articles', RelatedArticlesHandler, name='related_articles'),
             url(r'/control', UploadHandler, name="control"),
-            url(r'/update_bio', UpdateBioHandler, name="update_bio"),
+            url(r'/update_bio', ProfileHandler, name="update_bio"),
+            url(r'/profile', ProfileHandler, name="get_profile"),
 
             url(r'/form', FormHandler, name='form'),
             url(r'/next', NextHandler, name='next'),

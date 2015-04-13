@@ -7,6 +7,7 @@ from preprocessing.crawler import pdf2txt
 from tornado import web
 from tornado import escape
 from tornado import gen
+from tornado.escape import json_encode
 from gridfs.errors import NoFile
 from pymongo.errors import OperationFailure
 
@@ -305,11 +306,9 @@ class UploadHandler(BaseHandler):
         s = json.dumps(files, separators=(',', ':'), default=json_util.default)
         template_vars = {}
         template_vars['files'] = s
-        template_vars['user'] = self.get_current_user()
+        template_vars['user'] = user
         template_vars['email'] = email
         template_vars['bio_text'] = yield self.get_bio()
-        print "Fetched files:"
-        print s
         self.render("control.html", **template_vars)
 
     @web.authenticated
@@ -349,7 +348,58 @@ class UploadHandler(BaseHandler):
         self.write(s)
 
 
-class UpdateBioHandler(BaseHandler):
+class ProfileHandler(BaseHandler):
+    @gen.coroutine
+    def get_user_email(self, user):
+        doc = yield self.application.db['users'].find_one({'user': user})
+        email = doc['email']
+        raise gen.Return(email)
+
+    @gen.coroutine
+    def get_files_db(self, user):
+        """Finds all files by selected user.
+        :return a list of file dictionaries (can be empty).
+        """
+        files = []
+        fs = motor.MotorGridFS(self.application.db, collection=u'fs')
+        cursor = fs.find({"user": user}, timeout=False)
+        while (yield cursor.fetch_next):
+            file = {}
+            grid_out = cursor.next_object()
+            # content = yield grid_out.read()
+            try:
+                file['title'] = grid_out.title
+            except AttributeError:
+                file['title'] = "[No title]"
+            file['name'] = grid_out.filename
+            file['key'] = grid_out._id
+            file['size'] = grid_out.length
+            file['type'] = grid_out.content_type
+            # grid returns a datetime.datetime
+            upload_date = grid_out.upload_date.replace(tzinfo=pytz.utc).astimezone(self.timezone)
+            file['uploadDate'] = upload_date.strftime('%Y-%m-%d %H:%M')
+            file['deleteType'] = 'DELETE'
+            file['deleteUrl'] = self.request.uri + '?key=' + file['key']
+            file['url'] = self.get_download_url(key=file['key'])
+            if self.access_control_allow_credentials:
+                file['deleteWithCredentials'] = True
+            files.append(file)
+        raise gen.Return(files)
+
+    @gen.coroutine
+    def get_bio(self, user):
+        """Get user's profile bio"""
+        # find user document
+        user = yield self.application.db['users'].find_one({'user': user})
+        if user is None:
+            raise web.HTTPError(500)
+        try:
+            bio = user['bio']
+        except KeyError:
+            raise gen.Return("Empty bio")  # return empty string if no bio
+        else:
+            raise gen.Return(bio)
+
     @gen.coroutine
     def update_bio(self, bio_string):
         """Update profile bio"""
@@ -363,14 +413,28 @@ class UpdateBioHandler(BaseHandler):
         except OperationFailure:
             raise web.HTTPError(500)
 
+    @web.authenticated
+    @gen.coroutine
+    def get(self):
+        """GET JSON response with profile info"""
+        username = self.get_current_user()
+        email = yield self.get_user_email(username)
+        files = yield self.get_files_db(username)
+        bio = yield self.get_bio(username)
+        # use BSON util for default date conversion
+        s = json.dumps(files, separators=(',', ':'), default=json_util.default)
+        response = {'mail': email, 'bio': bio, 'files': s}
+        # write a JSON response
+        self.write(json_encode(response))
+
+    @web.authenticated
     @gen.coroutine
     def post(self):
-        """Gets POST argument containing the new bio"""
-        bio_text = self.get_argument('bio_new_text', default=None)
-        if bio_text:
-            bio_text = json.loads(bio_text)
-            yield self.update_bio(bio_text)
-            print "updated bio"
+        """Gets REQUEST data containing the new bio"""
+        payload = json.loads(self.request.body)
+        if 'bio_new_text' in payload:
+            yield self.update_bio(payload['bio_new_text'])
+            print "Updated bio"
             self.write(json.dumps({"msg": "Bio saved"}))
         else:
             print "didn't find bio_new_text"
