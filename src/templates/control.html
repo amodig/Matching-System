@@ -30,7 +30,7 @@
             // fetch existing file data
             var files = {% raw files %};  // get files in Tornado template variable
 
-            var $form = $('#fileupload')
+            var $form = $('#fileupload');
 
             $form.fileupload()
               .bind('fileuploadadd', function (e, data) {
@@ -40,8 +40,7 @@
                 console.log('We are done!');
               });
 
-            $form.fileupload('option', 'done').call($form, $.Event('done'), { result: {files: files } })
-
+            $form.fileupload('option', 'done').call($form, $.Event('done'), { result: {files: files } });
 
             // add new input fields
             $form.bind('fileuploadsubmit', function (e, data) {
