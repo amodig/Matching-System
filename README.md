@@ -7,6 +7,20 @@ Contributors:
 * [Arttu Modig](https://github.com/Dalar)
 * [Kalle Ilves](https://github.com/Kaltsoon)
 
+# New API
+
+## GET /profile
+
+### Response (JSON-format)
+
+<pre>
+{
+   "mail": "foo.bar@foo.bar",
+   "bio": "Hello world!",
+   "files": [...]
+}
+</pre>
+
 # Index.html
 
 ## GET /search
