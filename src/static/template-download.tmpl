@@ -1,3 +1,4 @@
+{% if(o.files.length > 0){ %}
 <table class="table">
   <thead>
     <th>File</th>
@@ -46,3 +47,8 @@
     {% } %}
   </tbody>
 </table>
+{% }else{ %}
+<p class="text-muted">
+  You haven't uploaded any articles. Maybe you would like to upload some above?
+</p>
+{% } %}
