@@ -1,5 +1,7 @@
-"""Provides control panel handlers for the Tornado app. UploadHandler handles the file uploads and downloads.
-UpdateBioHandler handles the changes to profile bio."""
+"""Provides profile control panel handlers for the Tornado app.
+
+UploadHandler and DownloadHandler handle the file uploads and downloads respectively.
+ProfileHandler shows the profile bio including the files, and handles the changes to bio."""
 
 from base_handler import *
 from preprocessing.crawler import pdf2txt
