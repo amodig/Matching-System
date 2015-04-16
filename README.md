@@ -15,8 +15,8 @@ Contributors:
 
 <pre>
 {
-   "user": "foo.bar",
-   "mail": "foo.bar@foo.bar",
+   "user": "foo",
+   "email": "foo.bar@foo.bar",
    "bio": "Hello world!",
    "files": [{"name": "file1.pdf,
               "title": "Title 1",
