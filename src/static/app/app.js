@@ -6,6 +6,10 @@ MatchingApp.config(function($routeProvider){
       controller: 'ProfileController',
       templateUrl: 'static/app/views/profile.html'
     })
+    .when('/engine', {
+      controller: 'IterationController',
+      templateUrl: 'static/app/views/engine.html'
+    })
     .otherwise({
       redirectTo: '/profile'
     });

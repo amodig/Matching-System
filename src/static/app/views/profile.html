@@ -1,16 +1,21 @@
 <div class="row">
   <div class="col-md-6">
-    <h1>My profile</h1>
+    <h1>{[bio.user]}'s profile</h1>
     <div class="media">
       <div class="media-left">
-        <img gravatar-src="'kalle.ilves@helsinki.fi'" gravatar-size="150">
+        <img gravatar-src="bio.email" gravatar-size="150">
       </div>
 
       <div class="media-body">
         <div id="profile-bio" ng-class="{ 'editing-bio': bio.editing }">
           <div id="bio-content">
+            <p class="text-muted" ng-if="!bio.content">
+              You don't have a bio yet, maybe you should write one below
+            </p>
+
             <p btf-markdown="bio.content">
             </p>
+
             <p>
               <button class="btn btn-default" id="edit-bio" ng-click="editBio()"><i class="fa fa-pencil"></i> Edit</button>
             </p>
@@ -34,10 +39,16 @@
   </div>
 
   <div class="col-md-6">
-    <h1>Upload articles</h1>
+
     <div id="upload">
         <form id="fileupload" action="/upload" method="POST" enctype="multipart/form-data">
-            <div class="row fileupload-buttonbar">
+          <h1>My articles</h1>
+          <!-- The table listing the files available for upload/download -->
+
+          <div class="files" id="files"></div>
+          <hr>
+          <h2>Upload articles</h2>
+            <div class="row fileupload-buttonbar" style="margin: 0px !important">
                 <div>
                     <!-- The fileinput-button span is used to style the file input field as button -->
                     <span class="btn btn-success fileinput-button">
@@ -71,13 +82,6 @@
                     <div class="progress-extended">&nbsp;</div>
                 </div>
             </div>
-
-            <hr>
-            <h2>My articles</h2>
-            <!-- The table listing the files available for upload/download -->
-
-            <div class="files" id="files"></div>
-
         </form>
     </div>
   </div>
