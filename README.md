@@ -15,9 +15,16 @@ Contributors:
 
 <pre>
 {
-   "mail": "foo.bar@foo.bar",
+   "user": "foo",
+   "email": "foo.bar@foo.bar",
    "bio": "Hello world!",
-   "files": [...]
+   "files": [{"name": "file1.pdf,
+              "title": "Title 1",
+              ...},
+             {"name": "file2.pdf,
+              "title": "Title 2",
+              ...},
+              ...]
 }
 </pre>
 

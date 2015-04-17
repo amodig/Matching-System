@@ -1,7 +1,7 @@
 from base_handler import *
 from charts_handlers import *
 from process_handlers import *
-from control_handlers import *
+from profile_handlers import *
 
 from tornado import escape
 from bson.objectid import ObjectId

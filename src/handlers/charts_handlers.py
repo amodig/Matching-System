@@ -59,9 +59,9 @@ class ChartsDataHandler(BaseHandler):
         # the third colum is title and the 
         return [{ "title": row[2].decode('latin1'), "id": row[0]} for row in iter]
 
+
 class ArticleMatrixHandler(BaseHandler):
     @tornado.web.authenticated
-    
     def post(self):
         data = json.loads(self.request.body)
         # this number decides limitation of different articles

@@ -1,5 +1,7 @@
-"""Provides control panel handlers for the Tornado app. UploadHandler handles the file uploads and downloads.
-UpdateBioHandler handles the changes to profile bio."""
+"""Provides profile control panel handlers for the Tornado app.
+
+UploadHandler and DownloadHandler handle the file uploads and downloads respectively.
+ProfileHandler shows the profile bio including the files, and handles the changes to bio."""
 
 from base_handler import *
 from preprocessing.crawler import pdf2txt
@@ -32,15 +34,7 @@ __email__ = "arttu.modig@gmail.com"
 __status__ = "Prototype"
 
 
-class UploadHandler(BaseHandler):
-    """A Tornado handler for file upload and download"""
-
-    # class attributes
-    MIN_FILE_SIZE = 1  # bytes
-    MAX_FILE_SIZE = 5000000  # bytes
-    DOCUMENT_TYPES = re.compile('application/pdf')  # re.compile('image/(gif|p?jpeg|(x-)?png)')
-    ACCEPT_FILE_TYPES = DOCUMENT_TYPES
-
+class BaseProfileHandler(BaseHandler):
     def initialize(self):
         """Tornado handler initialization"""
         self.file_param_name = 'files'
@@ -49,6 +43,105 @@ class UploadHandler(BaseHandler):
         self.access_control_allow_methods = ['OPTIONS', 'HEAD', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE']
         self.access_control_allow_headers = ['Content-Type', 'Content-Range', 'Content-Disposition']
         self.timezone = timezone('Europe/Helsinki')
+
+    def get_download_url(self, filename=None, key=None):
+        if filename:
+            url = self.request.host + '/download' + '?file=' + escape.url_escape(filename)
+        elif key:
+            url = self.request.host + '/download' + '?key=' + escape.url_escape(key)
+        else:
+            raise web.HTTPError(500)
+        return url
+
+    def send_access_control_headers(self):
+        """Set access control HTTP headers"""
+        self.set_header('Access-Control-Allow-Origin', self.access_control_allow_origin)
+        self.set_header('Access-Control-Allow-Credentials',
+                        'true' if self.access_control_allow_credentials else 'false')
+        self.set_header('Access-Control-Allow-Methods', ', '.join(self.access_control_allow_methods))
+        self.set_header('Access-Control-Allow-Headers', ', '.join(self.access_control_allow_headers))
+
+    def send_content_type_header(self):
+        """Set content type HTTP header"""
+        self.set_header('Vary', 'Accept')
+        if 'application/json' in self.get_server_vars('HTTP_ACCEPT'):
+            self.set_header('Content-type', 'application/json')
+        else:
+            self.set_header('Content-type', 'text/plain')
+
+    def get_server_vars(self, _id):
+        """Returns a list of header values given a header name"""
+        return self.request.headers.get_list(_id)
+
+    def head(self):
+        """Set default HTTP header"""
+        self.set_header('Pragma', 'no-cache')
+        self.set_header('Cache-Control', 'no-store, no-cache, must-revalidate')
+        self.set_header('Content-Disposition', 'inline; filename="files.json"')
+        # Prevent Internet Explorer from MIME-sniffing the content-type:
+        self.set_header('X-Content-Type-Options', 'nosniff')
+        if self.access_control_allow_origin:
+            self.send_access_control_headers()
+        self.send_content_type_header()
+
+
+class DownloadHandler(BaseProfileHandler):
+    """A Tornado handler for file download"""
+
+    @staticmethod
+    def fid(file_id=None, filename=None):
+        """Make a file ID either from original ID or filename"""
+        if not file_id:
+            if not filename:
+                raise web.HTTPError(500)
+            else:
+                fid = filename
+        else:
+            fid = file_id
+        return fid
+
+    @gen.coroutine
+    def get_grid_out(self, file_id=None, filename=None):
+        """Get GridOut object from MongoDB's GridFS file system"""
+        fs = motor.MotorGridFS(self.application.db, collection=u'fs')
+        fid = self.fid(file_id, filename)
+        try:
+            grid_out = yield fs.get(fid)
+        except NoFile:
+            raise web.HTTPError(404)
+        if filename:
+            assert grid_out.filename is filename, "file names does not match!"
+        raise gen.Return(grid_out)
+
+    @web.authenticated
+    @gen.coroutine
+    def get(self):
+        """Fetch a file from MongoDB's GridFS and send it to UploadHandler"""
+        print "GET download"
+        # use either filename or file key
+        filename = self.get_argument('file', default=None)
+        key = self.get_argument('key', default=None)
+        # get a GridFS GridOut object
+        grid_out = yield self.get_grid_out(file_id=key, filename=filename)
+        # Prevent browsers from MIME-sniffing the content-type:
+        self.set_header('X-Content-Type-Options', 'nosniff')
+        self.set_header('Content-Type', 'application/octet-stream')
+        # self.set_header('Content-Type', grid_out.content_type)
+        self.set_header('Content-Disposition', 'attachment; filename=%s' % grid_out.filename)
+        self.set_header('Content-Length', grid_out.length)
+        self.set_header('Upload-Date', grid_out.upload_date.strftime('%A, %d %M %Y %H:%M:%S %Z'))
+        # stream the file content to RequestHandler
+        yield grid_out.stream_to_handler(self)
+
+
+class UploadHandler(BaseProfileHandler):
+    """A Tornado handler for file upload"""
+
+    # upload attributes
+    MIN_FILE_SIZE = 1  # bytes
+    MAX_FILE_SIZE = 5000000  # bytes
+    DOCUMENT_TYPES = re.compile('application/pdf')  # re.compile('image/(gif|p?jpeg|(x-)?png)')
+    ACCEPT_FILE_TYPES = DOCUMENT_TYPES
 
     def callback(self, result, error):
         if error:
@@ -75,46 +168,6 @@ class UploadHandler(BaseHandler):
         f.seek(0)  # Reset the file position to the beginning
         return size
 
-    @staticmethod
-    def fid(file_id=None, filename=None):
-        """Make a file ID either from original ID or filename"""
-        if not file_id:
-            if not filename:
-                raise web.HTTPError(500)
-            else:
-                fid = filename
-        else:
-            fid = file_id
-        return fid
-
-    @gen.coroutine
-    def get_bio(self):
-        """Get user's profile bio"""
-        username = self.get_current_user()
-        # find user document
-        user = yield self.application.db['users'].find_one({'user': username})
-        if user is None:
-            raise web.HTTPError(500)
-        try:
-            bio = user['bio']
-        except KeyError:
-            raise gen.Return("Empty bio")  # return empty string if no bio
-        else:
-            raise gen.Return(bio)
-
-    @gen.coroutine
-    def get_grid_out(self, file_id=None, filename=None):
-        """Get GridOut object from MongoDB's GridFS file system"""
-        fs = motor.MotorGridFS(self.application.db, collection=u'fs')
-        fid = self.fid(file_id, filename)
-        try:
-            grid_out = yield fs.get(fid)
-        except NoFile:
-            raise web.HTTPError(404)
-        if filename:
-            assert grid_out.filename is filename, "file names does not match!"
-        raise gen.Return(grid_out)
-
     @gen.coroutine
     def write_file(self, file_content, user, key, result):
         """Write file to MongoDB's GridFS system."""
@@ -124,52 +177,6 @@ class UploadHandler(BaseHandler):
                                filename=result['name'], content_type=result['type'],
                                title=result['title'], abstract=result['abstract'])
         assert file_id is key, "file_id is not key (%r): %r" % (key, file_id)
-
-    def get_download_url(self, filename=None, key=None):
-        if filename:
-            url = self.request.uri + '?file=' + escape.url_escape(filename)
-        elif key:
-            url = self.request.uri + '?key=' + escape.url_escape(key)
-        else:
-            raise web.HTTPError(500)
-        return url + '&download=1'
-
-    @gen.coroutine
-    def get_user_email(self, user):
-        doc = yield self.application.db['users'].find_one({'user': user})
-        email = doc['email']
-        raise gen.Return(email)
-
-    @gen.coroutine
-    def get_files_db(self, user):
-        """Finds all files by selected user.
-        :return a list of file dictionaries (can be empty).
-        """
-        files = []
-        fs = motor.MotorGridFS(self.application.db, collection=u'fs')
-        cursor = fs.find({"user": user}, timeout=False)
-        while (yield cursor.fetch_next):
-            file = {}
-            grid_out = cursor.next_object()
-            # content = yield grid_out.read()
-            try:
-                file['title'] = grid_out.title
-            except AttributeError:
-                file['title'] = "[No title]"
-            file['name'] = grid_out.filename
-            file['key'] = grid_out._id
-            file['size'] = grid_out.length
-            file['type'] = grid_out.content_type
-            # grid returns a datetime.datetime
-            upload_date = grid_out.upload_date.replace(tzinfo=pytz.utc).astimezone(self.timezone)
-            file['uploadDate'] = upload_date.strftime('%Y-%m-%d %H:%M')
-            file['deleteType'] = 'DELETE'
-            file['deleteUrl'] = self.request.uri + '?key=' + file['key']
-            file['url'] = self.get_download_url(key=file['key'])
-            if self.access_control_allow_credentials:
-                file['deleteWithCredentials'] = True
-            files.append(file)
-        raise gen.Return(files)
 
     def handle_upload_db(self):
         """Handle uploads to database. Files are buffered into memory.
@@ -242,79 +249,15 @@ class UploadHandler(BaseHandler):
     #             results.append(result)
     #     return results
 
-    @gen.coroutine
-    def do_download(self):
-        """Fetch a file from MongoDB's GridFS and send it to UploadHandler"""
-        # use either filename or file key
-        filename = self.get_argument('file', default=None)
-        key = self.get_argument('key', default=None)
-        # get a GridFS GridOut object
-        grid_out = yield self.get_grid_out(file_id=key, filename=filename)
-        # Prevent browsers from MIME-sniffing the content-type:
-        self.set_header('X-Content-Type-Options', 'nosniff')
-        self.set_header('Content-Type', 'application/octet-stream')
-        #self.set_header('Content-Type', grid_out.content_type)
-        self.set_header('Content-Disposition', 'attachment; filename=%s' % grid_out.filename)
-        self.set_header('Content-Length', grid_out.length)
-        self.set_header('Upload-Date', grid_out.upload_date.strftime('%A, %d %M %Y %H:%M:%S %Z'))
-        # stream the file content to RequestHandler
-        yield grid_out.stream_to_handler(self)
-
-    def send_access_control_headers(self):
-        """Set access control HTTP headers"""
-        self.set_header('Access-Control-Allow-Origin', self.access_control_allow_origin)
-        self.set_header('Access-Control-Allow-Credentials',
-                        'true' if self.access_control_allow_credentials else 'false')
-        self.set_header('Access-Control-Allow-Methods', ', '.join(self.access_control_allow_methods))
-        self.set_header('Access-Control-Allow-Headers', ', '.join(self.access_control_allow_headers))
-
-    def send_content_type_header(self):
-        """Set content type HTTP header"""
-        self.set_header('Vary', 'Accept')
-        if 'application/json' in self.get_server_vars('HTTP_ACCEPT'):
-            self.set_header('Content-type', 'application/json')
-        else:
-            self.set_header('Content-type', 'text/plain')
-
-    def get_server_vars(self, _id):
-        """Returns a list of header values given a header name"""
-        return self.request.headers.get_list(_id)
-
-    def head(self):
-        """Set default HTTP header"""
-        self.set_header('Pragma', 'no-cache')
-        self.set_header('Cache-Control', 'no-store, no-cache, must-revalidate')
-        self.set_header('Content-Disposition', 'inline; filename="files.json"')
-        # Prevent Internet Explorer from MIME-sniffing the content-type:
-        self.set_header('X-Content-Type-Options', 'nosniff')
-        if self.access_control_allow_origin:
-            self.send_access_control_headers()
-        self.send_content_type_header()
 
     @web.authenticated
-    @gen.coroutine
     def get(self):
-        """GET files from the database that they are visible for download, or download one file"""
-        if self.get_argument('download', default=None):
-            self.do_download()
-            return
-        # fetch files from database
-        user = self.get_current_user()
-        email = yield self.get_user_email(user)
-        files = yield self.get_files_db(user)
-        # use BSON util for default date conversion
-        s = json.dumps(files, separators=(',', ':'), default=json_util.default)
-        template_vars = {}
-        template_vars['files'] = s
-        template_vars['user'] = user
-        template_vars['email'] = email
-        template_vars['bio_text'] = yield self.get_bio()
-        self.render("control.html", **template_vars)
+        self.redirect("/control")
 
     @web.authenticated
     @web.asynchronous
     def post(self):
-        """Receives POST arguments/files"""
+        """Receives POST arguments/files, or deletes a file"""
         if self.get_argument('_method', default=None) == 'DELETE':
             return self.delete()
         result = {'files': self.handle_upload_db()}
@@ -326,13 +269,12 @@ class UploadHandler(BaseHandler):
             self.request.set_headers('Content-Type', 'application/json')
         print "POST writing: %s" % s
         self.write(s)
-
         self.finish()
 
     @web.authenticated
     @gen.coroutine
     def delete(self):
-        """Deletes files in the database"""
+        """Delete a file in the database"""
         key = self.get_argument('key', default=None) or ''
         fs = motor.MotorGridFS(self.application.db, collection=u'fs')
         # get file name
@@ -348,7 +290,7 @@ class UploadHandler(BaseHandler):
         self.write(s)
 
 
-class ProfileHandler(BaseHandler):
+class ProfileHandler(BaseProfileHandler):
     @gen.coroutine
     def get_user_email(self, user):
         doc = yield self.application.db['users'].find_one({'user': user})
@@ -416,16 +358,16 @@ class ProfileHandler(BaseHandler):
     @web.authenticated
     @gen.coroutine
     def get(self):
-        """GET JSON response with profile info"""
+        """GET JSON response with profile info, including personal files"""
         username = self.get_current_user()
         email = yield self.get_user_email(username)
         files = yield self.get_files_db(username)
         bio = yield self.get_bio(username)
         # use BSON util for default date conversion
         s = json.dumps(files, separators=(',', ':'), default=json_util.default)
-        response = {'mail': email, 'bio': bio, 'files': s}
+        response = {'user': username, 'email': email, 'bio': bio, 'files': s}
         # write a JSON response
-        self.write(json_encode(response))
+        self.write(response)  # written as JSON automatically
 
     @web.authenticated
     @gen.coroutine
@@ -435,10 +377,18 @@ class ProfileHandler(BaseHandler):
         if 'bio_new_text' in payload:
             yield self.update_bio(payload['bio_new_text'])
             print "Updated bio"
-            self.write(json.dumps({"msg": "Bio saved"}))
+            self.write({"msg": "Bio saved"})
         else:
             print "didn't find bio_new_text"
 
 
-class UpdateKeyWordsHandler(BaseHandler):
+class ProfileIndexHandler(BaseProfileHandler):
+    @web.authenticated
+    def get(self):
+        # Old style, send template variables
+        variables = {'user': "foobar", 'email': "email@email.com", 'bio': "short bio", 'files': json.dumps({})}
+        self.render("control.html", **variables)
+
+
+class UpdateKeyWordsHandler(BaseProfileHandler):
     pass

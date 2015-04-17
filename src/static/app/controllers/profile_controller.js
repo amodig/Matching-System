@@ -15,7 +15,7 @@ MatchingApp.controller('ProfileController', function($scope, $rootScope, Api, Fi
 
   $scope.editBio = function(){
     $scope.bio.editing = true;
-  }
+  };
 
   $scope.updateBio = function(){
     Api.updateBio($scope.bio.content).success(function(){

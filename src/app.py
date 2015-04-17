@@ -50,7 +50,10 @@ class Application(tornado.web.Application):
             url(r'/tables_data', TablesDataHandler, name='tables_data'),
             url(r'/article_matrix', ArticleMatrixHandler, name='article_matrix'),
             url(r'/related_articles', RelatedArticlesHandler, name='related_articles'),
-            url(r'/control', UploadHandler, name="control"),
+
+            url(r'/control', ProfileIndexHandler, name="profile_index"),
+            url(r'/download', DownloadHandler, name="download"),
+            url(r'/upload', UploadHandler, name="upload"),
             url(r'/update_bio', ProfileHandler, name="update_bio"),
             url(r'/profile', ProfileHandler, name="get_profile"),
 
