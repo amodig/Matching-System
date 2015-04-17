@@ -3,7 +3,7 @@
     <h1>My profile</h1>
     <div class="media">
       <div class="media-left">
-        <img src="{{ modules.Gravatar(escape(email), 150, 'jpg') }}" class="media-object" width="150" alt="{{ escape(user) }}'s Avatar" >
+        <img gravatar-src="'kalle.ilves@helsinki.fi'" gravatar-size="150">
       </div>
 
       <div class="media-body">
@@ -12,11 +12,14 @@
             <p btf-markdown="bio.content">
             </p>
             <p>
-              <button class="btn btn-default" id="edit-bio" ng-click="editBio(true)"><i class="fa fa-pencil"></i> Edit</button>
+              <button class="btn btn-default" id="edit-bio" ng-click="editBio()"><i class="fa fa-pencil"></i> Edit</button>
             </p>
           </div>
 
           <div id="new-bio">
+            <p class="text-muted">
+              Tip: You can use <a href="https://help.github.com/articles/markdown-basics/" target="_blank">markdown</a> in this field.
+            </p>
             <div class="form-group">
               <textarea class="form-control" rows="8" ng-model="bio.content"></textarea>
             </div>
@@ -35,7 +38,7 @@
     <div id="upload">
         <form id="fileupload" action="/control" method="POST" enctype="multipart/form-data">
             <div class="row fileupload-buttonbar">
-                <div class="col-lg-7">
+                <div>
                     <!-- The fileinput-button span is used to style the file input field as button -->
                     <span class="btn btn-success fileinput-button">
                         <i class="glyphicon glyphicon-plus"></i>
@@ -54,12 +57,12 @@
                         <i class="glyphicon glyphicon-trash"></i>
                         <span>Delete</span>
                     </button>
-                    <input type="checkbox" class="toggle">
+                    <!--<input type="checkbox" class="toggle">-->
                     <!-- The global file processing state -->
                     <span class="fileupload-process"></span>
                 </div>
                 <!-- The global progress state -->
-                <div class="col-lg-5 fileupload-progress fade">
+                <div class="fileupload-progress fade">
                     <!-- The global progress bar -->
                     <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                         <div class="progress-bar progress-bar-success" style="width:0%;"></div>
@@ -68,12 +71,16 @@
                     <div class="progress-extended">&nbsp;</div>
                 </div>
             </div>
+
+            <hr>
+            <h2>My articles</h2>
             <!-- The table listing the files available for upload/download -->
-            <table role="presentation" class="table table-striped">
-                <tbody class="files" id="files"></tbody>
-            </table>
+
+            <div class="files" id="files"></div>
+
         </form>
     </div>
   </div>
-  
 </div>
+
+<div id="ajax-load-scripts"></div>
