@@ -123,14 +123,11 @@ class Application(tornado.web.Application):
             self.keywords_number = 10
             # self._num_of_corpora = "all"
             self._num_of_corpora = "db"
-
-            # this file stores information of all abstracts
+            # information of all abstracts:
             self.abstracts_filename = "../docs/abstracts/abstracts.xml"
-            
-            # this file stores information of all keywords as a set
+            # information of all keywords as a set:
             self.keywords_filename = "../docs/keywords/abstract_%s.txt" % self._num_of_corpora
-            
-            # this file stores keywords list of each abstract
+            # keyword list of each abstract:
             self.corpus_keywords_filename = "../docs/keywords/corpus_abstract_%s.txt" % self._num_of_corpora
 
             # self.extractors = Extractors(file_name=self.abstracts_filename)
@@ -142,8 +139,7 @@ class Application(tornado.web.Application):
             self.titles = info['titles']
 
             # set keywords (might take a while)
-            print "Setting keywords"
-            yield self.extractors.set_keywords_from_database()
+            # yield self.extractors.set_keywords_from_database()
 
             # Load and set abstract and keyword corpora
             self.corpus_keywords_file_obj = open(self.corpus_keywords_filename, 'r')
@@ -216,6 +212,7 @@ class Application(tornado.web.Application):
         form_keywords_info()
         form_persons_info()
         analyze_data()
+        print "Ready"
 
     def form_new_keywords_information(self):
         keywords_exploitation = [0.1] * len(self.keywords_list)

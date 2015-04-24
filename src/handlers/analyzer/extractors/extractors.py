@@ -157,6 +157,7 @@ class Extractors():
         cursor = database[collection].find({}, {"title": 1, "abstract": 1, "user": 1})
         while (yield cursor.fetch_next):
             doc = cursor.next_object()
+            print 'Extracting keywords from "' + doc['title'] + '"...'
             keywords = list(phrase_extractor.extract(doc['abstract']))
             keywords = [''.join(sublist) for sublist in keywords]
             corpora_representation_list.append(','.join(keywords))

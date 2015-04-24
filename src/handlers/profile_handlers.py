@@ -53,6 +53,15 @@ class BaseProfileHandler(BaseHandler):
             raise web.HTTPError(500)
         return url
 
+    def get_delete_url(self, filename=None, key=None):
+        if filename:
+            url = self.request.uri + '?file=' + escape.url_escape(filename)
+        elif key:
+            url = self.request.uri + '?key=' + escape.url_escape(key)
+        else:
+            raise web.HTTPError(500)
+        return url
+
     def send_access_control_headers(self):
         """Set access control HTTP headers"""
         self.set_header('Access-Control-Allow-Origin', self.access_control_allow_origin)
@@ -223,7 +232,7 @@ class UploadHandler(BaseProfileHandler):
                     # Set additional fields for File Upload plugin
                     result['deleteType'] = 'DELETE'
                     result['key'] = key
-                    result['deleteUrl'] = self.request.uri + '?key=' + key
+                    result['deleteUrl'] = self.get_delete_url(key=key)
                     if 'url' not in result:
                         result['url'] = self.get_download_url(key=key)
                     if self.access_control_allow_credentials:
@@ -231,24 +240,6 @@ class UploadHandler(BaseProfileHandler):
                     result['uploadDate'] = datetime.datetime.now(self.timezone).strftime('%Y-%m-%d %H:%M')
                 results.append(result)
         return results
-
-    # def handle_upload_dir(self):
-    #     results = []
-    #     if self.request.files[self.file_param_name]:
-    #         for f in self.request.files[self.file_param_name]:
-    #             result = {}
-    #             result['name'] = f['filename']
-    #             result['type'] = f['content_type']
-    #             result['size'] = self.get_file_size(f)
-    #             if self.validate(result):
-    #                 extension = os.path.splitext(f['filename'])[1]
-    #                 f_name = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
-    #                 final_filename = f_name + extension
-    #                 output_file = open("uploads/" + final_filename, 'w')
-    #                 output_file.write(f['body'])
-    #             results.append(result)
-    #     return results
-
 
     @web.authenticated
     def get(self):
@@ -327,7 +318,7 @@ class ProfileHandler(BaseProfileHandler):
             upload_date = grid_out.upload_date.replace(tzinfo=pytz.utc).astimezone(self.timezone)
             file['uploadDate'] = upload_date.strftime('%Y-%m-%d %H:%M')
             file['deleteType'] = 'DELETE'
-            file['deleteUrl'] = self.request.uri + '?key=' + file['key']
+            file['deleteUrl'] = self.get_delete_url(key=file['key'])
             file['url'] = self.get_download_url(key=file['key'])
             if self.access_control_allow_credentials:
                 file['deleteWithCredentials'] = True
@@ -386,6 +377,24 @@ class ProfileHandler(BaseProfileHandler):
             self.write({"msg": "Bio saved"})
         else:
             print "didn't find bio_new_text"
+
+    @web.authenticated
+    @gen.coroutine
+    def delete(self):
+        """Delete a file in the database"""
+        key = self.get_argument('key', default=None) or ''
+        fs = motor.MotorGridFS(self.application.db, collection=u'fs')
+        # get file name
+        grid_out = yield fs.get(key)
+        filename = grid_out.filename
+        # delete a file with the key
+        yield fs.delete(key)
+        # make JSON response
+        s = json.dumps({'files': {filename: True}}, separators=(',', ':'))
+        if 'application/json' in self.request.headers.get_list('Accept'):
+            self.request.set_headers['Content-Type'] = 'application/json'
+        print "DELETE writing: %s" % s
+        self.write(s)
 
 
 class ProfileIndexHandler(BaseProfileHandler):
