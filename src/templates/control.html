@@ -1,146 +1,64 @@
 <html ng-app="MatchingApp">
-<head>
-    <title>Control Panel</title>
+  <head>
+      <title>Control Panel</title>
 
-    <!-- Bootstrap styles -->
-    <link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+      <!-- Bootstrap styles -->
+      <link rel="stylesheet" href="static/bower_components/bootstrap/dist/css/bootstrap.min.css">
 
-    <link rel="stylesheet" href="static/font-awesome/css/font-awesome.min.css">
+      <link rel="stylesheet" href="static/font-awesome/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="static/css/styles.min.css">
+      <link rel="stylesheet" href="static/css/styles.min.css">
 
-    <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
-    <link rel="stylesheet" href="static/css/jquery.fileupload.css">
-    <link rel="stylesheet" href="static/css/jquery.fileupload-ui.css">
+      <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+      <link rel="stylesheet" href="static/css/jquery.fileupload.css">
+      <link rel="stylesheet" href="static/css/jquery.fileupload-ui.css">
 
-    <script src="static/js/jquery.js"></script>
-    <script src="static/js/jquery-ui.min.js"></script>
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="static/bower_components/angular/angular.min.js"></script>
-    <script src="static/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-    <script src="static/bower_components/showdown/src/showdown.js"></script>
-    <script src="static/bower_components/angular-markdown-directive/markdown.js"></script>
-    <script src="static/bower_components/angular-route/angular-route.min.js"></script>
+      <script src="static/js/jquery.js"></script>
+      <script src="static/js/jquery-ui.min.js"></script>
+      <script src="static/bootstrap/js/bootstrap.min.js"></script>
+      <script src="static/bower_components/angular/angular.min.js"></script>
+      <script src="static/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+      <script src="static/bower_components/showdown/src/showdown.js"></script>
+      <script src="static/bower_components/angular-markdown-directive/markdown.js"></script>
+      <script src="static/bower_components/angular-route/angular-route.min.js"></script>
+      <script src="static/bower_components/angular-gravatar/build/angular-gravatar.min.js"></script>
+      <script src="static/bower_components/raphael/raphael-min.js"></script>
+      <script src="static/bower_components/tinycolor/tinycolor.js"></script>
+      <script src="static/bower_components/lodash/lodash.min.js"></script>
 
-    <script src="static/app/app.min.js"></script>
+      <script src="static/app/app.min.js"></script>
 
-    <!-- The Template and jQuery File Upload scripts -->
-</head>
+      <!-- The Template and jQuery File Upload scripts -->
+  </head>
 
-<body class="control-panel" ng-controller="ProfileController" ng-init='bio.files={% raw files %}'>
+  <body class="control-panel">
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid wrapper">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Matching System</a>
-    </div>
-
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
-        <li><a href="#"><i class="fa fa-cogs"></i> Engine</a></li>
-      </ul>
-      <form class="navbar-form navbar-right" role="search">
-        <a class="btn btn-default" href="logout"><i class="fa fa-sign-out"></i> Logout</a>
-      </form>
-    </div>
-  </div>
-</nav>
-
-<div class="wrapper">
-  <div class="row">
-    <div class="col-md-6">
-      <h1>My profile</h1>
-      <div class="media">
-        <div class="media-left">
-          <img src="{{ modules.Gravatar(escape(email), 150, 'jpg') }}" class="media-object" width="150" alt="{{ escape(user) }}'s Avatar" >
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid wrapper">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#profile">Matching System</a>
         </div>
 
-        <div class="media-body">
-          <div id="profile-bio" ng-class="{ 'editing-bio': bio.editing }">
-            <div id="bio-content">
-              <p btf-markdown="bio.content">
-              </p>
-              <p>
-                <button class="btn btn-default" id="edit-bio" ng-click="editBio()"><i class="fa fa-pencil"></i> Edit</button>
-              </p>
-            </div>
-
-            <div id="new-bio">
-              <p class="text-muted">
-                Tip: You can use <a href="https://help.github.com/articles/markdown-basics/" target="_blank">markdown</a> in this field.
-              </p>
-              <div class="form-group">
-                <textarea class="form-control" rows="8" ng-model="bio.content"></textarea>
-              </div>
-              <div class="form-group">
-                <button class="btn btn-success" ng-click="updateBio()"><i class="fa fa-check"></i> Done</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <h1>Upload articles</h1>
-      <div id="upload">
-          <form id="fileupload" action="/upload" method="POST" enctype="multipart/form-data">
-              <div class="row fileupload-buttonbar">
-                  <div>
-                      <!-- The fileinput-button span is used to style the file input field as button -->
-                      <span class="btn btn-success fileinput-button">
-                          <i class="glyphicon glyphicon-plus"></i>
-                          <span>Add files...</span>
-                          <input type="file" name="files" multiple>
-                      </span>
-                      <button type="submit" class="btn btn-primary start">
-                          <i class="glyphicon glyphicon-upload"></i>
-                          <span>Start upload</span>
-                      </button>
-                      <button type="reset" class="btn btn-warning cancel">
-                          <i class="glyphicon glyphicon-ban-circle"></i>
-                          <span>Cancel upload</span>
-                      </button>
-                      <button type="button" class="btn btn-danger delete">
-                          <i class="glyphicon glyphicon-trash"></i>
-                          <span>Delete</span>
-                      </button>
-                      <!--<input type="checkbox" class="toggle">-->
-                      <!-- The global file processing state -->
-                      <span class="fileupload-process"></span>
-                  </div>
-                  <!-- The global progress state -->
-                  <div class="fileupload-progress fade">
-                      <!-- The global progress bar -->
-                      <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                          <div class="progress-bar progress-bar-success" style="width:0%;"></div>
-                      </div>
-                      <!-- The extended global progress state -->
-                      <div class="progress-extended">&nbsp;</div>
-                  </div>
-              </div>
-
-              <hr>
-              <h2>My articles</h2>
-              <!-- The table listing the files available for upload/download -->
-
-              <div class="files" id="files"></div>
-
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li ng-class="{ 'active': activeLink == 'profile' }"><a href="#profile"><i class="fa fa-user"></i> Profile</a></li>
+            <li ng-class="{ 'active': activeLink == 'engine' }"><a href="#engine"><i class="fa fa-cogs"></i> Engine</a></li>
+          </ul>
+          <form class="navbar-form navbar-right" role="search">
+            <a class="btn btn-default" href="logout"><i class="fa fa-sign-out"></i> Logout</a>
           </form>
+        </div>
       </div>
+    </nav>
+
+    <div class="wrapper" ng-view>
     </div>
-  </div>
-</div>
 
-<div id="ajax-load-scripts"></div>
-
-</body>
+  </body>
 </html>

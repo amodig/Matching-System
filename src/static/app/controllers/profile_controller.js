@@ -1,18 +1,17 @@
-MatchingApp.controller('ProfileController', function($scope, Api, Fileupload){
-  $scope.bio = {
-    editing: false,
-    content: '**Lorem ipsum**, dolor sit amet'
-  };
+MatchingApp.controller('ProfileController', function($scope, $rootScope, Api, Fileupload){
+  $rootScope.activeLink = 'profile';
 
   Api.getProfile().success(function(profile){
-    console.log(profile);
-  });
+    $scope.bio = {
+      editing: false,
+      content: profile.bio,
+      files: angular.fromJson(profile.files),
+      user: profile.user,
+      email: profile.email
+    };
 
-  var waitForFiles = $scope.$watch('bio', function(newVal, oldVal){
-    if(newVal.files){
-      Fileupload.init($scope.bio.files);
-      waitForFiles();
-    }
+
+    Fileupload.init($scope.bio.files);
   });
 
   $scope.editBio = function(){

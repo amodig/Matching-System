@@ -37,6 +37,20 @@ MatchingApp.directive('cluster', function(){
     });
   }
 
+  function updateModel(topic, keywords, scope){
+    var formattedKeywords = _.map(keywords, function(keyword){
+      return { content: keyword.content, weight: keyword.weight }
+    });
+
+    scope.$apply(function(){
+      scope.topic = {
+        content: topic.content,
+        weight: topic.weight,
+        keywords: formattedKeywords
+      };
+    });
+  }
+
   function Topic(raphael, attr){
     this.raphael = raphael;
     this.content = attr.content;
@@ -92,6 +106,11 @@ MatchingApp.directive('cluster', function(){
     this.background.attr({ fill: color });
   }
 
+  Keyword.prototype.setOpacity = function(opacity){
+    this.text.animate({ opacity: opacity }, 300);
+    this.background.animate({ opacity: opacity }, 300);
+  }
+
   Keyword.prototype.setFontColor = function(color){
     this.text.attr({ fill: color });
   }
@@ -144,7 +163,7 @@ MatchingApp.directive('cluster', function(){
     this.handle.remove();
   }
 
-  Keyword.prototype.smoothMove = function(x, y){
+  Keyword.prototype.smoothMove = function(x, y, callback){
     var _this = this;
     var textDim = this.text.getBBox();
 
@@ -154,6 +173,10 @@ MatchingApp.directive('cluster', function(){
       var distanceToMiddle = _this.distanceTo(WIDTH / 2, HEIGHT / 2);
 
       _this.setWeight(Math.max(0, 1 - distanceToMiddle / (WIDTH / 2)));
+
+      if($.isFunction(callback)){
+        callback();
+      };
     });
 
     this.text.animate({ x: textDim.width / 2 + x + this.PADDING, y: textDim.height / 2 + y + this.PADDING }, 300, '<');
@@ -188,9 +211,9 @@ MatchingApp.directive('cluster', function(){
 
   return {
     scope: {
-      cluster: '=ngModel'
+      topic: '=ngModel'
     },
-    template: '<h2 class="text-center">{[cluster.topic.content]}</h2><div class="cluster-raphael"></div>',
+    template: '<h2 class="text-center">{[topic.content]}</h2><div class="cluster-raphael"></div>',
     link: function(scope, elem, attrs){
       var topic = {};
       var keywords = [];
@@ -200,7 +223,7 @@ MatchingApp.directive('cluster', function(){
 
       initBackground(raphael);
 
-      topic = new Topic(raphael, { content: 'Lorem ipsum dolor sit amet', weight: 0.9 });
+      topic = new Topic(raphael, scope.topic);
       topic.render({ x: WIDTH / 2, y: HEIGHT / 2 });
 
       topic.handle
@@ -216,11 +239,12 @@ MatchingApp.directive('cluster', function(){
           }
         });
 
-      for(var i=0; i<8; i++){
-        var keyword = new Keyword(raphael, { content: 'Lorem ipsum', weight: Math.random() });
-        keyword.render({ x: 0, y: 0 });
-        keywords.push(keyword)
-      }
+      scope.topic.keywords.forEach(function(keyword){
+        var k = new Keyword(raphael, keyword);
+        k.render({ x: 0, y: 0 });
+
+        keywords.push(k)
+      });
 
       initKeywords(keywords);
 
@@ -274,6 +298,8 @@ MatchingApp.directive('cluster', function(){
             this.oy = pos.y;
 
             this.attr({ cursor: 'move' });
+
+            this.parent.setOpacity(0.7);
           },
           function(){
             var collision = false;
@@ -286,10 +312,16 @@ MatchingApp.directive('cluster', function(){
             });
 
             if(collision){
-              parent.smoothMove(this.ox, this.oy);
+              parent.smoothMove(this.ox, this.oy, function(){
+                updateModel(topic, keywords, scope);
+              });
+            }else{
+              updateModel(topic, keywords, scope);
             }
 
             this.attr({ cursor: 'pointer' });
+
+            this.parent.setOpacity(1);
           }
         )
     }
