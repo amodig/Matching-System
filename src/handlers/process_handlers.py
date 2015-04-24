@@ -52,22 +52,20 @@ class SearchHandler(MainBaseHandler):
         self.application.iter_num = 0
         # load the data from the front end
         data = json.loads(self.request.body)
-
-        # print data["keywords"]
         # decompose the search word and keywords and make them as a local keyword list
         keywords = [word for keyword in data["keywords"] for word in keyword["text"].split()]
-        # print keywords
         # initialize temp container for sending keywords
         temp = []
         # iterate through each word in the list and check whether it overlaps with our local keyword list.
         for keyword_info in self.application.keywords_info:
             if self._lists_overlap(keywords, keyword_info["text"].split()):
                 temp.append(keyword_info)
+
         self.application.filtered_keywords = temp
         self.application.keywords = self.application.filtered_keywords[self.application.keywords_number *
-                                                        self.application.iter_num: self.application.keywords_number *
-                                                                                (self.application.iter_num + 1)]
-
+                                                                       self.application.iter_num:
+                                                                       self.application.keywords_number *
+                                                                       (self.application.iter_num + 1)]
         # sort the persons
         keywords_id = [keyword["id"] for keyword in self.application.keywords]
 
@@ -79,6 +77,7 @@ class SearchHandler(MainBaseHandler):
         print persons_info
         persons = sorted(persons_info, key=sort_persons, reverse=True)
 
+        # create JSON message
         message = {
             "keywords": [
                 keyword
@@ -161,6 +160,8 @@ class NextHandler(MainBaseHandler):
 
         persons_info = self.application.corpora_user_id.values()
         persons = sorted(persons_info, key=sort_persons, reverse=True)
+
+        # create JSON message
         message = {
             "keywords": [
                 keyword
@@ -191,11 +192,13 @@ class RelatedArticlesHandler(MainBaseHandler):
         feature_matrix = self.application.analyzer._X.T
         feature_vector = feature_matrix[paper_id - 1, :]
 
-        # calculate the cosine distance between selected vector and all other vectors.
-        array_of_inner_product = \
-            feature_vector * \
-            feature_matrix.T  # calculate the inner product between target vector and all other feature vectors
-        norm_feature_vector = norm(feature_vector)  # calculate the norm of feature vector
+        # Calculate the cosine distance between selected vector and all other vectors:
+
+        # calculate the inner product between target vector and all other feature vectors
+        array_of_inner_product = feature_vector * feature_matrix.T
+        # calculate the norm of feature vector
+        norm_feature_vector = norm(feature_vector)
+
         norm_all_vector = apply_along_axis(norm, 1, feature_matrix)
         cosine_distance = (array_of_inner_product / norm_feature_vector / norm_all_vector)
         cosine_distance = cosine_distance.tolist()[0]
