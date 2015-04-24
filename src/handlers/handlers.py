@@ -302,7 +302,7 @@ class TablesDataHandler(BaseHandler):
     @tornado.web.authenticated 
     def get(self):
         words, person_names = zip(*[(person_info["keywords"], person_info["name"]) for person_info in
-                                    self.application.corpuses_name_id.values()])
+                                    self.application.corpora_user_id.values()])
         message = {
             "tables":
                 [

@@ -40,7 +40,7 @@ class ChartsDataHandler(BaseHandler):
         Form relationship between persons and total count of each keyword
         """
         word_counts, person_names = zip(*[(len(person_info["keywords"]), person_info["name"]) for person_info in
-                                          self.application.corpuses_name_id.values()])
+                                          self.application.corpora_user_id.values()])
         return {
                 "persons": person_names,
                 "data": word_counts

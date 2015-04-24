@@ -75,7 +75,7 @@ class SearchHandler(MainBaseHandler):
             return len(set(person["keywords"]) & set(keywords_id))
 
         # persons info is a list that contains information of all persons
-        persons_info = self.application.corpuses_name_id.values()
+        persons_info = self.application.corpora_user_id.values()
         print persons_info
         persons = sorted(persons_info, key=sort_persons, reverse=True)
 
@@ -159,7 +159,7 @@ class NextHandler(MainBaseHandler):
         def sort_persons(person):
             return len(set(person["keywords"]) & set(keywords_id))
 
-        persons_info = self.application.corpuses_name_id.values()
+        persons_info = self.application.corpora_user_id.values()
         persons = sorted(persons_info, key=sort_persons, reverse=True)
         message = {
             "keywords": [
