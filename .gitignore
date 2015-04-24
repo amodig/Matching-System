@@ -1,5 +1,6 @@
 # databases etc.
 src/handlers/preprocessing/crawler/crawler_logs
+src/uploads
 .idea
 
 # Created by .ignore support plugin (hsz.mobi)
