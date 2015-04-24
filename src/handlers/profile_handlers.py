@@ -298,6 +298,12 @@ class ProfileHandler(BaseProfileHandler):
         raise gen.Return(email)
 
     @gen.coroutine
+    def get_user_name(self, user):
+        doc = yield self.application.db['users'].find_one({'user': user})
+        name = doc['name']
+        raise gen.Return(name)
+
+    @gen.coroutine
     def get_files_db(self, user):
         """Finds all files by selected user.
         :return a list of file dictionaries (can be empty).

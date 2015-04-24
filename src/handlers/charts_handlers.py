@@ -17,12 +17,10 @@ class ChartsDataHandler(BaseHandler):
     @tornado.web.authenticated        
     def get(self):		
         message = {
-        "charts":
-            [
-            self.__form_person_weights_relationshp(),  
-            self.__form_person_keywords_counts_relationship(), 
-
-            ], 
+            "charts": [
+                self.__form_person_weights_relationshp(),
+                self.__form_person_keywords_counts_relationship()
+            ],
             "articles":
                 self.__form_article_correlation_relationship()
         }
@@ -33,7 +31,7 @@ class ChartsDataHandler(BaseHandler):
         Form relationship between persons and the total weight of all the keywords
         """
         return {
-                "persons":["aaa", "aaa", "aaa", "aaa", "aaa", "aaa", "aaa"], 
+                "persons": ["aaa", "aaa", "aaa", "aaa", "aaa", "aaa", "aaa"],
                 "data": [15, 23, 22, 11, 15, 6, 33]
                 }
 
@@ -41,7 +39,8 @@ class ChartsDataHandler(BaseHandler):
         """
         Form relationship between persons and total count of each keyword
         """
-        word_counts, person_names = zip(*[(len(person_info["keywords"]), person_info["name"]) for person_info in self.application.corpuses_name_id.values() ])
+        word_counts, person_names = zip(*[(len(person_info["keywords"]), person_info["name"]) for person_info in
+                                          self.application.corpuses_name_id.values()])
         return {
                 "persons": person_names,
                 "data": word_counts
@@ -65,7 +64,7 @@ class ArticleMatrixHandler(BaseHandler):
     def post(self):
         data = json.loads(self.request.body)
         # this number decides limitation of different articles
-        representatio_limit =20
+        representatio_limit = 20
         correlation_matrix = numpy.sqrt(self.application.analyzer._X.T * self.application.analyzer._X)  
         
         self._mm = MysqlMessenger(database="keyword_app")

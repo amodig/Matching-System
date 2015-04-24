@@ -10,6 +10,8 @@ from lxml import etree
 
 import nltk
 import pickle
+import motor
+import tornado.gen
 
 
 class PhraseExtractor():
@@ -73,14 +75,14 @@ class PhraseExtractor():
 
 
 class Extractors():
-    def __init__(self, file_name):
+    def __init__(self, file_name=None, database=None, collection=None):
         """
         @param self a point of class
         @param line_number number of lines to be processed as batch 
         """
         self._file_name = file_name
-        # This variable stores the information of the corpora needed in this project_corpus
-        self.project_corpora, self.author_names, self.titles = self.get_information(10000)
+        self._database = database
+        self._collection = collection
 
     def get_titles(self):
         return self.titles
@@ -91,20 +93,32 @@ class Extractors():
     def get_author_names(self):
         return self.author_names
 
-    # def get_information_from_database(self):
-    #     corpora = []
-    #     author_names = []
-    #     titles =[]
-    #     sql =
-    #     pass
+    @tornado.gen.coroutine
+    def get_information_from_database(self, database=None, collection=None):
+        if database is None:
+            database = self._database
+        if collection is None:
+            collection = self._collection
 
-    def get_information(self, number_of_corpora, file_name=None):
+        cursor = database[collection].find({}, {"title": 1, "abstract": 1, "user": 1})
+        corpora = []
+        uploaders = []
+        titles =[]
+        while (yield cursor.fetch_next):
+            document = cursor.next_object()
+            corpora.append(document['abstract'])
+            uploaders.append(document['user'])
+            titles.append(document['title'])
+        info = {"corpora": corpora, "uploader_names": uploaders, "titles": titles}
+        raise tornado.gen.Return(info)
+
+    def get_information_from_xml(self, number_of_corpora, file_name=None):
         """
         Read papers from database and return all the words (and paper titles) that belongs to one author in a list
         :param number_of_corpora: word limit
         :param file_name: file name
         :return corpora: list of all word corpus
-        :return author_names: list of all authors
+        :return uploader_names: list of all authors
         :return titles: list of all titles
         """
         corpora = []
@@ -130,7 +144,38 @@ class Extractors():
                 break
         return corpora, author_names, titles
 
-    def get_keywords_from_abstract(self, number_of_corpora, file_name=None):
+    @tornado.gen.coroutine
+    def set_keywords_from_database(self, database=None, collection=None):
+        if database is None:
+            database = self._database
+        if collection is None:
+            collection = self._collection
+
+        keyword_set = set()
+        corpora_representation_list = []
+        phrase_extractor = PhraseExtractor()
+        cursor = database[collection].find({}, {"title": 1, "abstract": 1, "user": 1})
+        while (yield cursor.fetch_next):
+            doc = cursor.next_object()
+            keywords = list(phrase_extractor.extract(doc['abstract']))
+            keywords = [''.join(sublist) for sublist in keywords]
+            corpora_representation_list.append(','.join(keywords))
+            keyword_set |= set(keywords)  # union
+        # store in application database
+        # yield self.application.db['keywords'].save({"keyword_set": keyword_set, "_id": 0})
+        # yield self.application.db['corpus_keywords'].save({"corpora_representation_list": corpora_representation_list,
+        #                                                   "_id": 0})
+
+        # store in pickle format
+        print "Store keywords in pickle"
+        file_corpus = open("../docs/keywords/corpus_abstract_db.txt", 'w')
+        file_keywords = open("../docs/keywords/abstract_db.txt", 'w')
+        pickle.dump(corpora_representation_list, file_corpus)
+        pickle.dump(keyword_set, file_keywords)
+        file_corpus.close()
+        file_keywords.close()
+
+    def set_keywords_from_abstract_xml(self, number_of_corpora, file_name=None):
         """Read a paper from a file, extract abstract and abstract corpora, and write them to text files.
         :param number_of_corpora: number of paper corpora
         :param file_name: paper file name
@@ -150,13 +195,13 @@ class Extractors():
         corpora_representation_list = []
         f_obj = open(self._keywords_filename, 'w')
         f_corpus_obj = open(self._corpus_keyword_filename, 'w')
-        phase_extractor = PhraseExtractor()
+        phrase_extractor = PhraseExtractor()
         for article in root.iterchildren():
             for element in article.iterchildren():
                 if element.tag == "abstract":
                     abstract = element.text
 
-                    keywords = list(phase_extractor.extract(abstract))
+                    keywords = list(phrase_extractor.extract(abstract))
                     keywords = [' '.join(sublist) for sublist in keywords]
                     corpora_representation_list.append(','.join(keywords))
 
@@ -170,5 +215,23 @@ class Extractors():
         f_corpus_obj.close()
  
 if __name__ == "__main__":
+    print "Run as script"
     extractor = Extractors("../../../../docs/abstracts/abstracts.xml")
-    extractor.get_keywords_from_abstract("all")
+    extractor.set_keywords_from_abstract_xml("all")
+
+    # # Connect to MongoDB
+    # MONGO_SERVER_ADDRESS = 'localhost'
+    # MONGO_SERVER_PORT = 27017
+    # client = motor.MotorClient(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
+    # # Choose correct database
+    # db = client['app']
+    #
+    # extractor = Extractors(database=db, collection=u'fs.files')
+    # iterator = extractor.get_information_from_database()
+    # iterator.next()
+    # print extractor._database
+    # print extractor.get_information_from_database
+    # print extractor.get_information_from_database()
+    # extractor.get_information_from_database(database=db, collection=u'fs.files')
+    #
+    # print "EOF"

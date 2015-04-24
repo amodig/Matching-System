@@ -26,6 +26,10 @@ brew install scipy
 # Activate your Python virtualenv and install requirement:
 # pip install -r requirements.txt
 
+# NLTK needs these packages:
+# models/maxent_treebank_pos_tagger
+# corpora/stopwords
+
 # Restore databases
 sudo mysql -u root -p -e "CREATE DATABASE matching_system;"
 sudo mysql -u root -p matching_system < database/matching_system.sql 

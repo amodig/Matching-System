@@ -1,45 +1,7381 @@
-Kuitti
+Pattern Recognition 45 (2012) 416–433
 
-8.12.2014 klo 23:44
+Contents lists available at ScienceDirect
 
-  
+Pattern Recognition
 
-  
+journal homepage: www.elsevier.com/locate/pr
 
-Saajan tili ja nimi
+SpectralCAT: Categorical spectral clustering of numerical and nominal data
+Gil David a,, Amir Averbuch b
 
-BARNES&NOBLE*COM 800­843­2665
+a Department of Mathematics, Program in Applied Mathematics, Yale University, New Haven, CT 06510, USA
+b School of Computer Science, Tel-Aviv University, Tel-Aviv 69978, Israel
 
-Viesti
-000492065******2355 OSTOPVM 141118 
-USD 48.47 KULUT 0,00 
-VAIHTOKURSSI 1 EUR = 1,2202 USD 
-MF NRO 24692164322000639063294 
-VARMENTAJA 400
+a r t i c l e i n f o
 
-Maksajan nimi
-MODIG ARTTU ALEKSI  
-Maksajan nimen lähde
-Nimi pankin järjestelmistä
+a b s t r a c t
 
-Arkistointitunnus
-201411205 EL1016784  
+Article history:
+Received 11 October 2010
+Received in revised form
+2 July 2011
+Accepted 3 July 2011
+Available online 18 July 2011
 
-Viitenumero  
- 
+Keywords:
+Spectral clustering
+Diffusion Maps
+Categorical data clustering
+Dimensionality reduction
 
-Kirjauspäivä 
-20.11.2014
+Data clustering is a common technique for data analysis, which is used in many ﬁelds, including
+machine learning, data mining, customer segmentation, trend analysis, pattern recognition and image
+analysis. Although many clustering algorithms have been proposed, most of them deal with clustering
+of one data type (numerical or nominal) or with mix data type (numerical and nominal) and only few of
+them provide a generic method that clusters all types of data. It is required for most real-world
+applications data to handle both feature types and their mix. In this paper, we propose an automated
+technique, called SpectralCAT, for unsupervised clustering of high-dimensional data that contains
+numerical or nominal or mix of attributes. We suggest to automatically transform the high-dimensional
+input data into categorical values. This is done by discovering the optimal transformation according to
+the Calinski–Harabasz index for each feature and attribute in the dataset. Then, a method for spectral
+clustering via dimensionality reduction of the transformed data is applied. This is achieved by
+automatic non-linear transformations, which identify geometric patterns in the data, and ﬁnd the
+connections among them while projecting them onto low-dimensional spaces. We compare our
+method to several clustering algorithms using 16 public datasets from different domains and types.
+The experiments demonstrate that our method outperforms in most cases these algorithms.
 
-Maksupäivä 
-20.11.2014
+& 2011 Elsevier Ltd. All rights reserved.
 
-Arvopäivä 
-20.11.2014
+1.
 
-euroa 
-39,72
+Introduction
 
-© OP­Pohjola­ryhmä
+Clustering means an unsupervised classiﬁcation of observed
+data into different subsets (clusters) such that the objects in each
+subset are similar while objects in different subsets are dissimilar.
+Data clustering is a common technique for data analysis. It is used
+in many ﬁelds such as machine learning, data mining, customer
+segmentation, trend analysis, pattern recognition and image
+analysis. Although many clustering algorithms have been pro-
+posed, most of them were designed to deal with clustering of only
+speciﬁc type of data (numerical or nominal). Most of the methods,
+which were designed to process numerical data, are incapable to
+process nominal data and vice versa. This is due to the differences
+between the nature of different data types. For example, numer-
+ical data consists of numerical attributes whose values are
+represented by continuous variables. Finding similarity between
+numerical objects usually relies on a common distance measure
+such as Euclidean distance. The problem of clustering categorical
+data is different since it consists of data with nominal attributes
+whose values neither have a natural ordering nor a common scale.
 
-12/8/2014Osuuspankkihttps://www.op.fi/tulostus/tiliote?id=994&ecb=1&ecby=ecb_3a9d655d92ae357b85dd9be783ce3b8c00ffcf1c23407fc5df745dfcb0150f507124b2726a4d63099b2…1/1
+ Corresponding author. Tel.: þ1 203 432 4345.
+E-mail addresses: gil.david@yale.edu (G. David),
+
+amir@math.tau.ac.il (A. Averbuch).
+
+0031-3203/$ - see front matter & 2011 Elsevier Ltd. All rights reserved.
+doi:10.1016/j.patcog.2011.07.006
+
+As a result, ﬁnding similarities between nominal objects by using
+common distance measures, which are used for processing
+numerical data,
+is not applicable here. On the other hand,
+common distance measures for categorical data, such as Ham-
+ming distance, are not applicable for numerical data. Moreover,
+real applications data have to handle mixed types of attributes
+such as numerical and nominal data that reside together. Several
+methods for clustering mix type of data (numerical and nominal)
+were proposed. Their strength is usually emerged when clustering
+mix data and not when clustering a single type of data. For
+example, k-prototypes algorithm [1] was designed to cluster mix
+data by integrating a numerical clustering algorithm (k-means
+[2]) and a categorical clustering algorithm (k-modes [3]). Its
+strength emerges when clustering the mixed data but when it
+clusters only one type of data it does not improve the perfor-
+mance of its building blocks algorithms. Only few methods
+provide generic algorithms that clusters all types of data (numer-
+ical or nominal or mix).
+
+In this paper, we propose an algorithm that provides a generic
+solution for all data types. We present an automated technique
+that performs an unsupervised clustering of high-dimensional
+data with anywhere from four to thousands of dimensions, which
+contains either numerical or nominal or mix of numerical and
+nominal attributes. We suggest to automatically transform the
+high-dimensional input data into categorical values. This is done
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+417
+
+automatically by discovering the optimal transformation for each
+feature and attribute in the dataset according to the Calinski–
+Harabasz index [4]. Then, a spectral clustering via dimensionality
+reduction of the transformed data is applied to it, which is a non-
+linear transformation that identiﬁes geometric patterns in the
+data and ﬁnds connections among them while projecting them
+onto low-dimensional spaces.
+
+We provide a framework that is based upon transforming the
+data to common nominal scales and then applying diffusion
+processes for ﬁnding meaningful geometric descriptions in these
+datasets which can be uniform and heterogenous together. We
+show that the eigenfunctions of Markov matrices are used to
+construct diffusion maps that generate efﬁcient representations
+of complex geometric structures that enable to perform efﬁcient
+data mining tasks. The associated family of diffusion distances,
+obtained by iterating a Markov matrix, deﬁnes multiscale (coarse
+graining) geometries that prove to be useful for data mining
+methodologies and for learning of large uniform, heterogeneous
+and distributed datasets. We extend the diffusion process meth-
+odology to handle categorical data and we propose a method to
+construct an adaptive kernel. The proposed framework relates the
+spectral properties of Markov processes to their geometric coun-
+terparts and it uniﬁes ideas arising in a variety of contexts such as
+machine learning, spectral graph theory and kernel methods. It
+enables to reduce the dimensionality of the data that is embedded
+into low-dimensional subspaces where all the requested and
+sought after information lie. This reduction does not violate the
+integrity and the coherency of the embedded data.
+
+The proposed algorithm has two sequential steps:
+
+1. Data transformation by categorization: Conversion of the high-
+dimensional data to common categorical scales. This is done
+automatically by discovering the optimal transformation for
+each feature and attribute in the dataset. Nominal features are
+already in categorical scales and therefore are not transformed.
+2. Spectral clustering of the categorized data: Study and analysis of
+the behavior of the dataset by projecting it onto a low-
+dimensional space. This step clusters the data.
+
+We compare our method with several clustering algorithms by
+using 16 public datasets from different domains and types. The
+experiments demonstrate that our method outperforms in most
+case these algorithms. The experiments show that SpectralCAT is
+generic and ﬁts different data types from various domains
+including high-dimensional data.
+
+The paper is organized as follows. Section 2 describes related
+clustering algorithms. Section 3 describes a method for data
+transformation by categorization. It describes how to transform
+data into categorical scales. The method for spectral clustering of
+the transformed data is described in Section 4. Section 5 provides
+a detailed description of the SpectralCAT algorithm for clustering
+numerical data or nominal data or mixed data and a description of
+SpectralCATþþ that extends it. Section 6 compares between our
+method and other clustering algorithms.
+
+2. Related work
+
+Many unsupervised clustering algorithms have been proposed
+over the years. Most of them cluster numerical data, where the
+data consists of numerical attributes whose values are repre-
+sented by continuous variables. Finding similarity between
+numerical objects usually relies on common distance measures
+such as Euclidean, Manhattan, Minkowski and Mahalanobis dis-
+tances to name some. A comprehensive survey of various cluster-
+ing algorithms is given in [5].
+
+k-means [2] is one of the most commonly used clustering
+algorithm. It was designed to cluster numerical data in which
+each cluster has a center called the mean. k-means ﬁnds the
+centers that minimize the sum of squared distances from each
+data point toits closest center. The k-means algorithm is classiﬁed
+as either partitioner or non-hierarchical clustering method. Find-
+ing an exact solution to the k-means problem for an arbitrary
+input is NP-hard. But the k-means algorithm ﬁnds quickly an
+approximated solution that can be arbitrarily bad with respect to
+the objective function in comparison to optimal clustering. The
+performance of k-means is highly dependent on the initialization
+of the centers. Furthermore, it does not perform effectively on
+high-dimensional data.
+
+k-meansþþ [6] algorithm chooses the initial values for the k-
+means clustering. It was proposed as an approximation algorithm
+for the NP-hard k-means problem. k-meansþþ speciﬁes a proce-
+dure to initialize the cluster centers before proceeding with the
+standard k-means optimization iterations. With the k-meansþþ
+initialization, the algorithm is guaranteed to ﬁnd a solution that is
+Oðlog kÞ competitive to the optimal k-means solution.
+
+The LDA-Km algorithm [7] combines linear discriminant ana-
+lysis (LDA) and k-means clustering [2] to adaptively select the
+most discriminative subspace.
+It uses k-means clustering to
+generate class labels and uses LDA to perform subspace selection.
+The clustering process is integrated with the subspace selection
+process and the data is then simultaneously clustered while
+feature subspaces are selected.
+
+The localized diffusion folders (LDF) methodology [8] performs
+hierarchical clustering and classiﬁcation of high-dimensional
+datasets. The diffusion folders are multi-level data partitioning
+into local neighborhoods that are generated by several random
+selections of data points and folders in a diffusion graph and by
+deﬁning local diffusion distances between them. This multi-level
+partitioning deﬁnes an improved localized geometry of the data
+and a localized Markov transition matrix that is used for the next
+time step in the diffusion process. The result of this clustering
+method is a bottom-up hierarchical clustering of the data while
+each level in the hierarchy contains localized diffusion folders of
+folders from the lower levels. This methodology preserves the
+local neighborhood of each point while eliminating noisy connec-
+tions between distinct points and areas in the graph.
+
+An agglomerative hierarchical algorithm is proposed in
+BIRCH [9]. It is used for clustering large numerical datasets in
+Euclidean spaces. BIRCH performs well when clusters have
+identical sizes and their shapes are either convex or spherical.
+However, it is affected by the input order of the data and it may
+not perform well when clusters have either different sizes or non-
+spherical shapes.
+
+CURE [10] is another method that clusters numerical datasets
+using hierarchical agglomerative algorithm. CURE can identify
+non-spherical shapes in large databases that have different sizes.
+It uses a combination of random sampling and partitioning in
+order to process large databases. Therefore, it is affected by the
+random sampler performance.
+
+A density-based clustering algorithm is proposed in DBSCAN
+[11]. This method is used to discover arbitrarily shaped clusters.
+DBSCAN is sensitive to its parameters, which in turn, are difﬁcult
+to determine. Furthermore, DBSCAN does not perform any pre-
+clustering and it is executed directly on the entire database. As a
+result, DBSCAN can incur substantial I/O costs in processing large
+databases.
+
+DIANA [12] is a divisive hierarchical algorithm that applies to
+all datasets that can be clustered by hierarchical agglomerative
+algorithms. Since the algorithm uses the largest dissimilarity
+between two objects in a cluster such as the diameter of the
+cluster, it is sensitive to outliers.
+
+418
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+Several clustering algorithms for categorical data have been
+proposed in recent years. The k-modes algorithm [3] emerged
+from the k-means algorithm. It was designed to cluster catego-
+rical datasets. The main idea of the k-modes algorithm is to
+specify the number of clusters and then to select k initial modes,
+followed by allocating every object to its nearest mode. The
+algorithm minimizes the dissimilarity of the objects in a cluster
+with respect to its mode.
+
+The inter-attribute and intra-attribute summaries of a data-
+base are constructed in CACTUS [13]. Then, a graph, called the
+similarity graph, is deﬁned according to these summaries. Finally,
+the clusters are found with respect to these graphs.
+
+COOLCAT [14] clusters categorical attributes using an incre-
+mental partition clustering algorithm to minimize the expected
+entropy. First, it ﬁnds a suitable set of clusters from a sample from
+the entire dataset. Then, it assigns the remaining records to a
+suitable cluster. The major drawback of this algorithm is that the
+order of the processing data points has a deﬁnite impact on the
+clustering quality.
+
+ROCK [15] is a hierarchical agglomerative clustering algorithm
+that employs links to merged clusters. A link between two
+categorical objects is deﬁned as the number of common neigh-
+bors. ROCK uses a similarity measure between links to measure
+the similarity between two data points and between two clusters.
+STIRR [16] is an iterative method that is based on non-linear
+dynamic systems from multiple instances of weighted hyper-
+graphs (known as basins). Each attribute value is represented by a
+weighted vertex. Two vertices are connected when the attribute
+values, which they represent, co-occur at least once in the dataset.
+The weights are propagated in each hypergraph until
+the
+conﬁguration of the weights in the main basin converges to a
+ﬁxed point.
+
+More recently, some kernel methods for clustering were
+proposed. A clustering method, which uses support vector
+machine, is given in [17]. The data points are mapped by a
+Gaussian kernel to a high-dimensional feature space, where it
+searches the minimal enclosing sphere. When this sphere is
+mapped back to data space, it can be separated into several
+components where each encloses a separate cluster.
+
+A method for unsupervised partitioning of a data sample,
+which estimates the possible number of inherent clusters that
+generate the data, is described in [18]. It exploits the notion that
+performing a non-linear data transformation into some high
+dimensional feature space increases the probability for linear
+separability between the patterns within the transformed space.
+Therefore, it simpliﬁes the associated data structure. It shows that
+the eigenvectors of a kernel matrix, which deﬁne an implicit
+mapping, provide means to estimate the number of clusters
+inherent within the data. A computational iterative procedure is
+presented for the subsequent
+feature space that partitions
+the data.
+
+A kernel clustering scheme, which is based on k-means for
+large datasets, is proposed in [19]. It introduces a clustering
+scheme which changes the clustering order from a sequence of
+samples to a sequence of kernels. It employs a disk-based strategy
+to control the data.
+
+Another kernel clustering scheme, which is based on k-means,
+is proposed in [20]. It uses a kernel function, which is based on
+Hamming distance, to embed categorical data in a constructed
+feature space where the clustering takes place.
+
+In recent years, spectral clustering has become a popular
+clustering technique. It is simple to implement, can be solved
+efﬁciently and very often outperforms traditional clustering
+algorithms. A comprehensive survey of spectral clustering meth-
+ods is given in [21]. Spectral clustering refers to a class of
+techniques which rely on the eigenstructure of a matrix to
+
+partition points into disjoint clusters, according to their compo-
+nents in the top few singular vectors of the matrix, with points in
+the same cluster having high similarity and points in different
+clusters having low similarity [22].
+
+A spectral clustering method, which is based on k singular
+vectors, is presented in [23]. Given a matrix A, where the rows of
+A are points in a high-dimensional space, then the subspace
+deﬁned by the top k right singular vectors of A is the rank-k
+subspace that best approximates A. This spectral algorithm
+projects all the points onto this subspace. Each singular vector
+then deﬁnes a cluster. To obtain a clustering, each projected point
+is mapped into a cluster deﬁned by the singular vector that is
+closest in angle to it.
+
+A method for using the ﬁrst non-trivial eigenvector to approx-
+imate the optimal normalized cut of a graph was presented in
+[24]. This method constructs a similarity graph of the data points,
+computes its unnormalized Laplacian and then computes the ﬁrst
+k generalized eigenvectors. The rows of these eigenvectors are
+clustered into k clusters via k-means.
+
+A similar spectral clustering method is presented in [25]. This
+method constructs a similarity graph of the data points, computes
+its normalized Laplacian and then computes the ﬁrst k eigenvec-
+tors. The rows of these eigenvectors are normalized to have unit
+length and then they are clustered into k clusters via k-means.
+
+Similar to k-modes algorithm, mean shift offers a nonpara-
+metric technique for the analysis of a complex multimodal feature
+space for numerical data. Mean shift is a simple iterative proce-
+dure that shifts each data point to the average of data points in its
+neighborhood [26–28]. Adaptive mean shift clustering method
+[29] is an unsupervised kernel density estimation method that
+automatically selects bandwidth of every sample point. Ref. [26]
+suggested the density gradient-based approach as a method for
+cluster analysis. It is derived from kernel density gradient esti-
+mator and it selects a kernel bandwidth that guarantee asympto-
+tic unbiasedness of the estimate.
+
+The k-prototypes algorithm [1] integrates the k-means [2] and
+the k-modes [3] algorithms by deﬁning a combined dissimilarity
+measure to enable clustering of mixed numerical and categorical
+attributes.
+
+Gower [30] introduced a similarity index that measures the
+similarity between two samples whose attributes are numerical
+or categorical or mixed type of data. Applying the k-means
+algorithm to the Gower similarity index enables clustering of
+mixed attributes.
+
+Many of the methods do not provide a generic algorithm for
+clustering all types of data (numerical or nominal or mix). Some
+of them were designed to deal with only one type of data. Some
+were designed to deal only with mix data but not with a single
+type. Moreover, some of them fail to handle high-dimensional
+data. Our proposed method is generic and it is designed to deal
+with all types of data (numerical or nominal or mix) that are also
+high-dimensional.
+
+3. Data transformation by categorization
+
+Categorical data contains data with nominal attributes whose
+values neither have a natural ordering nor an inherent order. The
+variables of categorical data are measured by nominal scales.
+Numerical data consists of data with numerical attributes whose
+values are represented by continuous variables. The variables of
+numerical data are measured by an interval scales or by a ratio of
+scales. Many algorithms, which have been developed by the
+machine learning community,
+focus on learning in nominal
+feature spaces. Many real-world classiﬁcation tasks deal with
+continuous features. These algorithms could not be applied to
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+419
+
+interval
+
+these classiﬁcation tasks unless the continuous features are ﬁrst
+discretized. Continuous variable discretization has received sig-
+niﬁcant attention in the machine learning community [31]. Other
+reasons for variable discretization, aside from the algorithmic
+requirements, include speed increase of induction algorithms [32]
+and viewing General Logic Diagrams [33] of the induced classiﬁer.
+Data discretization is part of any data mining and it has particular
+importance especially in mining of numerical data. It is used to
+reduce the number of values for a given continuous attribute by
+dividing the range of the attribute into intervals also called
+quantization. Interval labels can then be used to replace actual
+data values. Replacing numerical values of a continuous attribute
+by a small number of
+labels thereby reduces and
+simpliﬁes the original data and make it workable. This leads to
+a concise, easy to use, knowledge-level representation of mining
+results. There are many methods for data discretization such as
+entropy-based discretization, cluster analysis, binning, histogram
+analysis and discretization by intuitive partitioning. Entropy is
+one of the most commonly used. Entropy-based discretization is a
+supervised splitting technique.
+It explores class distribution
+information in its calculation and determination of split-points.
+To discretize a numerical attribute A, the method selects the value
+of A that has the minimum entropy as a split-point, and recur-
+sively partitions the resulting intervals to arrive at a hierarchical
+discretization. Cluster analysis is also a popular data discretiza-
+tion method. A clustering method can be applied to discretize a
+numerical attribute A by partitioning the values of A into clusters.
+Clustering takes the distribution of A into consideration, as well as
+the closeness of data points. Therefore, it is able to produce high-
+quality discretization results. These discretization techniques
+transform each attribute independently by changing the original
+data and the relationships between the original attributes, but
+this preprocessing step contributes toward the success of the
+mining process [34]. There is always a trade off between trans-
+forming the original data as a preprocessing step and mining the
+original data. There are advantages and disadvantages for each
+approach. In order to understand the effect of the categorization
+step in our algorithm, we compare in Section 6 the results
+obtained with and without this preprocessing step.
+
+This section describes how to categorize numerical data by
+transforming into categorical data. Our method for data transfor-
+mation by automatic categorization normalizes and discretizes
+the original data. It is similar to discretization by cluster analysis
+that was mentioned above. It deﬁnes a smart way to analyze the
+clusters and discretizes each attribute. It provides a measure to
+evaluate the performance of the discretization and selects the
+optimal clusters to be discretized.
+
+Let X ¼ fx1, . . . ,xmg be a set of n-dimensional numerical points
+i g, i ¼ 1, . . . ,m and xi is a row vector. In
+in Rn where xi ¼ fx1
+order to transform X from numerical scales into categorical scales,
+each component, which describes one feature from a single scale
+only, is transformed. Formally, let Xl ¼ fxl
+mg be a single
+feature in X. Xl
+is transformed into the categorical values
+mg, l ¼ 1, . . . ,n. This way, each point xi AX, i ¼ 1, . . . ,
+l ¼ f ^xl
+^X
+m is transformed into ^xi ¼ f ^x1
+i g and X is transformed into
+^X ¼ f ^x1, . . . , ^xmg. At the end of this process, each component
+l ¼ 1, . . . ,n, from the transformed data ^X has its own set of
+categories.
+
+i , . . . , ^xn
+
+1, . . . , ^xl
+
+i , . . . ,xn
+
+1, . . . ,xl
+
+As described above, categorization of numerical data is
+obtained by categorization of each feature. The categorization
+process of one feature, which is represented by a numerical
+variable, requires to know in advance the optimal number of
+categories in the transformed data. Since every numerical variable
+has it own numerical scale and its own natural order, it also has
+its own number of categories. Discovery of the known number of
+clusters is critical for the success of the categorization process.
+
+Since we have no information on this optimal number of cate-
+gories for each numerical variable, then, it has to be automatically
+discovered on-the-ﬂy. Section 3.1 describes an automatic cate-
+gorization process that reveals the optimal number of categories.
+
+3.1. Automatic categorization and discovery of the optimal number
+of categories
+
+An automatic categorization process of numerical data of one
+feature takes place by the application of a clustering method to
+the data while computing the validity index (deﬁned below) of
+the clusters. This process is repeated (iterated) using increasing
+number of categories in each iteration. This process is terminated
+when the ﬁrst local maxima is found. The number of categories,
+which reaches the best validity index (the local maxima), is
+chosen as the optimal number of categories.
+
+j
+
+P
+
+ijfkðxl
+
+iÞAcl
+
+j,i ¼ 1, . . . ,m,cl
+
+i xlÞT , where xl ¼ ð1=mÞ
+squares, with k clusters,
+ðxl ml
+jÞT , where ml
+
+In Section 3, we deﬁned Xl as a single dimension in X, where
+l ¼ 1, . . . ,n. Since the process of categorization is applicable to any
+number of dimensions, we can generalize the deﬁnition of Xl to be
+q-dimensional (features) in X. In this case, l corresponds to q-tuple
+features, where each feature is from the range 1, . . . ,n. This
+enables to transform several features into a single categorical
+AXl,
+feature. Let fk be a clustering function that associates each xl
+P
+i
+i¼1,y,m, to one of the k clusters in Cl, where Cl ¼ fcl
+kg and
+1, . . . ,cl
+j ¼ fxl
+AClg. k is unknown at this point.
+cl
+P
+is deﬁned as Sl ¼
+m
+The total sum of squares of Xl
+i ¼ 1
+P
+P
+ðxl
+i xlÞðxl
+m
+i ¼ 1 xl
+i. The within-cluster sum
+wðkÞ ¼
+k
+is deﬁned as Sl
+of
+j ¼ 1
+j ¼ ð1=jcl
+jjÞ
+wðkÞ denotes
+xl. Sl
+the sum of deviations from the centers of their associated clusters
+of all the points in the data. A good clustering method should
+achieve a small Sl
+j ¼ 1 jcl
+
+The between-cluster sum of squares, with k clusters, is deﬁned
+bðkÞ denotes the sum of the
+bðkÞ ¼
+as Sl
+weighted distances from the data center of all the centers of the k
+bðkÞ.
+clusters. A good clustering method should achieve a large Sl
+It is easily seen (Appendix B, point 1) that the total sum of
+squares (Sl) equals to the sum of the between-cluster sum of
+squares ðSl
+wðkÞÞ.
+Therefore,
+Sl ¼ Sl
+
+bðkÞÞ and the within-cluster sum of squares ðSl
+
+wðkÞ.
+jjðml
+
+j xlÞT . Sl
+
+j xlÞðml
+
+jÞðxl ml
+
+P
+
+k
+
+wðkÞþ Sl
+
+bðkÞ:
+
+xl A cl
+j
+
+xl A cl
+j
+
+ð1Þ
+
+ð2Þ
+
+In order to measure the validity index Sl
+
+k,m of the clustering, we
+
+use the Calinski–Harabasz index [4]:
+
+k,m ¼ ðm kÞSl
+ðk 1ÞSl
+
+bðkÞ
+wðkÞ :
+
+Sl
+
+The validity index maximizes Sl
+variance ratio criterion.
+
+k,m on k clusters. Sl
+
+k,m denotes the
+
+The optimal number of categories, denoted by kl
+
+best, is obtained
+by the application of the clustering method fk to Xl while
+k,m for Xl,
+calculating the corresponding validity index Sl
+k ¼ 2,3, . . .. We deﬁne kl
+best to be the smallest k for which the
+smoothed Sl
+k,m has a local maximum. We analyze the smoothed
+Sl
+k,m that does not have oscillatory peaks (noise) as it is in the
+source Sl
+k,m. The smoothness is achieved by the application of a 1D
+moving average ﬁlter, with a span of 5, to Sl
+k,m. The ﬁlter is a direct
+form II transposed [35] implementation of the standard difference
+equation. When the ﬁrst local maxima is found then this process
+is terminated.
+
+Fig. 1 shows an example of the application of this process to
+one of the features of the Segmentation dataset [36]. In this
+example, fk, k ¼ 2, . . . ,100 was applied and the corresponding
+validity indexes were calculated. The ﬁrst local maxima was
+found at k¼9 and therefore kbest ¼ 9.
+
+420
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+m
+
+m
+
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+q
+dðxjÞ
+P
+k Z 0 lt
+
+raising this quantity to a power t (advance in time), this inﬂuence is
+propagated to nodes in the neighborhood of xi and xj and the result is
+the probability for this move in t time steps. We denote this
+probability by ptðxi,xjÞ. These probabilities measure the connectivity
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+p
+among the points within the graph. The parameter t controls the scale
+of the neighborhood in addition to the scale control provided by E.
+Construction of ~pðxi,xjÞ ¼ ð
+Þpðxi,xjÞ, which is a sym-
+dðxiÞ
+P
+=
+metric and positive semi-deﬁnite kernel, leads to the following eigen-
+decomposition ~pðxi,xjÞ ¼
+k Z 0 lknkðxiÞnkðxjÞ. A similar eigen-decom-
+position is obtained from ~ptðxi,xjÞ ¼
+knkðxiÞnkðxjÞ after advan-
+cing t times on the graph. Here ~pt is the transition probability from xi
+to xj in t time steps. A fast decay of flkg is achieved by an appropriate
+choice of E. Thus, only a few terms are required in the sum above to
+achieve a sufﬁcient good accuracy. The family of diffusion maps Ft is
+given by FtðxÞ ¼ ðlt
+is the low-dimensional
+embedding of the data into an Euclidean space and it provides
+coordinates for the set X. Hence, we use Ft in order to cluster the
+data in the embedding space.
+As described above, a common choice for WE is wEðxi,xjÞ ¼
+e :xi xj:2=E. Since an appropriate choice of E is critical in the
+construction of the Gaussian kernel, we describe in Section 4.1 a
+method that constructs an adaptive Gaussian kernel with an
+appropriate choice of E. Moreover, the Euclidean distance metric,
+which is used in the construction of the Gaussian kernel, is
+applicable for numerical data but not for categorical data. In
+Section 4.2, we describe how to adapt the Gaussian kernel to our
+transformed (categorical) data.
+
+0n0ðxÞ,lt
+
+1n1ðxÞ, . . . ÞT . Ft
+
+4.1. Construction of an adaptive Gaussian kernel
+
+In this section, we propose a method for the construction of an
+adaptive Gaussian kernel. Let X ¼ fx1, . . . ,xmg be a set of points in
+Rn. Let wEðxi,xjÞ ¼ e :xi xj:2=E be the imposed Gaussian kernel. For
+each point xi AX, this Gaussian kernel pushes away from xi all the
+points that are already far away from xi. On the other hand, it
+pulls toward xi all the points that are already close to xi. This
+push-pull process is controlled by E. Since E is ﬁxed for all the
+entries in W, it produces a coarse scaling control. This scale
+control is obviously not optimal for all the entries in the Gaussian
+kernel since it does not take into account the local geometry of
+each data point in the graph. Fig. 2 shows an example of data
+points in R3. In this example, E ¼ 0:02 was chosen as the scale
+control. The orange/red points in this image are the neighbors of
+the green points according to the constructed Gaussian kernel
+(using the ﬁxed scale control). These are the points that were
+pulled toward the green points.
+
+In the left image, we see that although the green point is in a
+very dense area, it has only few neighbors. In this case, we are
+interested in pulling more points toward the green point. This is
+achieved by selecting a larger E (that provides a wider radius)
+since it will include more points in the neighborhood of the green
+point. In the right image, we see that although the green point is
+an outlier, it has relatively many neighbors where some of them
+are in areas that are well separated from the green point. In this
+case, we are interested in pushing more points away from the
+green point. This is achieved by selecting a smaller E (that
+provides a narrower radius) since it will include less points in
+the neighborhood of the green point.
+
+Therefore, a selection of an adaptive scale control is necessary
+in order to construct a more accurate Gaussian kernel that will
+express the local geometry of each data point in the graph.
+
+In this section, we propose a method that constructs a two-
+phase adaptive Gaussian kernel. The key idea in the construction
+of the adaptive Gaussian kernel is to determine automatically an
+
+Fig. 1. The validity indexes for k ¼ 2, . . . ,100. The ﬁrst local maxima is marked by
+the arrow.
+
+AXl, i¼1,y,m, to one of the clusters cl
+best, and the corresponding categorical value of xl
+i
+
+The justiﬁcation of the validity index is given in Appendix A.
+to Xl
+Therefore, the application of the clustering method fkl
+ACl,
+associates each xl
+i
+j ¼ 1, . . . ,kl
+is
+determined as j. This automatic categorization process reveals the
+optimal number of categories in Xl and transforms the numerical
+data into categorical data. This process is repeated for each
+feature l,l ¼ 1, . . . ,n in X.
+
+best
+
+j
+
+At the end of this process, the data is transformed into
+common categorical scales. Since in most cases the dataset
+contains high-dimensional data points, it is required to study
+and analyze the dataset by projecting it onto a low-dimensional
+subspaces where all the requested and sought after information
+lie to reveal global geometric information. Section 4 deals with
+the dimensionality reduction step. In Section 6, we show the
+effect of data clustering after the transformation step only (with-
+out the dimensionality reduction step). This comparison will
+emphasize the importance of the second step in our proposed
+method.
+
+4. Spectral clustering of categorized data
+
+Section 3 described a method for an automatic data categorization.
+This section describes how to cluster the transformed high-dimen-
+sional data via spectral clustering. The diffusion maps framework
+[37,38] and its inherent diffusion distances provide a method for
+ﬁnding meaningful geometric structures in datasets. In most cases,
+the dataset contains high-dimensional data points in Rn. The diffu-
+sion maps construct coordinates that parameterize the dataset and
+the diffusion distance provides a local preserving metric for this data.
+A non-linear dimensionality reduction, which reveals global geo-
+metric information, is constructed by local overlapping structures. We
+use the diffusion maps in order to reduce the dimensionality of
+the data, and then we cluster the data in the embedding. Let
+X ¼ fx1, . . . ,xmg be a set of points in Rn. The non-negative symmetric
+kernel WE9wEðxi,xjÞ is constructed on the data. It measures the
+pairwise similarity between the points. wEðxi,xjÞ ¼ e :xi xj:2=E, which
+uses the Euclidean distance measure, was chosen for WE. However,
+other distance measures such as the cosine and Mahalanobis dis-
+tances can also be used. The non-negativity property of WE allows to
+normalize it into a Markov transition matrix P where the states of the
+corresponding Markov process are the data points. This enables to
+analyze X as a random walk. The construction of P follows the
+classical construction of the normalized graph Laplacian [39]. Formally,
+P ¼ fpðxi,xjÞgi,j ¼ 1,...,m is constructed as pðxi,xjÞ ¼ wEðxi,xjÞ=dðxiÞ, where
+dðxiÞ ¼
+XwEðxi,xjÞ dmðxjÞ is the degree of xi. P is a Markov matrix since
+the sum of each row in P is 1 and pðxi,xjÞZ0. Thus, pðxi,xjÞ can be
+viewed as the probability to move from xi to xj in one time step. By
+
+R
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+421
+
+Fig. 2. Gaussian kernel with ﬁxed e. Left: normal point. Right: outlier point. (For interpretation of the references to color in this ﬁgure legend, the reader is referred to the
+web version of this article.)
+
+Fig. 3. Gaussian kernel with an adaptive scale control. Left: normal point. Right: outlier point. (For interpretation of the references to color in this ﬁgure legend, the reader
+is referred to the web version of this article.)
+
+adaptive scale control for each point in the graph. This adaptive
+scale control is a weight function that has the following property:
+data points in dense areas will have a large weight (‘‘bonus’’) and
+data points in sparse areas will have a small weight (‘‘penalty’’).
+Since dense-areas points have many close points and sparse areas
+do not, we deﬁne the weight function o that represents the local
+geometry around each data point.
+oEiðxiÞ ¼
+
+e :xi xj:2=Ei dmðxjÞ,
+
+ð3Þ
+
+Z
+
+~X i
+
+where ~X i is a big cloud of points around xi, m is the distribution of
+the points in ~X i, xj A ~X i and Ei is an initial scale control that is
+adapted to ~X i. In our experiments, we deﬁned around each point
+xi a cloud ~X i that included the m=3 nearest neighbors of xi. Hence,
+each cloud of points contained third of the data points.
+
+Typically, two alternatives are considered in order to deter-
+mine the scale controls Ei [40,41]. In the ﬁrst alternative, the same
+scale control is deﬁned for all Ei (see for example, [42–46]). In
+these methods, a Gaussian radial basis function network with a
+constant width at each node is used to approximate a function.
+Although the width in each node can have a different value, the
+same width for every node is sufﬁcient for universal approxima-
+tion [43]. Therefore, the widths are ﬁxed to a single global value
+to provide a simpler strategy. In practice, the width has effects on
+the numerical properties of the learning algorithms but not on the
+general approximation ability of the radial basis function net-
+work. However, these methods depend on uniform distribution of
+the data and hence inadequate in practice, where the data
+distribution is non-uniform.
+
+In the second alternative, local estimation of the scale controls
+is performed. A common way to estimate the scale controls is to
+take into consideration the distribution variances of the data
+points in different regions (see for example, [47–49]). The width
+of the Gaussian kernel in a local region is determined by the mean
+value or by the standard deviation in each region [47]. In [48], the
+width is set locally to the Euclidean distance between the local
+
+center and its nearest neighbor. These methods offer a greater
+adaptability to the data than a ﬁxed scale control.
+
+Therefore, in order to determine the scale control Ei in Eq. (3),
+we calculate the variance of the squares of the distances between
+the point xi to all the points xj that belong to the cloud of points
+around it:
+
+,
+
+ð4Þ
+
+X
+
+Ei ¼
+
+xj A ~X i
+
+::xi xj:2  ~X i:2
+P
+
+j ~X ij
+
+where ~X i ¼
+
+:xi xj:2=j ~X ij.
+
+xj A ~X i
+
+Assume oEðxiÞ, i ¼ 1, . . . ,m deﬁnes an adaptive weight for each
+data point. Since we construct an afﬁnity matrix between pairs of
+data points, we need to deﬁne a pairwise weight function. We
+determine this way not only an adaptive scale for each point in X,
+but we also determine an adaptive scale for each pair of points.
+s
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+Z
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+q
+We deﬁne the pairwise weight function OE to be
+e :xj xk:2=Ej dmðxkÞ
+e :xi xk:2=Ei dmðxkÞ
+oEiðxiÞoEjðxjÞ
+
+OEðxi,xjÞ ¼
+
+Z
+
+¼
+
+:
+
+~X i
+
+~X j
+
+ð5Þ
+OE satisﬁes the ‘‘bonus’’ and ‘‘penalty’’ properties and it takes into
+consideration the distribution of the different regions in the data.
+Moreover, OE is symmetric and non-negative. Now, we construct
+the adaptive Gaussian kernel W as follows:
+wEðxi,xjÞ ¼ e
+
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+p
+
+¼ e :xi xj:2=OEðxi,xjÞ,
+
+i,j ¼ 1, . . . ,m:
+
+ð6Þ
+Since both the Euclidean distance metric and OE are symmetric
+and non-negative, the constructed kernel W is symmetric and
+non-negative as well. This adaptive scale control provides better
+and compact description of the local geometric properties of the
+pairwise distances matrix for X.
+
+ :xi xj:2=
+
+ðxiÞoEj
+
+ðxjÞ
+
+oEi
+
+Fig. 3 shows an example of the same data points in R3. In this
+example, we constructed the adaptive Gaussian kernel that was
+
+422
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+Fig. 4. Left: diffusion maps with ﬁxed scale control. Right: adaptive scale control (‘‘bonus’’ and ‘‘penalty’’ are used).
+
+described above. In the left image, we see that the green point has
+more neighbors than when we used the ﬁxed scale control
+(Fig. 2). The reason is that this green point is in a very dense area
+and therefore it is close to many points. Hence, the adaptive scale
+control is much bigger than the initial scale control (a ‘‘bonus’’
+was awarded) and as a result more points were pulled toward the
+green point. In the right image, we see that the green point has
+fewer neighbors than when we used the ﬁxed scale control. The
+reason is that this green point is an outlier and therefore it is far
+from most of the points. Therefore, the adaptive scale control is
+much smaller than the initial scale control (a ‘‘penalty’’ was
+assigned) and as a result more points were pushed away from
+the green point. These selections of the adaptive scale controls
+provide a more accurate Gaussian kernel.
+
+Fig. 4 shows the diffusion maps coordinates of the same data
+points that use a Gaussian kernel with a ﬁxed scale control and
+the proposed kernel with the adaptive scale control. As we can
+see, when we use a ﬁxed scale control (the left image) we get a
+jelly-ﬁsh shape where the separation between normal (the body)
+and outliers (the tails) points is unclear. When we use the
+adaptive scale control (the right image), we get a bell shape
+where the separation between the normal points (the bell) and
+the outliers is very clear. This structure represents more accu-
+rately the geometry of the original points.
+
+Fig. 5 shows the performance of a Gaussian kernel with a ﬁxed
+scale control and the proposed kernel with an adaptive scale
+control. For each set of data points in R2 (a single row in Fig. 5), we
+applied the diffusion maps with different ﬁxed scale controls and
+with an adaptive scale control. We used the ﬁrst three diffusion
+coordinates in order to cluster the data points. The left column of
+images in Fig. 5 shows the clustering results with an adaptive
+scale control. The remaining columns show the results of cluster-
+ing with different ﬁxed scale controls. We notice that the
+clustering performance with an adaptive scale control is very
+accurate. All the datasets were clustered correctly according to
+their natural clusters. In order to cluster correctly using a ﬁxed
+scale control, it is necessary to choose manually an appropriate
+scale control for each dataset. In addition, a scale control, which is
+appropriate for one dataset (for example, 0.01 for the fourth
+
+dataset), is inappropriate for other datasets (for example, the
+second dataset requires a 100 times bigger scale control and the
+third dataset requires a 10 times bigger scale control). Moreover,
+for some datasets, all the ﬁxed scale controls were inappropriate
+(for example, the ﬁfth and sixth datasets).
+
+Therefore, the right selection of a scale control is crucial in
+order to catch correctly and accurately the geometry of the data.
+The proposed kernel with an adaptive scale control does it
+correctly.
+
+4.2. Construction of a categorical Gaussian kernel
+
+In this section, we describe how to construct a Gaussian kernel
+for categorical data. The weight function WE9wEðxi,xjÞ measures
+the pairwise similarity between points. WE uses common distance
+measures for numerical data such as Euclidean, cosine and
+Mahalanobis distances. However, these distance measures are
+not applicable for categorical data. In order to construct a weight
+function for categorical data, we use the weighted Hamming
+distance to measure the distance between categorical data points.
+Let X ¼ fx1, . . . ,xmg be a set of n-dimensional categorical data
+points and let Xl ¼ fxl
+i is the lth component in
+the n-dimensional xi. Denote by kl the number of categories of
+l¼1,y,n, which denotes one feature. The
+each variable Xl,
+weighted Hamming distance D between two points xi,xj AX is
+
+mg where xl
+
+1, . . . ,xl
+
+X
+
+n
+
+Dðxi,xjÞ ¼
+
+where
+
+l ¼ 1
+
+(
+
+jÞ
+dðxl
+i,xl
+kl
+
+,
+
+xl
+i,xl
+
+j A Xl,
+
+ð7Þ
+
+ð8Þ
+
+dðxl
+
+jÞ ¼ 0 if xl
+i,xl
+
+i ¼ xl
+j,
+
+1 otherwise:
+
+Therefore, the Gaussian kernel of the weighted Hamming distance
+of categorical data is
+wEðxi,xjÞ ¼ e Dðxi,xjÞ=E:
+
+ð9Þ
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+423
+
+Fig. 5. Left column: adaptive scale control (‘‘bonus’’ and ‘‘penalty’’ are used). Three right columns: diffusion maps with different ﬁxed scale controls.
+
+5. SpectralCAT: categorical spectral clustering of numerical
+and nominal data
+
+In Section 5.1, we provide a detailed description of the
+SpectralCAT algorithm for clustering numerical data or nominal
+data or mixed data. Section 5.2 describes SpectralCATþþ, which
+extends the SpectralCAT algorithm.
+
+5.1. SpectralCAT clustering algorithm
+
+The ﬂow of the SpectralCAT algorithm is presented in Fig. 6.
+Let X ¼ fx1, . . . ,xmg be a set of n-dimensional points in Rn
+i g, i ¼ 1, . . . ,m. X contains nominal values or
+
+where xi ¼ fx1
+numerical values or mix of nominal and numerical values.
+
+i , . . . ,xn
+
+Data transformation by automatic categorization of X: The high-
+dimensional data is transformed to common categorical scales.
+This is done automatically by discovering the optimal transforma-
+tion for each feature and attribute in the dataset. Denote column
+l,1rlr n, in X by Xl ¼D fxl
+i : 1r irmg. Each column vector l is
+transformed into categorical vector ^X
+
+by the following data.
+
+l
+
+1, . . . ,dl
+
+If Xl contains categorical data: The set of unique nominal values
+in Xl denoted by Dl ¼D fdl
+klg, kl rm is the number of unique
+nominal values in Xl. Therefore, each point in Xl contains a
+i ¼ 1, . . . ,m. In order to
+nominal value from the set D: xl
+i
+transform each xl
+i is replaced with the corresponding
+i
+category number of its nominal value ^xl
+
+i ¼ dj,1r jr klg.
+
+i ¼ fj : xl
+
+AD,
+
+AXl to ^xl
+
+i, xl
+
+424
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+wEð ^xi, ^xjÞ ¼ e Dð ^x i, ^x jÞ=OEðxi,xjÞ,i,j ¼ 1, . . . ,m. Since both the distance
+metric D and the pairwise weight function OE are symmetric
+and non-negative, the constructed kernel WE is symmetric and
+non-negative as well.
+
+Normalizing the Gaussian kernel WE into a Markov transition
+matrix P: The non-negativity property of WE allows us to normal-
+ize it into a Markov transition matrix P where the states of the
+corresponding Markov process are the data points. This enables to
+analyze ^X as a random walk. WE is normalized into a Markov
+matrix P:
+
+pð ^xi, ^xjÞ ¼
+
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+q
+q
+P
+P
+wEð ^xi, ^xjÞ
+q ¼ 1 wEð ^xj, ^xqÞ
+q ¼ 1 wEð ^xi, ^xqÞ
+
+m
+
+m
+
+:
+
+P
+
+P is a Markov matrix since the sum of each row in P is 1 and
+pð ^xi, ^xjÞZ0. Thus, pð ^xi, ^xjÞ can be viewed as the probability to move
+from ^xi to ^xj.
+
+m
+
+Construction of the diffusion maps: Since P is a symmetric
+positive semi-deﬁnite kernel, the following eigen-decomposition
+exists: pð ^xi, ^xjÞ ¼
+w Z 1 lwnwð ^xiÞnwð ^xjÞ, where lw are the eigenva-
+lues and nw are the eigenvectors. Since the spectrum decays, only
+few terms are required to achieve a sufﬁcient good accuracy. Let Z
+be the number of the retained terms. Hence, the diffusion maps F
+are given by Fð ^xiÞ ¼ ðl0n0ð ^xiÞ,l1n1ð ^xiÞ, . . . ,lZnZð ^xiÞÞT .F is the low-
+dimensional embedding of the data into an Euclidean space and it
+provides coordinates for the set ^X .
+
+Clustering using the embedding matrix F: F is used in order to
+cluster the data in the embedding. Since F provides coordinates
+on the set ^X , we can use any numerical clustering function fk in
+order to associate each ^xi A ^X , i¼1,y,m, to one of the clusters
+cj AC, j¼1,y,k, where k is the number of clusters in C. k-means as
+fk was used in our experiments.
+
+In Appendix C, we present the pseudocode for the SpectralCAT
+
+algorithm.
+
+5.2. SpectralCATþþ: an extension to the SpectralCAT algorithm
+
+This section describes the SpectralCATþþ that extends the data
+transformation step in the SpectralCAT clustering algorithm. As
+described in Section 5.1, the high-dimensional dataset is trans-
+formed into categorical scales. As a result, the transformed data
+contains the same number of
+features, but each feature is
+categorical. The key idea in SpectralCATþþ is the increase in the
+number of features in the transformed data.
+
+We recall from Section 3.1 that the process of categorization is
+applicable to any number of dimensions and the deﬁnition of a
+single dimension in X was generalized to be multidimensional
+(features). This enables to transform several features into a single
+categorical feature. In addition to the transformation of each
+feature in the data into its optimal categorical scales (as done
+by SpectralCAT), SpectralCATþþ transforms different combina-
+tions of parameters, that form multidimensional features, into
+categorical scales. This is done for n-tuple features, n ¼ 1,2, . . .,
+where each combination of features is transformed into a single
+categorical feature as described in Section 3.1.
+
+Therefore, for n-dimensional dataset, each of the n features is
+transformed into categorical scales. Then, each of the ðn
+2Þ combina-
+tions of two features is transformed into categorical scales. This
+adds ðn
+2Þ new features to the transformed data. We continue by
+adding ðn
+3Þ combinations of three features, and so on. As a result,
+the dimensionality of the transformed data increases from n (the
+3Þþ    þðn
+qÞ,
+original dimensionality of
+where q is the maximal number of desired combinations of
+features. Since the number of combinations for high-dimensional
+datasets is big, this strategy is impractical. Therefore, the number
+of combinations is reduced by selecting only several random
+
+the data)
+
+1Þþðn
+
+2Þþðn
+
+to ðn
+
+Fig. 6. The ﬂow of the SpectralCAT algorithm.
+
+best
+
+best
+
+k,m (Eq. (2)) on Xl, k ¼ 2,3, . . .. kl
+
+Otherwise, Xl contains numerical data: Assume fk performs a
+AXl,
+numerical clustering function that associates each xl
+i
+i¼1,y,m, to one of the clusters c1, . . . ,ck. We apply the clustering
+method fk to Xl while calculating the corresponding validity
+indices Sl
+is deﬁned as the
+smallest k for which Sl
+k,m has a local maximum. Once the local
+maxima is found and kl
+best is discovered, the process is terminated
+is applied to Xl. It associates each
+and the clustering method fkl
+AXl, i¼1,y,m, to one of the clusters c1, . . . ,ckl
+xl
+i
+transform each xl
+i is replaced with the corresponding
+i
+i ¼ fj :
+category number by its nominal value to become ^xl
+bestg. The optimal number of clusters in Xl is
+fkl
+denoted by kl, where the subscript ‘‘best’’ is removed. k-means as
+fk was used in our experiments.
+
+ðxl
+iÞ ¼ cj,1r jr kl
+
+This process is repeated for each l, l ¼ 1, . . . ,n. In the end, the
+original dataset X is replaced by the transformed matrix ^X .
+ðk1, . . . ,knÞ is the corresponding weight vector for ^X .
+
+. In order to
+
+AXl to ^xl
+
+i, xl
+
+Spectral clustering of the categorized data ^X : The behavior of the
+transformed dataset is analyzed by projecting it onto a low-
+dimensional space. This step clusters the data.
+
+best
+
+best
+
+Construction of an adaptive Gaussian kernel WE for categorical
+data: We combine the construction of a categorical Gaussian
+kernel (Section 4.2) with the construction of an adaptive Gaussian
+kernel (Section 4.1). Therefore, for any pair of points ^xi, ^xj A ^X , the
+pairwise weight function OE (Eq. (5)) is deﬁned according to the
+Gaussian kernel of the categorical data (Eq. (9)) as
+
+ﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃﬃ
+s
+Z
+e Dð ^x j, ^x kÞ=Ej dmð ^xkÞ
+e Dð ^x i, ^x kÞ=Ei dmð ^xkÞ
+
+OEðxi,xjÞ ¼
+
+Z
+
+,
+
+^X
+
+^X
+
+where the weighted distance D between two points was deﬁned
+in Eq. (7) according to the weight vector ðk1, . . . ,knÞ and Ei,Ej are
+deﬁned according to Eq. (4). Then, the adaptive Gaussian kernel
+for categorical data WE is deﬁned according to Eqs. (6) and (7) as
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+425
+
+iÞ ¼ ðn
+
+combinations of features from the data. Let 0rsr1 be the
+i Þs combina-
+accuracy factor. Then, we randomly select eslogðn
+tions of parameters where i¼2,y,q and qrn. s controls the
+number of selected combinations and thus controls the number of
+added computations. Hence, the dimensionality of the trans-
+formed data increases from n to nþ
+i Þs. The assembly of
+these single categorical features generates the ﬁnal categorical
+dataset, which is the input to the spectral clustering step. In
+Section 6, we show that even for small values of s, where the
+overhead of the added computation is relatively small, the
+accuracy of the clustering increases.
+
+i ¼ 2ðn
+
+P
+
+q
+
+6. Experimental evaluation
+
+We used in our experiments 16 public datasets from UCI
+repository [36]. These datasets belong to wide variety of domains
+and problems in data mining and machine learning. Table 1
+shows the properties of each dataset. The ﬁrst column in the
+table presents the names of the datasets. The second column
+presents the description of the dataset. The third column presents
+the type of the dataset: some datasets contain numerical data,
+some contain nominal data and some contain mix of numerical
+and nominal data. The fourth column presents the number of
+
+Table 1
+The properties of the datasets that were used to analyze the performance of the algorithms.
+
+Dataset name
+
+Description
+
+Iris
+Wine
+Glass
+Segmentation
+Ionosphere
+Heart SPECTF
+
+Ecoli
+Yeast
+Sat
+Pageblock
+Soybean
+Dermatology
+
+Adult
+Heart Cleveland
+Zoo
+Vowel
+
+Sizes of Iris plants
+Chemical analysis of wines
+Elements and characteristics of glasses
+Image segmentation data
+Radar data
+Diagnosis of cardiac Single Proton Emission
+Computed Tomography (SPECT) images
+Protein localization sites
+Protein localization sites
+Multi-spectral values of pixels in a satellite image
+Blocks of the page layout of documents
+Soybean characteristics
+Clinical and histopathological characteristics
+of patients
+Data from the census bureau database
+Diagnosis from Cleveland clinic foundation
+Characteristics of animals
+LPC derived log area ratio coefﬁcients
+
+Type
+
+Numerical
+Numerical
+Numerical
+Numerical
+Numerical
+Numerical
+
+Numerical
+Numerical
+Numerical
+Numerical
+Nominal and numeric
+Nominal and numeric
+
+Nominal and numeric
+Nominal and numeric
+Nominal and numeric
+Nominal
+
+Table 2
+Descriptions of the compared algorithms where num ¼ numerical and nom ¼ nominal.
+
+Algorithm name
+
+Description
+
+SpectralCAT
+
+Our proposed method in this paper.
+
+Num. of dimensions
+
+Num. of classes
+
+Num. of samples
+
+4
+13
+9
+19
+34
+44
+
+7
+8
+36
+10
+33
+33
+
+14
+13
+17
+12
+
+3
+3
+7
+7
+2
+2
+
+8
+10
+6
+5
+19
+6
+
+2
+5
+7
+11
+
+150
+178
+214
+2310
+351
+80
+
+336
+1484
+4435
+5473
+310
+366
+
+30,612
+303
+101
+528
+
+Each point is randomly associated to one of the k clusters—this method is used as a reference point, in order to estimate
+the performance of the clustering algorithms.
+First, we transform the data by categorization (the ﬁrst step in SpectralCAT). Then, we apply k-modes, which is a
+categorical clustering algorithm, on the transformed data. This method is used in order to understand the effect of the
+transformation step without the spectral clustering step (the second step in SpectralCAT).
+First, we transform the data by categorization (the ﬁrst step in SpectralCAT). Then, we apply the popular clustering
+algorithm k-means on the transformed data. This method is used in order to understand the effect of the transformation
+step without the spectral clustering step (the second step in SpectralCAT)
+We use the ‘‘vanilla’’ diffusion maps and then we cluster the embedded data using k-means. This method is used in order
+to understand the effect of the spectral clustering step without the transformation step, the adaptive Gaussian kernel and
+the Hamming distance.
+One of the most used clustering algorithm that was designed to cluster numerical data.
+An algorithm for choosing the initial values for k-means clustering. It initializes the cluster centers before proceeding with
+the standard k-means optimization iterations (see Section 2).
+Kernel k-means maps the data to a higher dimension feature space using a non-linear function. Then, it partitions the
+points by linear separations in the new space (see Section 2).
+First, we used PCA in order to reduce the dimensionality of the data by projecting the data onto the ﬁrst principal
+components. Then, we cluster the projected data using k-means.
+An agglomerative hierarchical algorithm that is used for clustering large numerical datasets (see Section 2).
+Emerged from the k-means algorithm and it was designed to cluster categorical datasets (see Section 2).
+The k-prototypes algorithm integrates the k-means and k-modes algorithms to enable clustering of mixed data (see
+Section 2).
+The LDA-Km algorithm combines linear discriminant analysis and k-means clustering to select the most discriminative
+subspace (see Section 2).
+The k-means algorithm applied to the Gower similarity index to enable clustering of mixed data (see Section 2).
+
+The k-means algorithm applied to the ﬁrst k eigenvectors of the normalized Laplacian (see Section 2)
+
+Ref.
+
+Data type
+
+Section 5 Num,
+
+–
+
+nom, mix
+–
+
+Section
+3, [3]
+
+Num,
+nom, mix
+
+Section
+3, [2]
+
+Num,
+nom, mix
+
+[37,2]
+
+Num
+
+[2]
+[6]
+
+Num
+Num
+
+[18]
+
+Num
+
+[50,2]
+
+Num
+
+[9]
+[3]
+[1]
+
+[7]
+
+Num
+Nom
+Mix
+
+Num
+
+[2,30]
+
+[2,25].
+
+Num,
+nom, mix
+Num
+
+A spectral algorithm that projects all the points onto a subspace deﬁned by the top k right singular vectors (see Section 2).
+
+[23]
+
+Num
+
+A method for using the ﬁrst non-trivial eigenvector to approximate the optimal normalized cut of a graph (see Section 2).
+
+[2,24]
+
+Num
+
+Random
+
+k-modesCAT
+
+k-meansCAT
+
+Diffusion maps
+
+k-means
+k-meansþþ
+
+Kernel k-means
+
+PCA k-means
+
+Birch
+k-modes
+k-prototypes
+
+LDA-Km
+
+Gower k-means
+
+Ng, Jordan and
+Weisss
+Kannan, Vempala
+and Vetta
+Shi and Malik
+
+426
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+l
+e
+w
+o
+V
+
+o
+o
+Z
+
+d
+n
+a
+l
+e
+v
+e
+l
+C
+
+t
+r
+a
+e
+H
+
+t
+l
+u
+d
+A
+
+y
+g
+o
+l
+o
+t
+a
+m
+r
+e
+D
+
+n
+a
+e
+b
+y
+o
+S
+
+k
+c
+o
+l
+b
+e
+g
+a
+P
+
+t
+a
+S
+
+t
+s
+a
+e
+Y
+
+i
+l
+o
+c
+E
+
+F
+T
+C
+E
+P
+S
+
+t
+r
+a
+e
+H
+
+e
+r
+e
+h
+p
+s
+o
+n
+o
+I
+
+n
+o
+i
+t
+a
+t
+n
+e
+m
+g
+e
+S
+
+s
+s
+a
+l
+G
+
+e
+n
+W
+
+i
+
+s
+i
+r
+I
+
+e
+m
+a
+n
+m
+h
+t
+i
+r
+o
+g
+l
+A
+
+8
+3
+0
+
+.
+
+7
+1
+0
+
+.
+
+3
+1
+0
+
+.
+
+1
+3
+0
+
+.
+
+4
+3
+0
+
+.
+
+9
+2
+0
+
+.
+
+1
+3
+0
+
+.
+
+1
+3
+0
+
+.
+
+9
+2
+0
+
+.
+
+1
+3
+0
+
+.
+
+5
+1
+0
+
+.
+
+2
+4
+0
+
+:
+
+7
+1
+0
+
+.
+
+2
+1
+0
+
+.
+
+9
+0
+0
+
+.
+
+3
+1
+0
+
+.
+
+–
+
+3
+9
+0
+
+:
+
+3
+4
+0
+
+.
+
+1
+9
+0
+
+.
+
+2
+8
+0
+
+.
+
+7
+8
+0
+
+.
+
+6
+8
+0
+
+.
+
+6
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+6
+8
+0
+
+.
+
+3
+8
+0
+
+.
+
+8
+8
+0
+
+.
+
+4
+8
+0
+
+.
+
+8
+8
+0
+
+.
+
+5
+7
+0
+
+.
+
+1
+7
+0
+
+.
+
+7
+7
+0
+
+.
+
+9
+0
+
+.
+
+2
+8
+0
+
+.
+
+5
+5
+0
+
+.
+
+3
+8
+0
+
+:
+
+6
+5
+0
+
+.
+
+7
+6
+0
+
+.
+
+6
+5
+0
+
+.
+
+9
+5
+0
+
+.
+
+6
+0
+
+.
+
+6
+5
+0
+
+.
+
+5
+5
+0
+
+.
+
+3
+8
+0
+
+:
+
+7
+6
+0
+
+.
+
+8
+5
+0
+
+.
+
+5
+5
+0
+
+.
+
+4
+5
+0
+
+.
+
+5
+5
+0
+
+.
+
+–
+
+1
+8
+0
+
+:
+
+4
+7
+0
+
+.
+
+5
+7
+0
+
+.
+
+5
+7
+0
+
+.
+
+5
+7
+0
+
+.
+
+5
+7
+0
+
+.
+
+4
+7
+0
+
+.
+
+5
+7
+0
+
+.
+
+5
+7
+0
+
+.
+
+1
+8
+0
+
+:
+
+5
+7
+0
+
+.
+
+8
+0
+
+.
+
+9
+7
+0
+
+.
+
+7
+7
+0
+
+.
+
+7
+7
+0
+
+.
+
+6
+7
+0
+
+.
+
+–
+
+7
+8
+0
+
+:
+
+2
+3
+0
+
+.
+
+3
+8
+0
+
+.
+
+3
+4
+0
+
+.
+
+1
+4
+0
+
+.
+
+2
+4
+0
+
+.
+
+7
+3
+0
+
+.
+
+1
+4
+0
+
+.
+
+3
+4
+0
+
+.
+
+3
+4
+0
+
+.
+
+7
+7
+0
+
+.
+
+8
+0
+
+.
+
+5
+8
+0
+
+.
+
+1
+4
+0
+
+.
+
+4
+0
+
+.
+
+1
+4
+0
+
+.
+
+–
+
+8
+7
+0
+
+:
+
+4
+2
+0
+
+.
+
+7
+6
+0
+
+.
+
+3
+7
+0
+
+.
+
+8
+6
+0
+
+.
+
+4
+7
+0
+
+.
+
+3
+7
+0
+
+.
+
+8
+6
+0
+
+.
+
+6
+7
+0
+
+.
+
+3
+6
+0
+
+.
+
+6
+0
+
+.
+
+6
+7
+0
+
+.
+
+9
+5
+0
+
+.
+
+3
+4
+0
+
+.
+
+7
+3
+0
+
+.
+
+8
+3
+0
+
+.
+
+–
+
+9
+0
+
+.
+
+9
+0
+
+:
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+–
+
+–
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+4
+7
+0
+
+:
+
+6
+2
+0
+
+.
+
+4
+5
+0
+
+.
+
+3
+7
+0
+
+.
+
+3
+7
+0
+
+.
+
+3
+7
+0
+
+.
+
+3
+7
+0
+
+.
+
+8
+2
+0
+
+.
+
+3
+7
+0
+
+.
+
+3
+7
+0
+
+.
+
+8
+4
+0
+
+.
+
+3
+7
+0
+
+.
+
+7
+0
+
+.
+
+5
+0
+
+.
+
+7
+6
+0
+
+.
+
+–
+
+–
+
+2
+4
+0
+
+.
+
+5
+3
+0
+
+.
+
+5
+3
+0
+
+.
+
+4
+5
+0
+
+.
+
+3
+5
+0
+
+.
+
+3
+5
+0
+
+.
+
+3
+5
+0
+
+.
+
+6
+5
+0
+
+:
+
+9
+4
+0
+
+.
+
+3
+5
+0
+
+.
+
+8
+3
+0
+
+.
+
+3
+5
+0
+
+.
+
+9
+3
+0
+
+.
+
+6
+3
+0
+
+.
+
+7
+3
+0
+
+.
+
+–
+
+–
+
+4
+7
+0
+
+.
+
+5
+4
+0
+
+.
+
+7
+4
+0
+
+.
+
+6
+8
+0
+
+.
+
+7
+8
+0
+
+:
+
+6
+8
+0
+
+.
+
+5
+8
+0
+
+.
+
+7
+8
+0
+
+:
+
+9
+7
+0
+
+.
+
+6
+8
+0
+
+.
+
+7
+4
+0
+
+.
+
+2
+8
+0
+
+.
+
+5
+6
+0
+
+.
+
+8
+5
+0
+
+.
+
+6
+0
+
+.
+
+–
+
+–
+
+9
+7
+0
+
+:
+
+6
+5
+0
+
+.
+
+6
+6
+0
+
+.
+
+8
+6
+0
+
+.
+
+5
+7
+0
+
+.
+
+8
+6
+0
+
+.
+
+8
+6
+0
+
+.
+
+1
+7
+0
+
+.
+
+8
+6
+0
+
+.
+
+6
+6
+0
+
+.
+
+4
+6
+0
+
+.
+
+6
+5
+0
+
+.
+
+1
+6
+0
+
+.
+
+3
+6
+0
+
+.
+
+6
+0
+
+.
+
+–
+
+–
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+:
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+–
+
+–
+
+5
+6
+0
+
+:
+
+9
+1
+0
+
+.
+
+4
+2
+0
+
+.
+
+2
+6
+0
+
+.
+
+9
+5
+0
+
+.
+
+9
+5
+0
+
+.
+
+4
+2
+0
+
+.
+
+2
+6
+0
+
+.
+
+3
+6
+0
+
+.
+
+4
+2
+0
+
+.
+
+6
+0
+
+.
+
+4
+6
+0
+
+.
+
+1
+5
+0
+
+.
+
+5
+3
+0
+
+.
+
+1
+5
+0
+
+.
+
+–
+
+–
+
+1
+4
+0
+
+.
+
+7
+4
+0
+
+.
+
+9
+5
+0
+
+.
+
+5
+6
+0
+
+.
+
+9
+5
+0
+
+.
+
+5
+6
+0
+
+.
+
+5
+6
+0
+
+.
+
+8
+5
+0
+
+.
+
+7
+4
+0
+
+.
+
+6
+0
+
+.
+
+7
+0
+
+:
+
+–
+
+1
+5
+0
+
+.
+
+6
+5
+0
+
+.
+
+1
+5
+0
+
+.
+
+6
+4
+0
+
+.
+
+6
+4
+0
+
+.
+
+7
+9
+0
+
+:
+
+1
+4
+0
+
+.
+
+8
+4
+0
+
+.
+
+1
+7
+0
+
+.
+
+7
+0
+
+.
+
+7
+0
+
+.
+
+7
+0
+
+.
+
+5
+0
+
+.
+
+7
+0
+
+.
+
+7
+0
+
+.
+
+6
+4
+0
+
+.
+
+–
+
+3
+8
+0
+
+.
+
+6
+9
+0
+
+.
+
+1
+8
+0
+
+.
+
+2
+6
+0
+
+.
+
+8
+0
+
+.
+
+7
+9
+0
+
+.
+
+9
+3
+0
+
+.
+
+4
+6
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+6
+9
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+5
+0
+
+.
+
+8
+9
+0
+
+:
+
+8
+8
+0
+
+.
+
+1
+8
+0
+
+.
+
+1
+8
+0
+
+.
+
+1
+7
+0
+
+.
+
+–
+
+T
+A
+C
+-
+l
+a
+r
+t
+c
+e
+p
+S
+
+m
+o
+d
+n
+a
+R
+
+T
+A
+C
+
+s
+e
+d
+o
+m
+-
+k
+
+T
+A
+C
+
+s
+n
+a
+e
+m
+-
+k
+
+s
+p
+a
+m
+n
+o
+i
+s
+u
+f
+f
+i
+
+D
+
+þ
+þ
+s
+n
+a
+e
+m
+-
+k
+
+s
+n
+a
+e
+m
+-
+k
+
+s
+n
+a
+e
+m
+-
+k
+
+l
+e
+n
+r
+e
+K
+
+s
+n
+a
+e
+m
+-
+k
+
+A
+C
+P
+
+s
+e
+d
+o
+m
+-
+k
+
+h
+c
+r
+i
+B
+
+s
+n
+a
+e
+m
+-
+k
+
+r
+e
+w
+o
+G
+
+s
+e
+p
+y
+t
+o
+t
+o
+r
+p
+-
+k
+
+m
+K
+-
+A
+D
+L
+
+a
+t
+t
+e
+V
+
+d
+n
+a
+
+a
+l
+a
+p
+m
+e
+V
+
+,
+
+n
+a
+n
+n
+a
+K
+
+s
+s
+s
+i
+e
+
+W
+d
+n
+a
+
+n
+a
+d
+r
+o
+J
+
+,
+
+g
+N
+
+k
+i
+l
+a
+M
+d
+n
+a
+
+i
+h
+S
+
+.
+]
+1
+5
+[
+
+x
+e
+d
+n
+
+i
+
+y
+t
+i
+r
+u
+P
+
+e
+h
+t
+
+o
+t
+
+g
+n
+
+i
+d
+r
+o
+c
+c
+a
+
+d
+e
+n
+ﬁ
+e
+d
+
+s
+i
+
+y
+c
+a
+r
+u
+c
+c
+a
+
+e
+h
+T
+
+.
+
+y
+c
+a
+r
+u
+c
+c
+a
+
+d
+e
+v
+e
+i
+h
+c
+a
+
+t
+s
+e
+b
+
+e
+h
+t
+
+t
+n
+e
+s
+e
+r
+p
+e
+r
+
+s
+r
+e
+b
+m
+u
+n
+
+c
+i
+l
+a
+t
+i
+
+d
+e
+d
+l
+o
+B
+
+.
+s
+
+m
+h
+t
+i
+r
+o
+g
+l
+a
+
+t
+n
+e
+r
+e
+f
+f
+i
+d
+
+d
+n
+a
+
+T
+A
+C
+l
+a
+r
+t
+c
+e
+p
+S
+
+n
+e
+e
+w
+t
+e
+b
+
+n
+o
+s
+i
+r
+a
+p
+m
+o
+c
+
+:
+s
+t
+l
+u
+s
+e
+r
+
+y
+c
+a
+r
+u
+c
+c
+a
+
+l
+l
+a
+r
+e
+v
+O
+
+3
+
+e
+l
+b
+a
+T
+
+dimensions (features) in each dataset: the lowest number of
+dimensions is 4 and the highest is 44. The ﬁfth column presents
+the number of classes in each dataset: the minimal number of
+classes is 2 and the maximal number is 19. The sixth column
+presents the number of samples in each dataset: the minimal
+number of samples is 80 and the maximal number is 30,612.
+
+In order to evaluate the performance of SpectralCAT, we
+compare its clustering results to several known clustering algo-
+rithms. Table 2 describes each of these clustering algorithms. The
+last column in this table presents the type of the data that each
+algorithm is designed to cluster: some algorithms were designed
+to cluster numerical data, some nominal data and some mix of
+numerical and nominal data. In order to understand the effect of
+our proposed categorization step (the ﬁrst step in the algorithm)
+without the dimensionality reduction step (the second step in the
+algorithm), we compare our method to two clustering methods
+that we call k-modesCAT and k-meansCAT. First, we transform the
+data by categorization (the ﬁrst step in SpectralCAT). Then,
+we apply k-modes, which is a categorical clustering algorithm
+(k-modesCAT algorithm in Table 1), or k-means, which is a
+numerical
+clustering algorithm (k-meansCAT algorithm in
+Table 1), on the transformed data. On the other hand, in order
+to understand the effect of the spectral clustering step without
+the categorization step, the adaptive Gaussian kernel and the
+Hamming distance, we compare our method to vanilla Diffusion
+Maps and then we cluster the embedded data using k-means
+(Diffusion Maps algorithm in Table 1).
+
+For each clustering algorithm, we measured the overall accu-
+racy as follows: let X ¼ fx1, . . . ,xmg be a set of n-dimensional
+points in Rn. Let L ¼ fl1, . . . ,lqg be a set of different classes. For
+each n-dimensional point xi AX, the corresponding label yi,
+yi ¼ lj,1r jr q is assigned. Therefore, Y ¼ fy1, . . . ,ymg is a set of
+labels for the dataset X. Since the compared algorithms use
+unsupervised clustering methods, Y is used only for measuring
+the quality of the clustering algorithms and not for the clustering
+process itself. Let f be a clustering algorithm to be evaluated. Let k
+be the number of clusters that f generates. Then, fk is a clustering
+algorithm that associates each xi AX, i ¼ 1, . . . ,m, to one of the
+clusters cr AC, r¼1,y,k, where k is the number of clusters in C.
+For each cr AC, cr is labeled according to the majority of the
+
+Fig. 7. Comparison between the accuracy obtained by SpectralCAT, k-modesCAT,
+k-meansCAT and diffusion maps. The accuracy is deﬁned according to the Purity
+index [51].
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+records in the cluster. Formally, let Bp
+
+(
+
+l
+e
+w
+o
+V
+
+o
+o
+Z
+
+d
+n
+a
+l
+e
+v
+e
+l
+
+C
+
+t
+r
+a
+e
+H
+
+t
+l
+
+u
+d
+A
+
+y
+g
+o
+l
+o
+t
+a
+m
+r
+e
+D
+
+n
+a
+e
+b
+y
+o
+S
+
+k
+c
+o
+l
+b
+e
+g
+a
+P
+
+t
+a
+S
+
+t
+s
+a
+e
+Y
+
+i
+l
+o
+c
+E
+
+F
+T
+C
+E
+P
+S
+
+t
+r
+a
+e
+H
+
+e
+r
+e
+h
+p
+s
+o
+n
+o
+I
+
+n
+o
+i
+t
+a
+t
+n
+e
+m
+g
+e
+S
+
+s
+s
+a
+l
+G
+
+e
+n
+W
+
+i
+
+s
+i
+r
+I
+
+m
+h
+t
+i
+r
+o
+g
+l
+A
+
+.
+]
+1
+5
+[
+
+x
+e
+d
+n
+
+i
+
+y
+t
+i
+r
+u
+P
+
+e
+h
+t
+
+o
+t
+
+g
+n
+
+i
+d
+r
+o
+c
+c
+a
+
+d
+e
+n
+ﬁ
+e
+d
+
+s
+i
+
+y
+c
+a
+r
+u
+c
+c
+a
+
+e
+h
+T
+
+.
+
+y
+c
+a
+r
+u
+c
+c
+a
+
+d
+e
+v
+e
+i
+h
+c
+a
+
+t
+s
+e
+b
+
+e
+h
+t
+
+t
+n
+e
+s
+e
+r
+p
+e
+r
+
+s
+r
+e
+b
+m
+u
+n
+
+c
+i
+l
+a
+t
+i
+
+d
+e
+d
+l
+o
+B
+
+.
+s
+r
+e
+t
+e
+m
+a
+r
+a
+p
+
+t
+n
+e
+r
+e
+f
+f
+i
+d
+
+h
+t
+i
+
+w
+þ
+þ
+T
+A
+C
+l
+a
+r
+t
+c
+e
+p
+S
+
+f
+o
+
+n
+o
+i
+t
+a
+c
+i
+l
+p
+p
+a
+
+e
+h
+t
+
+m
+o
+r
+f
+
+s
+t
+l
+u
+s
+e
+r
+
+y
+c
+a
+r
+u
+c
+c
+a
+
+l
+l
+a
+r
+e
+v
+O
+
+4
+
+e
+l
+b
+a
+T
+
+8
+3
+0
+
+.
+
+1
+4
+0
+
+.
+
+4
+0
+
+.
+
+2
+4
+0
+
+.
+
+3
+4
+0
+
+:
+
+9
+3
+0
+
+.
+
+4
+0
+
+.
+
+3
+9
+0
+
+.
+
+3
+9
+0
+
+.
+
+1
+9
+0
+
+.
+
+3
+9
+0
+
+.
+
+4
+9
+0
+
+.
+
+3
+9
+0
+
+.
+
+5
+9
+0
+
+:
+
+2
+8
+0
+
+.
+
+4
+8
+0
+
+:
+
+8
+7
+0
+
+.
+
+4
+8
+0
+
+:
+
+3
+8
+0
+
+.
+
+4
+8
+0
+
+:
+
+2
+8
+0
+
+.
+
+1
+8
+0
+
+.
+
+1
+8
+0
+
+.
+
+2
+8
+0
+
+:
+
+2
+8
+0
+
+:
+
+1
+8
+0
+
+.
+
+2
+8
+0
+
+:
+
+8
+0
+
+.
+
+7
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+3
+9
+0
+
+.
+
+3
+9
+0
+
+.
+
+5
+9
+0
+
+:
+
+1
+9
+0
+
+.
+
+3
+9
+0
+
+.
+
+8
+7
+0
+
+:
+
+8
+7
+0
+
+:
+
+7
+7
+0
+
+.
+
+6
+7
+0
+
+.
+
+7
+7
+0
+
+.
+
+7
+7
+0
+
+.
+
+5
+7
+0
+
+.
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+9
+0
+
+.
+
+4
+7
+0
+
+:
+
+3
+7
+0
+
+.
+
+1
+7
+0
+
+.
+
+2
+7
+0
+
+.
+
+2
+7
+0
+
+.
+
+8
+6
+0
+
+.
+
+7
+0
+
+.
+
+2
+4
+0
+
+.
+
+5
+0
+
+.
+
+9
+4
+0
+
+.
+
+2
+5
+0
+
+.
+
+3
+5
+0
+
+.
+
+4
+5
+0
+
+:
+
+3
+5
+0
+
+.
+
+4
+7
+0
+
+.
+
+8
+0
+
+.
+
+8
+0
+
+.
+
+1
+8
+0
+
+.
+
+8
+0
+
+.
+
+8
+7
+0
+
+.
+
+3
+8
+0
+
+:
+
+9
+7
+0
+
+.
+
+6
+7
+0
+
+.
+
+9
+7
+0
+
+.
+
+8
+0
+
+:
+
+8
+0
+
+:
+
+9
+7
+0
+
+.
+
+4
+7
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+9
+8
+0
+
+.
+
+5
+6
+0
+
+.
+
+5
+6
+0
+
+.
+
+8
+6
+0
+
+.
+
+6
+6
+0
+
+.
+
+6
+6
+0
+
+.
+
+1
+7
+0
+
+:
+
+1
+7
+0
+
+:
+
+1
+7
+0
+
+:
+
+1
+7
+0
+
+:
+
+7
+0
+
+.
+
+7
+0
+
+.
+
+7
+0
+
+.
+
+9
+6
+0
+
+.
+
+7
+0
+
+.
+
+7
+9
+0
+
+.
+
+8
+9
+0
+
+.
+
+7
+9
+0
+
+.
+
+6
+9
+0
+
+.
+
+7
+9
+0
+
+.
+
+9
+9
+0
+
+:
+
+7
+9
+0
+
+.
+
+7
+9
+0
+
+.
+
+7
+9
+0
+
+.
+
+8
+9
+0
+
+:
+
+6
+9
+0
+
+.
+
+7
+9
+0
+
+.
+
+6
+9
+0
+
+.
+
+6
+9
+0
+
+.
+
+1
+¼
+s
+
+1
+¼
+s
+
+:
+
+:
+
+:
+
+:
+
+8
+0
+¼
+s
+
+8
+0
+¼
+s
+
+3
+0
+¼
+s
+
+3
+0
+¼
+s
+
+d
+n
+a
+
+d
+n
+a
+
+d
+n
+a
+
+d
+n
+a
+
+d
+n
+a
+
+d
+n
+a
+
+2
+¼
+q
+
+3
+¼
+q
+
+2
+¼
+q
+
+3
+¼
+q
+
+2
+¼
+q
+
+3
+¼
+q
+
+h
+t
+i
+
+h
+t
+i
+
+h
+t
+i
+
+h
+t
+i
+
+h
+t
+i
+
+h
+t
+i
+
+w
+þ
+þ
+T
+A
+C
+-
+l
+a
+r
+t
+c
+e
+p
+S
+
+w
+þ
+þ
+T
+A
+C
+-
+l
+a
+r
+t
+c
+e
+p
+S
+
+w
+þ
+þ
+T
+A
+C
+-
+l
+a
+r
+t
+c
+e
+p
+S
+
+w
+þ
+þ
+T
+A
+C
+-
+l
+a
+r
+t
+c
+e
+p
+S
+
+w
+þ
+þ
+T
+A
+C
+-
+l
+a
+r
+t
+c
+e
+p
+S
+
+w
+þ
+þ
+T
+A
+C
+-
+l
+a
+r
+t
+c
+e
+p
+S
+
+T
+A
+C
+-
+l
+a
+r
+t
+c
+e
+p
+S
+
+P
+
+427
+
+dðxi,lpÞ, where
+
+xi A cr
+
+cr ¼
+
+0 otherwise,
+
+dðxi,lpÞ ¼ 1 if yi ¼ lp,
+Then, the label of each cluster cr,r ¼ 1, . . . ,k,
+Mcr ¼D flp : max1r pr qBp
+crg.
+
+1rprq, 1rrr k:
+
+is denoted by
+
+In order to evaluate the accuracy of the clustering algorithms,
+we measure the number of records in each cluster whose labels
+P
+are equal to the label of the majority of the records in the cluster
+ðMcrÞ. Therefore, the accuracy of the clustering algorithm is
+cr =m. This accuracy index is also known as the
+
+k
+
+r ¼ 1 max1r pr qBp
+Purity index [51].
+
+The accuracy results for LDA-Km were taken from [7]. In our
+experiments, we used the same conﬁguration for the k-means
+algorithm for all of the k-means based algorithms. In a single run
+of this algorithm in this implementation of k-means, the k-means
+clustering was repeated several times. In each iteration, a new set
+of
+initial cluster centroid positions (seeds) were used. This
+implementation of the k-means algorithm provides a solution
+with the lowest value for the within-cluster sums of point-to-
+centroid distances. Therefore, this implementation takes into
+account the need to have initialization with different seeds. The
+best solution is chosen based on a general criteria and it is not
+based on the target function.
+
+Table 3 presents the accuracy results from the application of
+the different algorithms to the evaluation datasets. For each
+clustering algorithm and each dataset, we chose k as the number
+of classes in the dataset (according to Table 1).
+
+Application of the random clustering to Ionosphere and Page-
+block datasets achieved the same results as all the algorithms
+achieved (on these two datasets). SpectralCAT outperformed all of
+the algorithms that were applied to 9 out of the 14 remaining
+datasets (one other algorithm achieved on one dataset the same
+result as SpectralCAT).
+
+As mentioned above, in order to understand the effect of the
+two steps of SpectralCAT, we compared our method to k-mod-
+esCAT, k-meansCAT and Diffusion Maps. Fig. 7 shows the compar-
+ison results between the basic SpectralCAT and these methods.
+The x-axis shows the different datasets and the y-axis shows the
+accuracy results.
+
+In most cases, even the basic SpectralCAT gets better results
+than these methods and overall SpectralCAT achieved the best
+results. Therefore, it is important to perform the two steps and
+not only one of them.
+
+Table 4 presents the accuracy results from the application of
+SpectralCATþþ to the evaluation datasets. As described in Section
+5.2, we randomly select ðn
+i Þs combinations of parameters where
+i¼2,y,q and 0rsr1 is the accuracy factor. In this experiment,
+we repeated the tests with different values for q and different
+values for s.
+
+For four datasets, SpectralCATþþ did not improve the accuracy
+results of SpectralCAT. For 12 datasets, SpectralCATþþ improved
+the accuracy results of SpectralCAT algorithm and in some cases
+even signiﬁcantly. It can be noticed that even for a small value of
+s, where the overhead of the added computation is relatively
+small, SpectralCATþþ improves in most cases the accuracy results
+of SpectralCAT.
+
+Table 5 summarizes this experiment and presents the accuracy
+results for different algorithms on the evaluation datasets, includ-
+ing the results of SpectralCATþþ.
+
+7. Conclusions
+
+We presented two automated techniques for unsupervised
+data clustering that contains numerical or nominal or mix of
+
+Table 5
+Overall accuracy results where num ¼ numerical and nom ¼ nominal. Bolded italic numbers represent the best achieved accuracy. The accuracy is deﬁned according to the Purity index [51].
+
+Iris Wine Glass
+
+Segmentation
+
+Ionosphere Heart SPECTF
+
+Ecoli
+
+Yeast
+
+Sat
+
+Pageblock
+
+Soybean Dermatology Adult
+
+Heart Cleveland
+
+Zoo
+
+Vowel
+
+Dataset information
+Dataset type
+Features
+Classes
+Samples
+
+Num Num Num Num
+4
+3
+150
+
+19
+7
+2310
+
+13
+3
+178
+
+9
+7
+214
+
+Algorithm
+SpectralCAT
+Spectral-CATþþ (q¼2, s ¼ 1Þ
+Spectral-CATþþ (q¼3, s ¼ 1Þ
+Spectral-CATþþ (q¼2, s ¼ 0:8Þ
+Spectral-CATþþ (q¼3, s ¼ 0:8Þ
+Spectral-CATþþ (q¼2, s ¼ 0:3Þ
+Spectral- CATþþ (q¼2, s ¼ 0:3Þ
+Random
+k-modesCAT
+k-meansCAT
+Diffusion maps
+k-means
+k-meansþþ
+Kernel k-means
+PCA k-means
+Birch
+k-modes
+k-prototypes
+LDA-Km
+Gower k-means
+Ng, Jordan and Weisss
+Kannan, Vempala and Vetta
+Shi and Malik
+
+0.97
+0.97
+0:98
+0.96
+0.97
+0.96
+0.96
+0.39
+0.64
+0.89
+0.9
+0.89
+0.89
+0.96
+0.89
+0.89
+0.59
+–
+0:98
+0.88
+0.81
+0.81
+0.71
+
+0.97
+0.98
+0.97
+0.96
+0.97
+0:99
+0.97
+0.41
+0.48
+0.7
+0.71
+0.7
+0.7
+0.5
+0.7
+0.7
+0.46
+–
+0.83
+0.96
+0.8
+0.81
+0.62
+
+0.7
+0:71
+0:71
+0.7
+0.7
+0.69
+0.7
+0.41
+0.47
+0.59
+0.65
+0.59
+0.6
+0.65
+0.65
+0.58
+0.47
+–
+0.51
+0.56
+0.51
+0.46
+0.46
+
+0.65
+0.65
+0.68
+0.66
+0.66
+0:71
+0:71
+0.19
+0.24
+0.6
+0.62
+0.59
+0.59
+0.24
+0.62
+0.63
+0.24
+–
+–
+0.64
+0.51
+0.35
+0.51
+
+Num
+34
+2
+351
+
+0.89
+0.89
+0.89
+0.89
+0.89
+0.89
+0.89
+0:89
+0.89
+0.89
+0.89
+0.89
+0.89
+0.89
+0.89
+0.89
+0.89
+–
+–
+0.89
+0.89
+0.89
+0.89
+
+Num
+44
+2
+80
+
+0.79
+0.76
+0.79
+0:8
+0:8
+0.79
+0.74
+0.56
+0.66
+0.68
+0.75
+0.68
+0.68
+0.71
+0.68
+0.66
+0.64
+–
+–
+0.56
+0.61
+0.63
+0.6
+
+Num Num Num Num
+7
+8
+336
+
+8
+10
+1484
+
+36
+6
+4435
+
+10
+5
+5473
+
+0.74
+0.8
+0.8
+0.81
+0.8
+0.78
+0.83
+0.45
+0.47
+0.86
+0:87
+0.86
+0.85
+0:87
+0.79
+0.86
+0.47
+–
+–
+0.82
+0.65
+0.58
+0.6
+
+0.42
+0.5
+0.49
+0.52
+0.53
+0.54
+0.53
+0.35
+0.35
+0.54
+0.53
+0.53
+0.53
+0:56
+0.49
+0.53
+0.38
+–
+–
+0.53
+0.39
+0.36
+0.37
+
+0:74
+0.73
+0.71
+0.72
+0.72
+0.68
+0.7
+0.26
+0.54
+0.73
+0.73
+0.73
+0.73
+0.28
+0.73
+0.73
+0.48
+–
+–
+0.73
+0.7
+0.5
+0.67
+
+0.9
+0.9
+0.9
+0.9
+0.9
+0.9
+0.9
+0:9
+0.9
+0.9
+0.9
+0.9
+0.9
+0.89
+0.9
+0.9
+0.9
+–
+–
+0.9
+0.9
+0.9
+0.9
+
+Nom
+33
+19
+310
+
+0:78
+0:78
+0.77
+0.76
+0.77
+0.77
+0.75
+0.24
+0.67
+0.73
+0.68
+0.74
+0.73
+0.68
+0.6
+0.76
+0.63
+–
+0.76
+0.59
+0.43
+0.37
+0.38
+
+Num nom
+33
+6
+366
+
+Num nom Num nom
+14
+2
+30612
+
+13
+5
+303
+
+Num nom Num nom
+17
+7
+101
+
+12
+11
+528
+
+0.87
+0.89
+0.93
+0.93
+0:95
+0.91
+0.93
+0.32
+0.83
+0.43
+0.41
+0.42
+0.37
+0.41
+0.43
+0.43
+0.8
+0.77
+–
+0.85
+0.41
+0.4
+0.41
+
+0.81
+0.81
+0.8
+0:82
+0:82
+0.81
+0:82
+0.74
+0.8
+0.75
+0.75
+0.75
+0.75
+0.74
+0.75
+0.75
+0.81
+0.75
+–
+0.79
+0.77
+0.77
+0.76
+
+0.82
+0:84
+0.78
+0:84
+0.83
+0:84
+0.82
+0.55
+0.83
+0.56
+0.67
+0.56
+0.59
+0.6
+0.56
+0.55
+0.83
+0.67
+–
+0.58
+0.55
+0.54
+0.55
+
+0.93
+0.93
+0.91
+0.93
+0.94
+0.93
+0:95
+0.43
+0.91
+0.82
+0.87
+0.86
+0.86
+0.89
+0.86
+0.83
+0.9
+0.88
+0.84
+0.88
+0.75
+0.71
+0.77
+
+0.38
+0.41
+0.4
+0.42
+0:43
+0.4
+0.39
+0.17
+0.13
+0.31
+0.34
+0.29
+0.31
+0.31
+0.29
+0.31
+0.15
+0.42
+–
+0.17
+0.12
+0.09
+0.13
+
+4
+2
+8
+
+G
+
+.
+
+D
+a
+v
+i
+d
+
+,
+
+A
+
+.
+
+A
+v
+e
+r
+b
+u
+c
+h
+
+/
+
+P
+a
+t
+t
+e
+r
+n
+
+R
+e
+c
+o
+g
+n
+i
+t
+i
+o
+n
+
+4
+5
+
+(
+2
+0
+1
+2
+)
+
+4
+1
+6
+–
+4
+3
+3
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+429
+
+¼
+
+2ðk 1Þ
+
+ðk 1Þdl þðm kÞAk
+P
+j ¼ 1ðjcl
+2ðm kÞ
+
+jj 1Þdj
+
+k
+
+l
+
+¼
+
+0
+@
+
+dl þðm kÞAk
+P
+ðk 1Þ
+j ¼ 1ðjcl
+
+k
+
+dl  dl 
+
+jj 1Þdj
+
+ðm kÞ
+
+1
+A ¼
+
+l
+
+dl þðm kÞAk
+ðk 1Þ
+dl Ak:
+
+ðA:5Þ
+
+Several properties of the validity index were described in [4].
+We present these properties and their corresponding analyzes
+according to Eq. (A.5). Note that our contribution for the proper-
+ties is for the case where the points are uniformly distributed in
+space.
+ If the squared distances between all pairs of points are equal
+k. Therefore, Ak ¼ 0
+
+l ¼    ¼ dl
+
+l ¼ d2
+
+then by deﬁnition dl ¼ d1
+and Sl
+ If for each cluster cl
+
+k,m ¼ 1.
+P
+
+k
+
+j ¼ 1ðjcl
+
+l ¼ Ej, where Ej ¼ 0
+zero),
+is
+
+almost
+
+þ
+
+(the
+then
+
+j,j ¼ 1, . . . ,k, dj
+variation within each cluster
+Ak ¼ dl 
+fore, Sl
+Sl
+k,m is maximized.
+
+jj 1ÞEj=ðm kÞ ¼ dl E, where E ¼ 0
+
+þ
+k,m ¼ ððm 1Þdl ðm kÞEÞ=ðk 1ÞE and since E ¼ 0
+
+ If the m points are uniformly distributed in space, then for
+l ¼
+k (all the clusters have the same size and the same
+
+2j ¼    ¼ jcl
+
+kj and d1
+
+jcl
+1j ¼ jcl
+
+þ
+
+then
+
+l ¼ d2
+
+. There-
+
+each selection of k,
+   ¼ dl
+k ¼ dl
+P
+variation). Therefore,
+j ¼ 1ðjcl
+
+k
+
+Ak ¼
+
+jj 1Þðdl dl
+kÞ
+ðm kÞ
+
+¼ ðm kÞðdl dl
+kÞ
+ðm kÞ
+
+¼ dl dl
+
+k
+
+and
+
+k,m ¼
+Sl
+
+dl þðm kÞðdl dl
+kÞ
+
+k 1
+dl dl þdl
+
+k
+
+¼ ðm 1Þdl ðm kÞdl
+
+k
+
+ðk 1Þdl
+
+k
+
+:
+
+numerical and nominal attributes. These techniques are based on
+automatic transformation of high-dimensional data to common
+categorical scales. Then, spectral clustering of the transformed data
+is performed by projecting it onto a low-dimensional space. An
+empirical evaluation of our approach was presented. Our methods
+were compared to several clustering algorithms by applying them to
+16 public datasets from different domains and types. Our experi-
+ments showed that our methods outperform in most case these
+algorithms. Although some of
+the compared algorithms were
+designed to cluster speciﬁc data types (numerical, nominal or mix),
+we still outperformed most of them to obtain the best results. The
+experiments show that SpectralCAT and SpectralCATþþ are generic
+and suitable to operate on different data types from various domains
+including high-dimensional data.
+
+Appendix A.
+
+Justiﬁcation of the Calinski–Harabasz index
+
+In order to justify the use of this validity index, we use the fact
+that the sum of squares of m points is equal to the sum of the
+upper (or lower) triangular matrix of the pairwise distances
+between the m points divided by m (Appendix B, point 2).
+Therefore,
+
+P
+
+ðxl
+i xlÞ2 ¼
+
+m
+
+i xl
+jÞ2
+io jðxl
+m
+
+:
+
+ðA:1Þ
+
+X
+
+m
+
+i ¼ 1
+
+P
+i xl
+jÞ2
+io jðxl
+m
+
+m
+
+According to Eq. (A.1), we reformulate Sl to be
+
+,
+
+2
+
+Sl ¼
+
+¼ ðm 1Þdl
+P
+ðA:2Þ
+jÞ2 is the mean of the trian-
+io jðxl
+where dl ¼ ð1=ðmðm 1Þ=2ÞÞ
+gular matrix of the pairwise distances between the m points
+wðkÞ
+(excluding the zero diagonal). Similarly, we reformulate Sl
+to be
+
+i xl
+
+m
+
+P
+
+X
+
+k
+
+j ¼ 1
+
+wðkÞ ¼
+Sl
+
+j
+
+jcl
+io r,xl
+
+j
+
+i
+
+,xl
+
+j
+
+r A cl
+jcl
+jj
+
+rÞ2
+i xl
+ðxl
+¼
+P
+
+P
+jj 1Þdj
+j ¼ 1ðjcl
+2
+
+k
+
+j
+
+jcl
+io r,xl
+
+j
+
+j
+
+i,xl
+
+r A cl
+
+jjðjcl
+
+ðxl
+i xl
+
+l ¼ ð1=ðjcl
+
+jj 1Þ=2ÞÞ
+
+l (excluding the zero diagonal). Since Sl
+
+rÞ2 is the mean of
+where dj
+the triangular matrix of the pairwise distances between the jcl
+jj
+wðkÞ
+points in cj
+(Eq. (1)) and according to Eqs. (A.2) and (A.3), we reformulate
+bðkÞ to be
+Sl
+bðkÞ ¼ ðm 1Þdl
+
+bðkÞ ¼ Sl Sl
+
+P
+
+Sl
+
+k
+
+l
+
+2
+
+ 
+
+jj 1Þdj
+j ¼ 1ðjcl
+P
+2
+ðk 1Þdl þðm kÞdl 
+2
+j ¼ 1ðjcl
+jj 1Þðdl dj
+
+j ¼ 1ðjcl
+
+P
+
+k
+
+k
+
+¼
+
+¼
+
+ðk 1Þdl þ
+P
+j ¼ 1ðjcl
+
+k
+
+2
+
+jj 1Þðdl dj
+
+lÞ=ðm kÞ is a weighted mean of the
+where Ak ¼
+differences between the mean of the squared distances (between
+the m points) and the mean of the squared distances between
+each group points.
+
+Therefore, by Eqs. (A.3) and (A.4), Eq. (2) becomes
+
+k,m ¼ ðm kÞSl
+ðk 1ÞSl
+
+bðkÞ
+wðkÞ
+
+Sl
+
+l
+
+,
+
+ðA:3Þ
+
+We show now that Sl
+k,m o Sl
+Sl
+k,m o Sl
+Sl
+
+kþ 1,m.
+
+kþ 1,m
+
+k,m is monotonic increasing, i.e. for all k,
+
+ðm 1Þdl ðm kÞdl
+
+k
+
+ðk 1Þdl
+
+k
+
+o
+
+ðm 1Þdl ðm k 1Þdl
+
+kþ 1
+
+kdl
+
+kþ 1
+
+kðm 1Þdldl
+
+kþ 1 kðm kÞdl
+
+kdl
+
+oðk 1Þðm 1Þdldl
+
+kdldl
+
+ 
+kþ 1 oðk 1Þdldl
+
+kþ 1
+k kðm kÞdl
+kdl
+!
+
+kþ 1
+
+kdl
+
+kþdl
+
+kþ 1 þðm 1Þdl
+
+kdl
+
+kþ 1
+
+jj 1Þdj
+
+l
+
+0odl
+
+k
+
+1
+
+  1
+kdl
+
+þ 1
+kdl
+
+  1
+dl
+k
+
+:
+
+kþ 1
+
+dl
+kþ 1
+k 40 and 1=kdl 40 then it is sufﬁcient to show that
+
+ðA:6Þ
+
+lÞ
+
+¼ ðk 1Þdl þðm kÞAk
+
+2
+
+,
+
+ðA:4Þ
+
+  1
+kdl
+
+kþ 1
+
+  1
+dl
+k
+
+Since dl
+0o 1
+dl
+kþ 1
+o k 1
+kdl
+
+1
+dl
+k
+
+kþ 1
+
+k
+k 1
+
+k
+
+o dl
+dl
+kþ 1
+
+:
+
+ðA:7Þ
+
+For simplicity of the computation, we assume that the m
+points, which have uniform discrete distribution, are in the
+
+430
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+of the m points is
+
+range [1,m]. Therefore, the variance dl
+ðm2 1Þ=12 (Appendix B, point 3).
+For the general case, where the m points are distributed
+3 ¼
+
+uniformly in the range [a,b] we get xl
+aþ2a, . . . ,xl
+b a
+a
+
+1 ¼ a,xl
+
+m ¼ b. Therefore, m ¼ ðb aÞ=aþ1 and
+þ1
+
+2 ¼ aþa,xl
+
+2 1
+
+ðA:8Þ
+
+dl ¼ a2
+
+12
+
+¼ a2ðm2 1Þ
+
+:
+
+12
+
+Since the m points are uniformly distributed then the number
+of points in each cluster is m=k. Therefore, from Eqs. (A.7) and
+(A.8) we have to show that
+
+k
+k 1
+
+k
+
+o dl
+dl
+kþ 1
+
+
+
+ 
+ 
+!
+
+
+2 1
+12a2 m
+k
+2 1
+m
+kþ1
+
+12a2
+
+k
+k 1
+
+o
+
+k
+k 1
+
+o
+
+m2 k2
+
+k2
+
+m2 ðkþ1Þ2
+
+ðkþ1Þ2
+
+k3ðm2 ðkþ1Þ2Þoðm2 k2Þðkþ1Þ2ðk 1Þ
+
+k3m2 k5 2k4 k3 o m2k3 k5 þ m2k2 k4 km2 þk3 m2 þ k2
+m2ðkþ1Þom2k2 þ k4 þ2k3 þ k2,
+
+ðA:9Þ
+
+which is true since k2 4ðkþ1Þ for k41.
+Therefore, for all k41, Sl
+ing and the (local) maximum is obtained when k¼m.
+Fig. A.1 shows an example of the application of this process to
+uniform distribution data points. It can be noticed that the
+validity indexes function is monotonic increasing.
+
+k,m is monotonic increas-
+
+k,m o Sl
+
+kþ 1,m, Sl
+
+ For the general case, if Sl
+
+k 1,m o Sl
+
+k,m then the following inequ-
+
+ality exists:
+k 1,m oSl
+Sl
+
+k,m
+
+dl þðm kþ1ÞAk 1
+
+ðk 2Þ
+dl Ak 1
+
+dl þðm kÞAk
+ðk 1Þ
+
+dl Ak
+
+o
+
+ðm 1ÞAk 1
+
+dl
+k 2
+
+o
+
+ðm 1ÞAkAk 1
+ðk 1Þðk 2Þ þ ðm 1ÞAkdl
+k 1
+
+Ak 1dl
+
+Ak
+
+o Ak 1 þðk 2Þdl
+
+k 1
+
+k 1
+þ k 2
+
+Ak 1
+dl
+
+o Ak
+Ak 1
+
+:
+
+ðA:10Þ
+
+k 1,m to Sl
+
+Therefore, the increase from k 1 clusters to k clusters will
+k,m if Ak=Ak 1 4ðk 1Þ=
+cause an increase from Sl
+Ak 1=dl þ k 2.
+ If the m points are clustered naturally into k clusters, then the
+increase from k 1 clusters to k clusters will cause a signiﬁcant
+increase from Ak 1 to Ak since the within-cluster variation is
+getting smaller. Therefore, the ratio between the numerator
+and the denominator of Sl
+k,m according to Eq. (A.5) will be
+signiﬁcantly bigger than the ratio between the numerator and
+the denominator of Sl
+k 1,m. Hence, there is an increase from
+Sl
+k 1,m to Sl
+Fig. A.2 shows an example from the application of this process
+to 20 clusters each of uniformly distributed data points. It can
+be noticed that the increase from 19 clusters to 20 natural
+clusters causes a signiﬁcant increase from S19 to S20 (marked
+by the arrow).
+
+k,m.
+
+Fig. A.1. Left: uniform distributed data points. Right: the validity indexes for the
+uniform distributed data points.
+
+Fig. A.2. Left: 20 clusters each of uniformly distributed data points. Right: the
+validity indexes for these data points. The arrow marks the signiﬁcant increase
+from S19 to S20.
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+P
+
+P
+
+P
+
+431
+
+Appendix B. Statistical properties
+
+This section presents some well-known statistical properties.
+
+1. The total sum of squares (Sl) equals to the sum of the
+bðkÞÞ and the within-cluster
+
+jcl
+jjðml
+
+j xlÞðml
+
+j xlÞT
+
+2
+
+m
+i ¼ 1 xl
+i
+m
+
+ xl2
+
+2
+
+¼
+
+m
+i ¼ 1 xl
+i
+m
+
+m
+i ¼ 1 xl
+i
+m
+
+then
+
+ 2xl
+
+þxl2 ¼
+
+
+dl ¼ mðmþ1Þð2mþ1Þ
+  ðmþ1Þ
+¼ 2m2 þ3mþ1
+  m2 þ2mþ1
+¼ 4m2 þ6mþ2 3m2 6m 3
+
+6m
+
+2
+
+4
+
+6
+
+2
+
+12
+
+¼ m2 1
+
+:
+
+12
+
+2 2xl
+
+mÞ
+m 1xl
+
+data)
+
+^X
+
+l ¼ Categorize ðXl,fk,max_kÞ (categorize the lth column
+
+3. The variance dl
+
+of m uniform discrete distributed points:
+
+P
+P
+
+m
+
+P
+P
+i ¼ 1 i2 ¼ mðmþ1Þð2mþ1Þ=6,
+i ¼ 1ðxl
+2 2xl
+i xlÞ2
+m
+
+m
+i ¼ 1 xl
+i
+
+P
+
+¼
+
+m
+
+m
+
+Since
+
+dl ¼
+
+m
+
+i ¼ 1 i ¼ mðmþ1Þ=2 and
+m
+i ¼ 1 xl
+
+iþ mxl2
+
+according to Alg. 1)
+
+Else
+^X
+End
+
+l ¼ Xl
+
+End
+For each i,jAf1, . . . ,mg (build a pairwise distance matrix)
+
+Wi,j ¼ Hammingð ^xi, ^xjÞ
+
+X
+
+k
+
+j ¼ 1
+
+k
+
+k
+
+k
+
+k
+
+¼
+
+j ¼ 1
+
+j ¼ 1
+
+j ¼ 1
+
+xl A cl
+j
+
+xl A cl
+j
+
+ðxl ml
+
+bðkÞ ¼
+
+wðkÞþ Sl
+Sl
+
+between-cluster sum of squares ðSl
+X
+X
+sum of squares ðSl
+wðkÞÞ:
+X
+X
+X
+X
+xl2 
+X
+X
+X
+jjxl2 2
+þ2
+jcl
+X
+X
+X
+X
+
+jÞðxl ml
+jÞT þ
+X
+jÞ2 þ
+ðxl ml
+X
+X
+X
+jþ
+X
+
+j ¼ 1
+jcl
+jjml
+X
+
+xl2 
+X
+
+jcl
+jjml
+
+ 2
+
+xlml
+
+xl A cl
+j
+
+xl A cl
+j
+
+xl A cl
+j
+
+xl A cl
+j
+
+j ¼ 1
+
+j ¼ 1
+
+j ¼ 1
+
+j ¼ 1
+
+j ¼ 1
+
+j ¼ 1
+
+j ¼ 1
+
+ml
+j
+
+¼
+
+¼
+
+k
+
+k
+
+k
+
+k
+
+k
+
+k
+
+k
+
+j
+
+j
+
+2 þ2
+
+jcl
+jjml
+jxl
+
+jjðml
+jcl
+j xlÞ2
+X
+X
+X
+
+2 þ2
+
+j ¼ 1
+
+xl A cl
+j
+
+k
+
+k
+
+2 
+
+j ¼ 1
+
+jcl
+jjxl2
+
+j
+
+k
+
+2
+
+j ¼ 1
+
+X
+jcl
+jjml
+X
+X
+xl2 mxl2
+X
+X
+
+jcl
+jjxl2
+
+xl A cl
+j
+
+j ¼ 1
+
+k
+
+k
+
+xl
+
+j ¼ 1
+
+xl A cl
+j
+
+k
+
+ 2
+
+j ¼ 1
+
+ml
+j
+
+xl A cl
+j
+
+k
+
+þ2mxl2 2xl
+X
+X
+X
+
+X
+X
+X
+
+xl A cl
+j
+
+xl A cl
+j
+
+j ¼ 1
+
+j ¼ 1
+
+k
+
+k
+
+j ¼ 1
+
+xl A cl
+j
+
+¼
+
+¼
+
+¼
+
+xl þ
+X
+
+k
+
+j ¼ 1
+
+k
+
+j ¼ 1
+
+j
+
+jjml
+jcl
+2 
+X
+
+k
+
+jcl
+jjml
+
+j ¼
+
+j ¼ 1
+
+xl2 mxl2 þ2mxl2 2xl
+X
+
+X
+
+xl2 þ mxl2 2
+
+k
+
+xlxl
+
+j ¼ 1
+
+xl A cl
+j
+
+ðxl xlÞ2 ¼ Sl:
+
+2. The sum of squares of m points is equal to the sum of the
+upper (or lower) triangular matrix of the pairwise distances
+between the m points divided by m:
+
+X
+
+m
+
+i ¼ 1
+
+ðxl
+i xlÞ2 ¼ ðxl
+2 þxl
+¼ xl
+
+1 xlÞ2þðxl
+2 þ    þxl
+
+2 xlÞ2þ    þðxl
+2þmxl2 2xl
+
+1
+
+2
+
+m
+
+ 
+
+m xlÞ2
+1xl 2xl
+1 þxl
+xl
+
+1 þxl
+
+2þ    þxl
+
+2þmxl xl 2
+2  ðxl
+2  xl
+2 þ    þðm 1Þxl
+
+2 þxl
+
+2
+
+1
+
+2
+
+m
+2 þ2
+2 þ . . . þxl
+P
+m
+m
+io jðxl
+2 2
+
+m
+
+m
+
+m
+
+mxl
+
+!
+2xl      2xl
+2þ    þxl
+m
+mÞ2
+P
+io jðxl
+i xl
+jÞ2
+2 þxl
+
+m
+
+m 1
+
+m
+
+3Þþ    þðxl
+
+m
+2 2xl
+2 þxl
+1xl
+m
+
+3
+
+i xl
+jÞ2
+
+¼ xl
+
+1
+
+2 þxl
+
+2
+
+2 þ    þxl
+
+m
+
+¼ xl
+
+1
+
+2 þxl
+
+2
+
+2 þ    þxl
+
+m
+
+¼ xl
+
+1
+
+2 þxl
+ðm 1Þxl
+
+2 þ    þxl
+2þðm 1Þxl
+
+m
+
+2
+
+2 2xl
+
+1
+
+1
+
+2þxl
+
+¼
+¼ ðxl
+P
+i xl
+jÞ2
+io jðxl
+m
+
+¼
+
+m
+
+2
+
+:
+
+2Þþðxl
+
+1
+
+1xl
+
+2
+
+ml
+j
+
+Appendix C. Pseudocode of the spectralCAT algorithm
+
+Algorithm 1. Data transformation by automatic categorization
+
+Input:
+
+X ¼ fx1, . . . ,xmg (q-dimensional numerical points to categorize)
+fk (a clustering function that partitions X into k clusters and
+
+returns the corresponding assignments)
+
+max_k (maximum number of categories to examine)
+
+Output:
+
+^X ¼ f ^x1, . . . , ^xmg (a vector of categorical points)
+
+Procedure Categorize
+
+For each kAf2, . . . ,max_kg
+
+SðkÞ ¼ CalinskiHarabaszðfkðXÞ,XÞ (the Calinski-Harabasz index
+
+for the result of the clustering)
+
+End
+kbest ¼ mink Af2,...,max_kgfLocalMaxðSðkÞÞ ¼ Trueg (the smallest k
+
+for which S(k) has a local maximum)
+
+ðXÞ
+
+^X ¼ fkbest
+return ^X
+
+End
+
+Algorithm 2. SpectralCAT
+
+Input:
+
+X ¼ fx1, . . . ,xmg (n-dimensional dataset to cluster)
+fk (a clustering function that partitions X into k clusters and
+
+returns the corresponding assignments)
+
+k (the number of clusters to partition X)
+
+Output:
+
+IDX ¼ fIDX1, . . . ,IDXmg (an assignment of each point in X to one
+
+of k clusters)
+
+Procedure SpectralCAT
+For each lAf1, . . . ,ng
+1, . . . ,xl
+
+Set Xl ¼ fxl
+If Numerical(Xl) ¼ True (the lth column contains numerical
+
+ng (the lth column in X)
+
+432
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+End
+For each i,jAf1, . . . ,mg (build a pairwise weight function - Eqs.
+
+(5) and (6))
+
+Oi,j ¼ GaussianWeightðWi,jÞ
+WEi,j ¼ e Wi,j=Oi,j (the adaptive Gaussian kernel)
+
+End
+For each iAf1, . . . ,mg (build the degree of each point)
+
+di ¼
+
+R
+^X WEi,jdmð ^xjÞ
+ﬃﬃﬃ
+p ﬃﬃﬃ
+p
+Pi,j ¼ WE i,j
+
+di
+
+dj
+
+matrix)
+
+End
+For each i,jAf1, . . . ,mg (construction of a Markov transition
+
+End
+½l,n ¼ SVDðPÞ (the eigen-decomposition of the Markov
+
+For each iAf1, . . . ,mg (construction of the diffusion coordinates
+
+transition matrix)
+
+with Z terms)
+
+Fi ¼ ðl0n0ð ^xiÞ,l1n1ð ^xiÞ, . . . ,lZnZð ^xiÞÞT
+
+End
+IDX ¼ fkðFÞ (clustering of the data in the embedding)
+return IDX
+
+End
+
+References
+
+[1] Z.X. Huang, Extensions to the k-means algorithm for clustering large data
+sets with categorical values, Data Mining Knowledge Discovery 3 (1998)
+283–304.
+
+[2] J. MacQueen, Some methods for classiﬁcation and analysis of multivariate
+observations, Proceedings of the 5th Berkeley Symposium on Mathematical
+Statistics and Probability, vol. 1, University of California Press, Berkeley, CA,
+1967, pp. 281–297.
+
+[3] Z. Huang, Extensions to the k-means algorithm for clustering large data sets
+with categorical values, Data Mining and Knowledge Discovery 2 (1998)
+283–304.
+
+[4] T. Calinski, J. Harabasz, A dendrite method for cluster analysis, Communica-
+
+tions in Statistics 3 (1974) 1–27.
+
+SIAM, 2007.
+
+[5] C.M.G. Gan, J. Wu, Data Clustering: Theory, Algorithms, and Applications,
+[6] S.V.D. Arthur, k-meansþþ: the advantages of careful seeding, in: Proceedings
+of the Eighteenth Annual ACM-SIAM Symposium on Discrete Algorithms,
+New Orleans, Louisiana, 2007, pp. 1027–1035.
+
+[7] C. Ding, T. Li, Adaptive dimension reduction using discriminant analysis and
+k-means clustering, in: Proceedings of the 24th International Conference on
+Machine Learning, Corvalis, Oregon, 2007, pp. 521–528.
+
+[8] G. David, A. Averbuch, R. R. Coifman, Hierarchical clustering via localized
+diffusion folders, in: Proceedings of the Association for the Advancement of
+Artiﬁcial Intelligence (AAAI) Fall Symposium Series 2010, /http://aaai.org/
+ocs/index.php/FSS/FSS10/paper/view/2210S.
+
+[9] R.R.T. Zhang, M. Livny, Birch: an efﬁcient data clustering method for very
+
+large databases, SIGMOD Record 25 (1996) 103–114.
+
+[10] R.R.S. Guha, K. Shim, Cure: an efﬁcient clustering algorithms for large
+databases, in: ACM SIGMOD International Conference on Management of
+Data, Seattle, WA, 1998, pp. 73–84.
+
+[11] J.S.M. Ester, H.P. Kriegel, X. Xu, A density-based algorithm for discovering
+clusters in large spatial database with noise, in: International Conference on
+Knowledge Discovery in Databases and Data Mining (KDD-96), AAAI Press,
+Portland, Oregon, 1996, pp. 226–231.
+
+[12] L. Kaufman, P. Rousseeuw, Finding Groups in Data—An introduction to
+
+[17] H.S.A. Ben-Hur, D. Horn, V. Vapnik, Support vector clustering, Journal of
+
+Machine Learning Research 2 (2001) 125–137.
+
+[18] M. Girolami, Mercer kernel based clustering in feature space, IEEE Transac-
+
+tions on Neural Networks 13 (2002) 780–784.
+
+[19] R. Zhang, A. Rudnicky, A large scale clustering scheme for kernel k-means,
+in: Proceedings of the 16th International Conference on Pattern Recognition
+(ICPR 02), Quebec City, Canada, 2002, pp. 289–292.
+
+[20] J. Couto, Kernel k-means for categorical data, Advances in Intelligent Data
+
+Analysis VI 3646 (2005) 46–56.
+
+[21] U. von Luxburg, A tutorial on spectral clustering, Statistics and Computing 17
+
+(4) (2007) 395–416.
+
+[22] F.R. Bach, M.I. Jordan, Learning spectral clustering, Proceedings of NIPS, vol.
+
+16, MIT Press, 2004, pp. 305–312.
+
+[23] S.V.R. Kannan, A. Vetta, On clusterings: good, bad and spectral, in: Proceed-
+ings of the 41st Annual Symposium on Foundations of Computer Science,
+2000.
+
+[24] J. Shi, J. Malik, Normalized cuts and image segmentation, IEEE Transactions
+
+on Pattern Analysis and Machine Intelligence 22 (2000) 888–905.
+
+[25] M.I.J.A.Y. Ng, Y. Weiss, On spectral clustering: analysis and an algo-
+rithm, Advances in Neural Information Processing Systems (NIPS), vol. 14,
+2002.
+
+[26] K. Fukunaga, L. Hostetler, The estimation of the gradient of a density function,
+with applications in pattern recognition, IEEE Transactions on Information
+Theory in Information Theory 21 (1) (1975) 32–40.
+
+[27] D. Comaniciu, P. Meer, Mean shift: a robust approach towards feature space
+analysis, IEEE Transactions on Pattern Analysis and Machine Intelligence 24
+(5) (2002) 603–619.
+
+[28] Y. Cheng, Mean shift, mode seeking, and clustering, IEEE Transactions on
+
+Pattern Analysis and Machine Intelligence 17 (8) (1995) 790–799.
+
+[29] D. Comaniciu, An algorithm for data-driven bandwidth selection,
+
+IEEE
+Transactions on Pattern Analysis and Machine Intelligence 2 (2003)
+281–288.
+
+[30] J.C. Gower, A general coefﬁcient of similarity and some of its properties,
+
+Biometrics 27 (1971) 857–871.
+
+[31] R.K.J. Dougherty, M. Sahami, Supervised and unsupervised discretization of
+in: Machine Learning: Proceedings of the Twelfth
+
+continuous features,
+International Conference, Morgan Kaufmann Publishers, 1995.
+
+[32] J. Catlett, On changing continuous attributes into ordered discrete attributes,
+in: Proceedings of the European Working Session on Learning, Springer-
+Verlag, Berlin, Germany, 1991, pp. 164–178.
+
+[33] R.S. Michalski, A planar geometric model for representing multidimensional
+discrete spaces and multiple-valued logic functions, Technical Report,
+University of Illinois at Urbaba-Champaign, 1978.
+
+[34] J. Han, M. Kambert, Data Mining: Concepts and Techniques, Morgan Kauf-
+
+mann, San Francisco, 2001.
+
+[35] A.V. Oppenheim, R.W. Schafer, Discrete-Time Signal Processing, Prentice-
+
+Hall, 1989.
+
+[36] C. Blake, C. Merz, Uci repository of machine learning databases, University of
+California, Department of Information and Computer Science, Irvine, CA, USA,
+1998 /http://www.ics.uci.edu/mlearn/MLRepository.htmlS.
+
+[37] R.R. Coifman, S. Lafon, Diffusion maps, Applied and Computational Harmonic
+
+Analysis 21 (2006) 5–30.
+
+[38] R.R. Coifman, S. Lafon, Geometric harmonics: a novel tool for multiscale out-
+of-sample extension of empirical functions, Applied and Computational
+Harmonic Analysis 21 (2006) 31–52.
+
+[39] F.R.K. Chung, Spectral Graph Theory, in: AMS Regional Conference Series in
+
+Mathematics, vol. 92, 1997.
+
+[40] A.L.L.L.N. Benoudjit, C. Archambeau, M. Verleysen, Width optimization of the
+Gaussian kernels in radial basis function networks, in: Proceedings of the
+European Symposium on Artiﬁcial Neural Networks, ESANN 2002 Bruges,
+Belgium, 2002, pp. 425–432.
+
+[41] N. Benoudjit, M. Verleysen, On the kernel widths in radial-basis function
+
+networks, Neural Processing Letters 18 (2003) 139–154.
+
+[42] V.D. Sanchez, On the number and the distribution of RBF centers, Neuro-
+
+computing 7 (1995) 197–202.
+
+[43] S. Chen, S. Billings, Neural networks for nonlinear dynamic system modelling
+
+and identiﬁcation, International Journal of Control 56 (1992) 319–346.
+
+[44] M. Orr, Introduction to radial basis function networks, 1996 /http://www.
+
+anc.ed.ac.uk/rbf/papers/intro.psS.
+
+[45] J. Park, I. Sandberg, Universal approximation using radial basis function
+
+networks, Neural Computation 3 (1991) 246–257.
+
+Cluster Analysis, John Wiely & Sons, Inc., New York, 1990.
+
+[46] S. Haykin, Neural Networks: a Comprehensive Foundation, second ed.,
+
+[13] J.G.V. Ganti, R. Ramakrishnan, Cactus: clustering categorical data using
+summaries, in: Proceedings of the 5th ACM SIGKDD International Conference
+on Knowledge Discovery and Data Mining (KDD), ACM Press, San Diego, CA,
+USA, 1999, pp. 73–83.
+
+[14] J.C.D. Barbara, Y. Li, Coolcat: an entropy-based algorithm for categorical
+clustering, in: Proceedings of the 11th ACM Conference on Information and
+Knowledge Management (CIKM 02), ACM Press, McLean, Virginia, USA, 2002,
+pp. 582–589.
+
+Prentice Hall, 1998.
+
+[47] M. Verleysen, K. Hlavackova, Learning in RBF networks,
+
+Interna-
+tional Conference on Neural Networks (ICNN), Washington, DC, 1996,
+pp. 199–204.
+
+in:
+
+[48] A. Saha, J. Keeler, Algorithms for better representation and faster learning in
+radial basis function networks, in: Advances in Neural Information Proces-
+sing Systems, vol. 2, Morgan Kaufmann Publishers Inc., San Francisco, CA,
+1990.
+
+[15] R.R.S. Guha, K. Shim, Rock: a robust clustering algorithm for categorical
+
+[49] J. Moody, C. Darken, Fast learning in networks of locally-tuned processing
+
+attributes, Journal of Information Systems 25 (2000) 345–366.
+
+units, Neural Computation 1 (1989) 281–294.
+
+[16] J.K.D. Gibson, P. Raghavan, Clustering categorical data: an approach based on
+dynamical systems, in: Proceedings of the 24th International Conference on
+Very Large Data Bases (VLDB), Morgan Kaufmann, New York, NY, USA, 1998,
+pp. 311–322.
+
+[50] K. Pearson, On lines and planes of closest ﬁt to systems of points in space,
+
+Philosophical Magazine 2 (1901) 559–572.
+
+[51] M.S.P-N. Tan, V. Kumar, Introduction to Data Mining, Pearson Addison-
+
+Wesley, 2006.
+
+G. David, A. Averbuch / Pattern Recognition 45 (2012) 416–433
+
+433
+
+Gil David received his M.Sc. degree in Computer Science at the Hebrew University in Jerusalem, Israel in 2003 and received his Ph.D. degree at the Department of Computer
+Science at Tel-Aviv University in Tel-Aviv, Israel in 2009. Currently he is a postdoctoral associate at the Department of Mathematics, Program in Applied Mathematics at
+Yale University in New Haven, USA. His main interests are anomaly detection, data mining, diffusion geometry, pattern recognition and data analysis.
+
+Amir Averbuch received his M.Sc. degree in Mathematics at the Hebrew University in Jerusalem, Israel in 1975 and received his Ph.D. degree at the Department of
+Computer Science at Columbia University in New York, USA in 1983. From 1976 to 1986 he was a Research Staff Member at the Department of Computer Science, IBM T.J.
+Watson Research Center, Yorktown Heights, NY. In 1987, he joined the School of Computer Science, Tel-Aviv University, where he is now Professor of Computer Science.
+His main interests are applied harmonic analysis, wavelets, signal/image processing, numerical computation and scientiﬁc computing.
+
+

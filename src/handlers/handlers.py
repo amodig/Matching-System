@@ -301,7 +301,8 @@ class TablesHandler(BaseHandler):
 class TablesDataHandler(BaseHandler):
     @tornado.web.authenticated 
     def get(self):
-        words, person_names = zip(*[(person_info["keywords"], person_info["name"]) for person_info in self.application.corpuses_name_id.values() ])
+        words, person_names = zip(*[(person_info["keywords"], person_info["name"]) for person_info in
+                                    self.application.corpuses_name_id.values()])
         message = {
             "tables":
                 [
@@ -387,11 +388,11 @@ class FacebookDemoHandler(BaseHandler):
 
 
 class GravatarHandler(BaseHandler):
-    def build_grav_url(self, email):
+    @staticmethod
+    def get_gravatar_url(email):
         # random patterned background:
         default = 'identicon'
         size = 40
-
         # construct the url
         gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
         gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
@@ -399,7 +400,7 @@ class GravatarHandler(BaseHandler):
 
     def get(self):
         email = self.get_argument('email', "sample@gmail.com")
-        self.render("grav.html", user=self.get_current_user(), email=email, icon=self.build_grav_url(email))
+        self.render("grav.html", user=self.get_current_user(), email=email, icon=self.get_gravatar_url(email))
 
 
 class WildcardPathHandler(BaseHandler):
