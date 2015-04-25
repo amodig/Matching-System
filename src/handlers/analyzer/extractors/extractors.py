@@ -12,6 +12,7 @@ import nltk
 import pickle
 import motor
 import tornado.gen
+import tornado.ioloop
 
 
 class PhraseExtractor():
@@ -214,25 +215,24 @@ class Extractors():
         pickle.dump(keyword_set, f_obj)
         f_obj.close()                  
         f_corpus_obj.close()
- 
-if __name__ == "__main__":
-    print "Run as script"
-    extractor = Extractors("../../../../docs/abstracts/abstracts.xml")
-    extractor.set_keywords_from_abstract_xml("all")
 
-    # # Connect to MongoDB
-    # MONGO_SERVER_ADDRESS = 'localhost'
-    # MONGO_SERVER_PORT = 27017
-    # client = motor.MotorClient(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
-    # # Choose correct database
-    # db = client['app']
-    #
-    # extractor = Extractors(database=db, collection=u'fs.files')
-    # iterator = extractor.get_information_from_database()
-    # iterator.next()
-    # print extractor._database
-    # print extractor.get_information_from_database
-    # print extractor.get_information_from_database()
-    # extractor.get_information_from_database(database=db, collection=u'fs.files')
-    #
-    # print "EOF"
+
+@tornado.gen.coroutine
+def main():
+    # Connect to MongoDB
+    MONGO_SERVER_ADDRESS = 'localhost'
+    MONGO_SERVER_PORT = 27017
+    client = motor.MotorClient(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
+    # Choose correct database
+    db = client['app']
+    extractor = Extractors(database=db, collection=u'fs.files')
+    info = yield extractor.get_information_from_database()
+    print info
+
+if __name__ == '__main__':
+    print "Run as script"
+    # extractor = Extractors("../../../../docs/abstracts/abstracts.xml")
+    # extractor.set_keywords_from_abstract_xml("all")
+
+    tornado.ioloop.IOLoop.instance().run_sync(main)
+    print "EOF"
