@@ -435,8 +435,8 @@ class AbstractHandler(BaseProfileHandler):
         if key == 'all':
             # file_keys = self.request.get_arguments('file_key')
             payload = json.loads(self.request.body)
-            if 'file_key' in payload:
-                file_keys = payload['file_key']
+            if 'key' in payload:
+                file_keys = payload['key']
             else:
                 raise web.HTTPError(400)  # Bad request
 
