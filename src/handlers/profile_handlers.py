@@ -376,6 +376,7 @@ class ProfileHandler(BaseProfileHandler):
 
 
 class AbstractHandler(BaseProfileHandler):
+    """Handler for getting uploaded paper abstracts automatically"""
     @staticmethod
     def extract_abstract(body, content_type):
         p = re.compile('pdf')
@@ -391,13 +392,14 @@ class AbstractHandler(BaseProfileHandler):
         temp_file.write(body)
         temp_file.close()
         # convert and write ASCII to temp file
-        pdf2txt.main(["scriptname", "-o", "uploads/output.txt", temp_path])
-        out = open("uploads/abstract_%s.txt" % temp_id, 'r')
+        txt_path = "uploads/abstract_%s.txt" % temp_id
+        pdf2txt.main(["scriptname", "-o", txt_path, temp_path])
+        out = open(txt_path, 'r')
         contents = out.read()
         out.close()
         # delete temp files
         os.remove(temp_path)
-        os.remove("uploads/abstract_%s.txt" % temp_id)
+        os.remove(txt_path)
         # find and return abstract
         abstract_start_position = contents.lower().find("abstract")
         abstract_end_position = contents[abstract_start_position:].lower().find("\n\n") + abstract_start_position
@@ -425,6 +427,7 @@ class AbstractHandler(BaseProfileHandler):
         abstract = self.extract_abstract(content, content_type)
         raise gen.Return(abstract)
 
+    @web.authenticated
     @gen.coroutine
     def get(self, key):
         if not key:
@@ -436,28 +439,28 @@ class AbstractHandler(BaseProfileHandler):
                 file_keys = payload['file_key']
             else:
                 raise web.HTTPError(400)  # Bad request
+
+            # Iterate through requested abstracts:
+            # The argument passed to the callback is returned as the result of the yield expression.
+            def _iterate(gen_abstracts, callback):
+                try:
+                    file_id, abstract = gen_abstracts.next()
+                except StopIteration:
+                    file_id, abstract = None
+                callback(file_id, abstract)
+
+            _gen_abstracts = self.generate_abstracts(file_keys)  # return a generator
+            while True:
+                file_id, abstract = yield gen.Task(_iterate, _gen_abstracts)
+                if file_id or abstract is not None:
+                    self.write({'key': file_id, 'abstract': abstract})
+                else:
+                    break
+            self.finish()
         else:  # request only one abstract
-            abstract = self.get_abstract(key)
+            abstract = yield self.get_abstract(key)
             self.write({'key': key, 'abstract': abstract})
             self.finish()
-
-        # Iterate through requested abstracts:
-        # The argument passed to the callback is returned as the result of the yield expression.
-        def _iterate(gen_abstracts, callback):
-            try:
-                file_id, abstract = gen_abstracts.next()
-            except StopIteration:
-                file_id, abstract = None
-            callback(file_id, abstract)
-
-        _gen_abstracts = self.generate_abstracts(file_keys)  # return a generator
-        while True:
-            file_id, abstract = yield gen.Task(_iterate, _gen_abstracts)
-            if file_id or abstract is not None:
-                self.write({'key': file_id, 'abstract': abstract})
-            else:
-                break
-        self.finish()
 
 
 class ProfileIndexHandler(BaseProfileHandler):
