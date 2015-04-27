@@ -46,9 +46,9 @@ class BaseProfileHandler(BaseHandler):
 
     def get_download_url(self, filename=None, key=None):
         if filename:
-            url = self.request.host + '/download' + '?file=' + escape.url_escape(filename)
+            url = self.request.protocol + '://' + self.request.host + '/download' + '?file=' + escape.url_escape(filename)
         elif key:
-            url = self.request.host + '/download' + '?key=' + escape.url_escape(key)
+            url = self.request.protocol + '://' + self.request.host + '/download' + '?key=' + escape.url_escape(key)
         else:
             raise web.HTTPError(500)
         return url
@@ -191,6 +191,7 @@ class UploadHandler(BaseProfileHandler):
         """Handle uploads to database. Files are buffered into memory.
         :return JSON list of uploaded files.
         """
+
         def _extract_abstract(body, content_type):
             p = re.compile('pdf')
             if not p.search(content_type):
