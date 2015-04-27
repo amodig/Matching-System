@@ -406,6 +406,7 @@ class AbstractHandler(BaseProfileHandler):
 
     @gen.coroutine
     def generate_abstracts(self, file_keys):
+        """Abstract generator"""
         fs = motor.MotorGridFS(self.application.db, collection=u'fs')
         for file_id in file_keys:
             grid_out = yield fs.get(file_id)
@@ -415,10 +416,30 @@ class AbstractHandler(BaseProfileHandler):
             yield file_id, abstract
 
     @gen.coroutine
-    def get(self):
-        file_keys = self.request.get_arguments('file_key')
-        if not file_keys:
+    def get_abstract(self, file_id):
+        """Get single abstract"""
+        fs = motor.MotorGridFS(self.application.db, collection=u'fs')
+        grid_out = yield fs.get(file_id)
+        content = yield grid_out.read()
+        content_type = grid_out.content_type
+        abstract = self.extract_abstract(content, content_type)
+        raise gen.Return(abstract)
+
+    @gen.coroutine
+    def get(self, key):
+        if not key:
             raise web.HTTPError(400)  # Bad request
+        if key == 'all':
+            # file_keys = self.request.get_arguments('file_key')
+            payload = json.loads(self.request.body)
+            if 'file_key' in payload:
+                file_keys = payload['file_key']
+            else:
+                raise web.HTTPError(400)  # Bad request
+        else:  # request only one abstract
+            abstract = self.get_abstract(key)
+            self.write({'key': key, 'abstract': abstract})
+            self.finish()
 
         # Iterate through requested abstracts:
         # The argument passed to the callback is returned as the result of the yield expression.
