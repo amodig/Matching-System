@@ -133,10 +133,10 @@ class DownloadHandler(BaseProfileHandler):
         # get a GridFS GridOut object
         grid_out = yield self.get_grid_out(file_id=key, filename=filename)
         # Prevent browsers from MIME-sniffing the content-type:
-        self.set_header('X-Content-Type-Options', 'nosniff')
-        self.set_header('Content-Type', 'application/octet-stream')
-        # self.set_header('Content-Type', grid_out.content_type)
-        self.set_header('Content-Disposition', 'attachment; filename=%s' % grid_out.filename)
+        # self.set_header('X-Content-Type-Options', 'nosniff')
+        # self.set_header('Content-Type', 'application/octet-stream')  # could it be smarter?
+        self.set_header('Content-Type', grid_out.content_type)
+        self.set_header('Content-Disposition', 'attachment; filename="%s"' % grid_out.filename)
         self.set_header('Content-Length', grid_out.length)
         self.set_header('Upload-Date', grid_out.upload_date.strftime('%A, %d %M %Y %H:%M:%S %Z'))
         # stream the file content to RequestHandler
