@@ -148,7 +148,7 @@ class UploadHandler(BaseProfileHandler):
 
     # upload attributes
     MIN_FILE_SIZE = 1  # bytes
-    MAX_FILE_SIZE = 5000000  # bytes
+    MAX_FILE_SIZE = 50000000  # bytes, 50 MB
     DOCUMENT_TYPES = re.compile('application/pdf')  # re.compile('image/(gif|p?jpeg|(x-)?png)')
     ACCEPT_FILE_TYPES = DOCUMENT_TYPES
 
@@ -182,9 +182,11 @@ class UploadHandler(BaseProfileHandler):
         """Write file to MongoDB's GridFS system."""
         fs = motor.MotorGridFS(self.application.db, collection=u'fs')
         # default: file_id is the ObjectId of the resulting file
-        file_id = yield fs.put(file_content, _id=key, user=user,
-                               filename=result['name'], content_type=result['type'],
-                               title=result['title'], abstract=result['abstract'])
+        try:
+            file_id = yield fs.put(file_content, _id=key, user=user, filename=result['name'],
+                                   content_type=result['type'], title=result['title'])
+        except KeyError:
+            raise web.HTTPError(500)
         assert file_id is key, "file_id is not key (%r): %r" % (key, file_id)
 
     def handle_upload_db(self):
@@ -247,7 +249,11 @@ class UploadHandler(BaseProfileHandler):
         key = self.get_argument('key', default=None) or ''
         fs = motor.MotorGridFS(self.application.db, collection=u'fs')
         # get file name
-        grid_out = yield fs.get(key)
+        try:
+            grid_out = yield fs.get(key)
+        except NoFile:
+            print "No such file with key: %s" % key
+            raise web.HTTPError(500)
         filename = grid_out.filename
         # delete a file with the key
         yield fs.delete(key)
