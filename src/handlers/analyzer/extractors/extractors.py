@@ -107,9 +107,9 @@ class Extractors():
         titles =[]
         while (yield cursor.fetch_next):
             document = cursor.next_object()
-            corpora.append(document['abstract'])
-            uploaders.append(document['user'])
-            titles.append(document['title'])
+            corpora.append(document.get('abstract', "[empty]"))
+            uploaders.append(document['user'])  # should always be there!
+            titles.append(document.get('title', "[No Title]"))
         info = {"corpora": corpora, "uploader_names": uploaders, "titles": titles}
         raise tornado.gen.Return(info)
 
