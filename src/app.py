@@ -125,7 +125,7 @@ class Application(tornado.web.Application):
         def set_keywords_parameters():
             self.keywords_number = 10
             # self._num_of_corpora = "all"
-            self._num_of_corpora = "db"
+            self._num_of_corpora = "all"
             # information of all abstracts:
             self.abstracts_filename = "../docs/abstracts/abstracts.xml"
             # information of all keywords as a set:
@@ -183,14 +183,13 @@ class Application(tornado.web.Application):
                     "id": 1, "title": "%s" % title, "abstract": "%s" % original_corpus,
                     "url": "http://images4.fanpop.com/image/photos/14700000/Beautifull-cat-cats-14749885-1600-1200.jpg"
                 })
-                
+
                 # append keywords in list corpora_user_id[name]["keywords"]
                 for keyword in decomposed_corpus.split(','):
                     for keyword_info in self.keywords_info:
                         if keyword == keyword_info["text"]:
                             self.corpora_user_id[user]["keywords"].append(keyword_info["id"])
-            print "Persons info ready"
-            
+
         def set_iteration_parameters():
             # number of iteration
             self.iter_num = 0

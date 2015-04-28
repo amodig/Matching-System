@@ -87,4 +87,24 @@
   </div>
 </div>
 
+<div class="modal fade" id="article-abstract-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{[activeFile.title]}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger" ng-show="activeFile.error">
+          Couldn't read the abstract
+        </div>
+        <p class="text-muted text-center" ng-show="activeFile.loading">
+          <i class="fa fa-spin fa-spinner"></i> Loading the abstract...
+        </p>
+        <p ng-hide="activeFile.loading">{[activeFile.abstract]}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="ajax-load-scripts"></div>

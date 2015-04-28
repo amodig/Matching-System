@@ -1,10 +1,22 @@
 MatchingApp.service('Fileupload', function(){
-  this.init = function(files){
+  this.init = function(files, options){
     function scriptsLoaded(data) {
 
         var $form = $('#fileupload')
 
         $form.fileupload('option', 'done').call($form, $.Event('done'), { result: { files: files } })
+
+        $form.on('click', '.paper-title', function(e){
+          e.preventDefault();
+
+          var title = $(this).attr('data-title');
+          var key = $(this).attr('data-key');
+
+          options.fileClicked({
+            title: title,
+            key: key
+          });
+        });
 
         $form.bind('fileuploadsubmit', function (e, data) {
             var inputs = data.context.find(':input');
@@ -14,24 +26,8 @@ MatchingApp.service('Fileupload', function(){
                 data.context.find('button').prop('disabled', false);
                 return false;
             }
-            
+
             data.formData = inputs.serializeArray();
-        });
-
-        $(document).ready(function () {
-            $("#btn-save").click(function () {
-                var text = $('#bio-text').val();
-
-                $.ajax({
-                    type: 'POST',
-                    url: "/update_bio",
-                    data: {"bio_new_text": JSON.stringify(text)},
-                    dataType: 'json',
-                    success: function (data) {
-                        window.location.reload(true);
-                    }
-                });
-            });
         });
     }
 
