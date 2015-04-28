@@ -9,8 +9,8 @@ from __future__ import division
 from lxml import etree
 from os import path
 
-from ..database_messager.mysql_messager import MysqlMessenger
-from ..analyzer.extractors.extractors import PhraseExtractor
+#from ..database_messager.mysql_messager import MysqlMessenger
+#from ..analyzer.extractors.extractors import PhraseExtractor
 
 import pickle
 

@@ -486,7 +486,10 @@ class AbstractHandler(BaseProfileHandler):
         # print "Old abstract:", doc['abstract']
         # update abstract
         coll = self.application.db[u'fs.files']
-        result = yield coll.update({'_id': key}, {'$set': {'abstract': abstract}})
+        try:
+            result = yield coll.update({'_id': key}, {'$set': {'abstract': abstract}})
+        except OperationFailure:
+            raise web.HTTPError(500)
         print 'Updated', result['n'], 'document'
         # doc = yield self.application.db[u'fs.files'].find_one({'_id': key})
         # print "New abstract:", doc['abstract']

@@ -218,7 +218,7 @@ class Extractors():
 
 
 @tornado.gen.coroutine
-def main():
+def main1():
     # Connect to MongoDB
     MONGO_SERVER_ADDRESS = 'localhost'
     MONGO_SERVER_PORT = 27017
@@ -229,10 +229,43 @@ def main():
     info = yield extractor.get_information_from_database()
     print info
 
+@tornado.gen.coroutine
+def main2():
+    import sys
+    sys.path.insert(0, '/Users/amodig/tornado-test/Keyword-APP/src/handlers')
+    from profile_handlers import AbstractHandler
+
+    # Connect to MongoDB
+    MONGO_SERVER_ADDRESS = 'localhost'
+    MONGO_SERVER_PORT = 27017
+    client = motor.MotorClient(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
+    # Choose correct database
+    db = client['app']
+    fs = motor.MotorGridFS(db, collection=u'fs')
+    cursor = fs.find({}, timeout=False)
+    while (yield cursor.fetch_next):
+        grid_out = cursor.next_object()
+        content = yield grid_out.read()
+        content_type = grid_out.content_type
+        title = grid_out.title
+        filename = grid_out.filename
+        key = grid_out._id
+        abstract = AbstractHandler.extract_abstract(content, content_type)
+        print "--------------------------------------"
+        print "Title:"
+        print title
+        print "Filename:"
+        print filename
+        print "Key:"
+        print key
+        print "--------------------------------------"
+        print "Abstract:"
+        print abstract
+    print "finished"
+
+
 if __name__ == '__main__':
     print "Run as script"
     # extractor = Extractors("../../../../docs/abstracts/abstracts.xml")
     # extractor.set_keywords_from_abstract_xml("all")
-
-    tornado.ioloop.IOLoop.instance().run_sync(main)
-    print "EOF"
+    tornado.ioloop.IOLoop.instance().run_sync(main2)
