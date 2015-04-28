@@ -468,6 +468,29 @@ class AbstractHandler(BaseProfileHandler):
             self.write({'key': key, 'abstract': abstract})
             self.finish()
 
+    #@web.authenticated
+    @gen.coroutine
+    def post(self, key):
+        if not key:
+            raise web.HTTPError(400)  # Bad request
+        if key == 'all':
+            print "Can't edit all abstracts at once!"
+            raise web.HTTPError(400)  # Bad request
+        # get new abstract in payload
+        payload = json.loads(self.request.body)
+        if 'new_abstract' in payload:
+            abstract = payload['new_abstract']
+        else:
+            raise web.HTTPError(400)  # Bad request
+        # doc = yield self.application.db[u'fs.files'].find_one({'_id': key})
+        # print "Old abstract:", doc['abstract']
+        # update abstract
+        coll = self.application.db[u'fs.files']
+        result = yield coll.update({'_id': key}, {'$set': {'abstract': abstract}})
+        print 'Updated', result['n'], 'document'
+        # doc = yield self.application.db[u'fs.files'].find_one({'_id': key})
+        # print "New abstract:", doc['abstract']
+        self.finish()
 
 class ProfileIndexHandler(BaseProfileHandler):
     @web.authenticated

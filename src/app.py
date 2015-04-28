@@ -57,7 +57,8 @@ class Application(tornado.web.Application):
             url(r'/upload', UploadHandler, name="upload"),
             url(r'/update_bio', ProfileHandler, name="update_bio"),
             url(r'/profile', ProfileHandler, name="profile"),
-            url(r'/abstract/([a-z0-9]+)', AbstractHandler, name="abstract"),
+            url(r'/abstract/([a-z0-9]+)', AbstractHandler, name='abstract/([a-z0-9]+)'),
+            url(r'/abstract/edit/([a-z0-9]+)', AbstractHandler, name='abstract/edit/([a-z0-9]+)'),
 
             url(r'/form', FormHandler, name='form'),
             url(r'/next', NextHandler, name='next'),
@@ -69,6 +70,7 @@ class Application(tornado.web.Application):
             url(r'/grav', GravatarHandler, name='grav'),
             url(r'/menu', MenuTagsHandler, name='menu'),
             url(r'/slidy', SlidyHandler, name='slidy'),
+
             url(r'/notification', NotificationHandler, name='notification'),
             url(r'/fb_demo', FacebookDemoHandler, name='fb_demo'),
             url(r'/popup', PopupHandler, name='popup_demo'),
@@ -140,7 +142,7 @@ class Application(tornado.web.Application):
             self.titles = info['titles']
 
             # set keywords (might take a while)
-            # yield self.extractors.set_keywords_from_database()
+            # yield self.extractors.set_keywords_fm_database()
 
             # Load and set abstract and keyword corpora
             self.corpus_keywords_file_obj = open(self.corpus_keywords_filename, 'r')
@@ -148,9 +150,11 @@ class Application(tornado.web.Application):
             self.corpora = pickle.load(self.corpus_keywords_file_obj)
             self.corpus_keywords_file_obj.close()
 
-        @tornado.gen.coroutine
         def form_persons_info():
-            assert(len(self.original_corpora) == len(self.corpora) == len(self.uploader_names))  # for persons_info
+            print len(self.original_corpora)
+            print len(self.corpora)
+            print len(self.uploader_names)
+            #assert(len(self.original_corpora) == len(self.corpora) == len(self.uploader_names))  # for persons_info
             self.corpora_user_id = {}
             self.persons_info = []  # this variable is a list that contains all information of persons
             person_id = 0
@@ -185,6 +189,7 @@ class Application(tornado.web.Application):
                     for keyword_info in self.keywords_info:
                         if keyword == keyword_info["text"]:
                             self.corpora_user_id[user]["keywords"].append(keyword_info["id"])
+            print "Persons info ready"
             
         def set_iteration_parameters():
             # number of iteration
