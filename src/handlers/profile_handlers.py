@@ -46,9 +46,9 @@ class BaseProfileHandler(BaseHandler):
 
     def get_download_url(self, filename=None, key=None):
         if filename:
-            url = self.request.host + '/download' + '?file=' + escape.url_escape(filename)
+            url = self.request.protocol + '://' + self.request.host + '/download' + '?file=' + escape.url_escape(filename)
         elif key:
-            url = self.request.host + '/download' + '?key=' + escape.url_escape(key)
+            url = self.request.protocol + '://' + self.request.host + '/download' + '?key=' + escape.url_escape(key)
         else:
             raise web.HTTPError(500)
         return url
@@ -133,10 +133,10 @@ class DownloadHandler(BaseProfileHandler):
         # get a GridFS GridOut object
         grid_out = yield self.get_grid_out(file_id=key, filename=filename)
         # Prevent browsers from MIME-sniffing the content-type:
-        self.set_header('X-Content-Type-Options', 'nosniff')
-        self.set_header('Content-Type', 'application/octet-stream')
-        # self.set_header('Content-Type', grid_out.content_type)
-        self.set_header('Content-Disposition', 'attachment; filename=%s' % grid_out.filename)
+        # self.set_header('X-Content-Type-Options', 'nosniff')
+        # self.set_header('Content-Type', 'application/octet-stream')  # could it be smarter?
+        self.set_header('Content-Type', grid_out.content_type)
+        self.set_header('Content-Disposition', 'attachment; filename="%s"' % grid_out.filename)
         self.set_header('Content-Length', grid_out.length)
         self.set_header('Upload-Date', grid_out.upload_date.strftime('%A, %d %M %Y %H:%M:%S %Z'))
         # stream the file content to RequestHandler
@@ -191,27 +191,6 @@ class UploadHandler(BaseProfileHandler):
         """Handle uploads to database. Files are buffered into memory.
         :return JSON list of uploaded files.
         """
-        def _extract_abstract(body, content_type):
-            p = re.compile('pdf')
-            if not p.search(content_type):
-                warnings.warn("The file was not PDF.")
-                return "Not a PDF!"
-            # save PDF temp file
-            temp_path = "uploads/temp.pdf"
-            temp_file = open(temp_path, 'w')
-            temp_file.write(body)
-            temp_file.close()
-            # convert and write ASCII to temp file
-            pdf2txt.main(["scriptname", "-o", "uploads/output.txt", temp_path])
-            out = open("uploads/output.txt", 'r')
-            contents = out.read()
-            out.close()
-            # find and return abstract
-            abstract_start_position = contents.lower().find("abstract")
-            abstract_end_position = contents[abstract_start_position:].lower().find("\n\n") + abstract_start_position
-            len_abstract = len("abstract") + len('\n')
-            return re.sub('\s+', ' ', contents[abstract_start_position + len_abstract:abstract_end_position]).strip()
-
         results = []
         if self.request.files:
             # each f is a dictionary
@@ -225,8 +204,7 @@ class UploadHandler(BaseProfileHandler):
                 if self.validate(result):
                     user = self.get_current_user()
                     key = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
-                    # Abstract extraction requires that the file is stored physically i.e. a file path
-                    result['abstract'] = _extract_abstract(file_body, f['content_type'])
+                    # result['abstract'] = self.extract_abstract(file_body, f['content_type'])
                     # Write file to database
                     self.write_file(file_body, user, key, result)
                     # Set additional fields for File Upload plugin
@@ -395,6 +373,94 @@ class ProfileHandler(BaseProfileHandler):
             self.request.set_headers['Content-Type'] = 'application/json'
         print "DELETE writing: %s" % s
         self.write(s)
+
+
+class AbstractHandler(BaseProfileHandler):
+    """Handler for getting uploaded paper abstracts automatically"""
+    @staticmethod
+    def extract_abstract(body, content_type):
+        p = re.compile('pdf')
+        if not p.search(content_type):
+            warnings.warn("The file was not PDF.")
+            return "Not a PDF!"
+        # save PDF temp file
+        if not os.path.exists("uploads"):
+            os.mkdir("uploads")
+        temp_id = ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6))
+        temp_path = "uploads/%s.pdf" % temp_id
+        temp_file = open(temp_path, 'w')
+        temp_file.write(body)
+        temp_file.close()
+        # convert and write ASCII to temp file
+        txt_path = "uploads/abstract_%s.txt" % temp_id
+        pdf2txt.main(["scriptname", "-o", txt_path, temp_path])
+        out = open(txt_path, 'r')
+        contents = out.read()
+        out.close()
+        # delete temp files
+        os.remove(temp_path)
+        os.remove(txt_path)
+        # find and return abstract
+        abstract_start_position = contents.lower().find("abstract")
+        abstract_end_position = contents[abstract_start_position:].lower().find("\n\n") + abstract_start_position
+        len_abstract = len("abstract") + len('\n')
+        return re.sub('\s+', ' ', contents[abstract_start_position + len_abstract:abstract_end_position]).strip()
+
+    @gen.coroutine
+    def generate_abstracts(self, file_keys):
+        """Abstract generator"""
+        fs = motor.MotorGridFS(self.application.db, collection=u'fs')
+        for file_id in file_keys:
+            grid_out = yield fs.get(file_id)
+            content = yield grid_out.read()
+            content_type = grid_out.content_type
+            abstract = self.extract_abstract(content, content_type)
+            yield file_id, abstract
+
+    @gen.coroutine
+    def get_abstract(self, file_id):
+        """Get single abstract"""
+        fs = motor.MotorGridFS(self.application.db, collection=u'fs')
+        grid_out = yield fs.get(file_id)
+        content = yield grid_out.read()
+        content_type = grid_out.content_type
+        abstract = self.extract_abstract(content, content_type)
+        raise gen.Return(abstract)
+
+    @web.authenticated
+    @gen.coroutine
+    def get(self, key):
+        if not key:
+            raise web.HTTPError(400)  # Bad request
+        if key == 'all':
+            # file_keys = self.request.get_arguments('file_key')
+            payload = json.loads(self.request.body)
+            if 'key' in payload:
+                file_keys = payload['key']
+            else:
+                raise web.HTTPError(400)  # Bad request
+
+            # Iterate through requested abstracts:
+            # The argument passed to the callback is returned as the result of the yield expression.
+            def _iterate(gen_abstracts, callback):
+                try:
+                    file_id, abstract = gen_abstracts.next()
+                except StopIteration:
+                    file_id, abstract = None
+                callback(file_id, abstract)
+
+            _gen_abstracts = self.generate_abstracts(file_keys)  # return a generator
+            while True:
+                file_id, abstract = yield gen.Task(_iterate, _gen_abstracts)
+                if file_id or abstract is not None:
+                    self.write({'key': file_id, 'abstract': abstract})
+                else:
+                    break
+            self.finish()
+        else:  # request only one abstract
+            abstract = yield self.get_abstract(key)
+            self.write({'key': key, 'abstract': abstract})
+            self.finish()
 
 
 class ProfileIndexHandler(BaseProfileHandler):
