@@ -7,6 +7,10 @@ MatchingApp.service('Api', function($http){
     return $http.get('/profile');
   }
 
+  this.getAbstractWithKey = function(key){
+    return $http.get('/abstract/' + key, { cache: true });
+  }
+
   this.topics = function(){
     return {
       success: function(callback){

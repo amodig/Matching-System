@@ -123,7 +123,7 @@ class Application(tornado.web.Application):
         def set_keywords_parameters():
             self.keywords_number = 10
             # self._num_of_corpora = "all"
-            self._num_of_corpora = "db"
+            self._num_of_corpora = "all"
             # information of all abstracts:
             self.abstracts_filename = "../docs/abstracts/abstracts.xml"
             # information of all keywords as a set:

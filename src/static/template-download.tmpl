@@ -1,7 +1,7 @@
 {% if(o.files.length > 0){ %}
 <table class="table">
   <thead>
-    <th>File</th>
+    <th>Files</th>
     <th>Title</th>
     <th>Date</th>
     <th>Size</th>
@@ -12,15 +12,15 @@
       <tr div class="template-download">
         <td>
           {% if (file.url) { %}
-              <a href="{%=file.url%}" class="btn btn-default btn-sm" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}><i class="fa fa-file"></i> {%=file.name%}</a>
+              <a href="{%=file.url%}" class="btn btn-default btn-sm" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}><i class="fa fa-file"></i> {%= file.name.length > 20 ? file.name.substring(0,20) + '...' : file.name %}</a>
           {% } else { %}
-              <button class="btn btn-default btn-sm" disabled><i class="fa fa-file"></i> {%=file.name%}</button>
+              <button class="btn btn-default btn-sm" disabled><i class="fa fa-file"></i> {%= file.name.length > 20 ? file.name.substring(0,20) + '...' : file.name %}</button>
           {% } %}
         </td>
         <td>
-          {%=file.title%}
+          <a href="#" class="paper-title" data-key="{%=file.key%}" data-title="{%=file.title%}">{%=file.title%}</a>
           {% if (file.error) { %}
-            <span class="text-danger"></span>
+            <span class="text-danger">{%=file.error%}</span>
           {% } %}
         </td>
         <td>
