@@ -57,6 +57,7 @@ class Application(tornado.web.Application):
             url(r'/upload', UploadHandler, name="upload"),
             url(r'/update_bio', ProfileHandler, name="update_bio"),
             url(r'/profile', ProfileHandler, name="profile"),
+            url(r'/abstract/([a-z0-9]+)', AbstractHandler, name="abstract"),
 
             url(r'/form', FormHandler, name='form'),
             url(r'/next', NextHandler, name='next'),
@@ -178,13 +179,13 @@ class Application(tornado.web.Application):
                     "id": 1, "title": "%s" % title, "abstract": "%s" % original_corpus,
                     "url": "http://images4.fanpop.com/image/photos/14700000/Beautifull-cat-cats-14749885-1600-1200.jpg"
                 })
-                
+
                 # append keywords in list corpora_user_id[name]["keywords"]
                 for keyword in decomposed_corpus.split(','):
                     for keyword_info in self.keywords_info:
                         if keyword == keyword_info["text"]:
                             self.corpora_user_id[user]["keywords"].append(keyword_info["id"])
-            
+
         def set_iteration_parameters():
             # number of iteration
             self.iter_num = 0
