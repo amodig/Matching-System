@@ -7,8 +7,12 @@ MatchingApp.service('Api', function($http){
     return $http.get('/profile');
   }
 
+  this.updateArticle = function(article){
+    $http.post('/article/' + article.key + '/edit', _.pick(article, 'title', 'abstract'));
+  }
+
   this.getAbstractWithKey = function(key){
-    return $http.get('/abstract/' + key, { cache: true });
+    return $http.get('/abstract/' + key);
   }
 
   this.topics = function(){

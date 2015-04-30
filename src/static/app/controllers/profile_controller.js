@@ -20,6 +20,7 @@ MatchingApp.controller('ProfileController', function($scope, $rootScope, Api, Fi
             $scope.activeFile.loading = true;
             $scope.activeFile.error = false;
             $scope.activeFile.title = file.title;
+            $scope.activeFile.key = file.key;
           });
 
           Api.getAbstractWithKey(file.key)
@@ -44,5 +45,19 @@ MatchingApp.controller('ProfileController', function($scope, $rootScope, Api, Fi
       .success(function(){
         $scope.bio.editing = false;
       });
+  }
+
+  $scope.saveArticle = function(){
+    $scope.bio.files.forEach(function(file){
+      if(file.key == $scope.activeFile.key){
+        file.title = $scope.activeFile.title;
+      }
+    });
+
+    Api.updateArticle(_.pick($scope.activeFile, 'title', 'abstract', 'key'));
+
+    Fileupload.updateFile(_.pick($scope.activeFile, 'title', 'key'));
+
+    $('#article-abstract-modal').modal('hide');
   }
 });
