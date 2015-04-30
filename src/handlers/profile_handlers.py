@@ -381,7 +381,7 @@ class ProfileHandler(BaseProfileHandler):
         self.write(s)
 
 
-class AbstractHandler(BaseProfileHandler):
+class ArticleDataHandler(BaseProfileHandler):
     """Handler for getting uploaded paper abstracts automatically"""
     @staticmethod
     def extract_abstract(body, content_type):
@@ -424,7 +424,7 @@ class AbstractHandler(BaseProfileHandler):
             yield file_id, abstract
 
     @gen.coroutine
-    def get_abstract(self, file_id):
+    def generate_abstract(self, file_id):
         """Get single abstract"""
         fs = motor.MotorGridFS(self.application.db, collection=u'fs')
         grid_out = yield fs.get(file_id)
@@ -433,7 +433,23 @@ class AbstractHandler(BaseProfileHandler):
         abstract = self.extract_abstract(content, content_type)
         raise gen.Return(abstract)
 
-    @web.authenticated
+    @gen.coroutine
+    def get_info(self, file_id):
+        """Get single article's info"""
+        fs = motor.MotorGridFS(self.application.db, collection=u'fs')
+        grid_out = yield fs.get(file_id)
+        title = grid_out.title
+        try:
+            abstract = grid_out.abstract
+        except KeyError:
+            abstract = self.generate_abstract(file_id)
+            coll = self.application.db[u'fs.files']
+            yield coll.update({'_id': file_id}, {'$set': {'abstract': abstract}})
+            print "set abstract automatically"
+        info = {'file_id': file_id, 'title': title, 'abstract': abstract}
+        raise gen.Return(info)
+
+    #@web.authenticated
     @gen.coroutine
     def get(self, key):
         if not key:
@@ -458,14 +474,16 @@ class AbstractHandler(BaseProfileHandler):
             _gen_abstracts = self.generate_abstracts(file_keys)  # return a generator
             while True:
                 file_id, abstract = yield gen.Task(_iterate, _gen_abstracts)
-                if file_id or abstract is not None:
-                    self.write({'key': file_id, 'abstract': abstract})
+                info = yield self.get_info(file_id)
+                if abstract is not None:
+                    self.write({'key': file_id, 'title': info['title'], 'abstract': info['abstract'],
+                                'auto_abstract': abstract})
                 else:
                     break
             self.finish()
-        else:  # request only one abstract
-            abstract = yield self.get_abstract(key)
-            self.write({'key': key, 'abstract': abstract})
+        else:  # request only one file
+            info = yield self.get_info(key)
+            self.write({'key': key, 'title': info['title'], 'abstract': info['abstract']})
             self.finish()
 
     #@web.authenticated
@@ -474,25 +492,28 @@ class AbstractHandler(BaseProfileHandler):
         if not key:
             raise web.HTTPError(400)  # Bad request
         if key == 'all':
-            print "Can't edit all abstracts at once!"
+            print "Can't edit all metadata at once!"
             raise web.HTTPError(400)  # Bad request
+        # select GridFS files collection (metadata)
+        coll = self.application.db[u'fs.files']
         # get new abstract in payload
         payload = json.loads(self.request.body)
+        result = {'n': 0}
         if 'new_abstract' in payload:
             abstract = payload['new_abstract']
-        else:
-            raise web.HTTPError(400)  # Bad request
-        # doc = yield self.application.db[u'fs.files'].find_one({'_id': key})
-        # print "Old abstract:", doc['abstract']
-        # update abstract
-        coll = self.application.db[u'fs.files']
-        try:
-            result = yield coll.update({'_id': key}, {'$set': {'abstract': abstract}})
-        except OperationFailure:
-            raise web.HTTPError(500)
+            try:
+                result = yield coll.update({'_id': key}, {'$set': {'abstract': abstract}})
+                print "updated abstract"
+            except OperationFailure:
+                raise web.HTTPError(500)
+        if 'new_title' in payload:
+            title = payload['new_title']
+            try:
+                result = yield coll.update({'_id': key}, {'$set': {'title': title}})
+                print "updated title"
+            except OperationFailure:
+                raise web.HTTPError(500)
         print 'Updated', result['n'], 'document'
-        # doc = yield self.application.db[u'fs.files'].find_one({'_id': key})
-        # print "New abstract:", doc['abstract']
         self.finish()
 
 class ProfileIndexHandler(BaseProfileHandler):

@@ -57,8 +57,8 @@ class Application(tornado.web.Application):
             url(r'/upload', UploadHandler, name="upload"),
             url(r'/update_bio', ProfileHandler, name="update_bio"),
             url(r'/profile', ProfileHandler, name="profile"),
-            url(r'/abstract/([a-z0-9]+)', AbstractHandler, name='abstract/([a-z0-9]+)'),
-            url(r'/abstract/edit/([a-z0-9]+)', AbstractHandler, name='abstract/edit/([a-z0-9]+)'),
+            url(r'/article/([a-z0-9]+)', ArticleDataHandler, name='article/([a-z0-9]+)'),
+            url(r'/article/([a-z0-9]+)/edit', ArticleDataHandler, name='article/([a-z0-9]+)/edit'),
 
             url(r'/form', FormHandler, name='form'),
             url(r'/next', NextHandler, name='next'),

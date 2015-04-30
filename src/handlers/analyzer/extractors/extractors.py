@@ -233,7 +233,7 @@ def main1():
 def main2():
     import sys
     sys.path.insert(0, '/Users/amodig/tornado-test/Keyword-APP/src/handlers')
-    from profile_handlers import AbstractHandler
+    from profile_handlers import ArticleDataHandler
 
     # Connect to MongoDB
     MONGO_SERVER_ADDRESS = 'localhost'
@@ -250,7 +250,7 @@ def main2():
         title = grid_out.title
         filename = grid_out.filename
         key = grid_out._id
-        abstract = AbstractHandler.extract_abstract(content, content_type)
+        abstract = ArticleDataHandler.extract_abstract(content, content_type)
         print "--------------------------------------"
         print "Title:"
         print title
