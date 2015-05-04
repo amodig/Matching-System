@@ -441,11 +441,11 @@ class ArticleDataHandler(BaseProfileHandler):
         title = grid_out.title
         try:
             abstract = grid_out.abstract
-        except KeyError:
-            abstract = self.generate_abstract(file_id)
+        except AttributeError:
+            abstract = yield self.generate_abstract(file_id)
             coll = self.application.db[u'fs.files']
             yield coll.update({'_id': file_id}, {'$set': {'abstract': abstract}})
-            print "set abstract automatically"
+            print "Abstract extracted automatically"
         info = {'file_id': file_id, 'title': title, 'abstract': abstract}
         raise gen.Return(info)
 
@@ -471,7 +471,7 @@ class ArticleDataHandler(BaseProfileHandler):
                     file_id, abstract = None
                 callback(file_id, abstract)
 
-            _gen_abstracts = self.generate_abstracts(file_keys)  # return a generator
+            _gen_abstracts = self.generate_abstracts(file_keys)  # returns a generator
             while True:
                 file_id, abstract = yield gen.Task(_iterate, _gen_abstracts)
                 info = yield self.get_info(file_id)

@@ -119,6 +119,7 @@ class Application(tornado.web.Application):
         self.client = motor.MotorClient(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
         # Choose correct database
         self.db = self.client['app']
+        #self.db = self.client['test-thank']
 
         # following part is for Analyzer
         @tornado.gen.coroutine
