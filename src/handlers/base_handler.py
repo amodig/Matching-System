@@ -2,7 +2,6 @@ import tornado.auth
 import tornado.escape
 import tornado.gen
 import tornado.httpserver
-import tornado.gen
 import tornado.web
 from urlparse import urlparse
 from tornado.ioloop import IOLoop

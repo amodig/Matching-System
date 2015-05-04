@@ -119,43 +119,48 @@ class Application(tornado.web.Application):
         self.client = motor.MotorClient(MONGO_SERVER_ADDRESS, MONGO_SERVER_PORT)
         # Choose correct database
         self.db = self.client['app']
-        #self.db = self.client['test-thank']
+        # self.db = self.client['test-thank']
 
         # following part is for Analyzer
         @tornado.gen.coroutine
-        def set_keywords_parameters():
+        def set_keywords_parameters(source='xml'):
+            print "Set keywords for analyzer..."
+            print "Using source:", source
             self.keywords_number = 10
-            # self._num_of_corpora = "all"
-            self._num_of_corpora = "all"
-            # information of all abstracts:
-            self.abstracts_filename = "../docs/abstracts/abstracts.xml"
+
+            if source is 'xml':
+                self._num_of_corpora = "all"
+                self.abstracts_filename = "../docs/abstracts/abstracts.xml"  # information of all abstracts
+                self.extractors = Extractors(file_name=self.abstracts_filename)
+                self.original_corpora, self.uploader_names, self.titles = self.extractors.get_information_from_xml(10000)
+            elif source is 'db':
+                self._num_of_corpora = "db"
+                self.extractors = Extractors(database=self.db, collection=u'fs.files')
+                info = yield self.extractors.get_information_from_database()
+                self.original_corpora = info['corpora']
+                self.uploader_names = info['uploader_names']
+                self.titles = info['titles']
+
+                # set keywords (might take a while):
+                # yield self.extractors.set_keywords_from_database()  # recommended to run only when needed
+
+            print "Paper uploaders:", self.uploader_names
+
             # information of all keywords as a set:
             self.keywords_filename = "../docs/keywords/abstract_%s.txt" % self._num_of_corpora
-            # keyword list of each abstract:
+            # keyword lists of each abstract:
             self.corpus_keywords_filename = "../docs/keywords/corpus_abstract_%s.txt" % self._num_of_corpora
-
-            # self.extractors = Extractors(file_name=self.abstracts_filename)
-            self.extractors = Extractors(database=self.db, collection=u'fs.files')
-            # self.original_corpora, self.author_names, self.titles = self.extractors.get_information_from_xml(10000)
-            info = yield self.extractors.get_information_from_database()
-            self.original_corpora = info['corpora']
-            self.uploader_names = info['uploader_names']
-            self.titles = info['titles']
-
-            # set keywords (might take a while)
-            # yield self.extractors.set_keywords_fm_database()
-
-            # Load and set abstract and keyword corpora
+            # load and set abstract and keyword corpora
             self.corpus_keywords_file_obj = open(self.corpus_keywords_filename, 'r')
             # set preprocessed keyword corpora (this is different than original corpora)
             self.corpora = pickle.load(self.corpus_keywords_file_obj)
             self.corpus_keywords_file_obj.close()
 
         def form_persons_info():
-            print len(self.original_corpora)
-            print len(self.corpora)
-            print len(self.uploader_names)
-            #assert(len(self.original_corpora) == len(self.corpora) == len(self.uploader_names))  # for persons_info
+            print "amount of original corpora:", len(self.original_corpora)
+            print "amount of preprocessed corpora:", len(self.corpora)
+            print "amount of uploaders:", len(self.uploader_names)
+            # assert(len(self.original_corpora) == len(self.corpora) == len(self.uploader_names))  # for persons_info
             self.corpora_user_id = {}
             self.persons_info = []  # this variable is a list that contains all information of persons
             person_id = 0
@@ -212,13 +217,13 @@ class Application(tornado.web.Application):
             self.keywords_file_obj.close()
 
         # set keywords parameters
-        tornado.ioloop.IOLoop.instance().run_sync(set_keywords_parameters)
+        tornado.ioloop.IOLoop.instance().run_sync(lambda: set_keywords_parameters(source='xml'))
 
         set_iteration_parameters()
         form_keywords_info()
         form_persons_info()
         analyze_data()
-        print "Ready"
+        print "Ready!"
 
     def form_new_keywords_information(self):
         keywords_exploitation = [0.1] * len(self.keywords_list)

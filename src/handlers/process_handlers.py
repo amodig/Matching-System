@@ -140,7 +140,7 @@ class NextHandler(MainBaseHandler):
 
         # get scores of all the keywords ordered in list order 
         before = datetime.datetime.now()
-        scores = self.application.analyzer.analyze(keywords, self.application.corpuses, weights)
+        scores = self.application.analyzer.analyze(keywords, self.application.corpora, weights)
         after = datetime.datetime.now()
         print "Time Consumption of Function Analyzer: ", after - before
         scores_sum = [sum(score) for score in scores]

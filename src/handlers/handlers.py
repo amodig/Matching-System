@@ -5,6 +5,7 @@ from profile_handlers import *
 
 from tornado import escape
 from bson.objectid import ObjectId
+
 import bcrypt
 import hashlib
 import urllib
@@ -307,8 +308,8 @@ class TablesDataHandler(BaseHandler):
             "tables":
                 [
                     {
-                        "persons":person_names, 
-                        "words":words
+                        "persons": person_names,
+                        "words": words
                     }
                 ]
             }
