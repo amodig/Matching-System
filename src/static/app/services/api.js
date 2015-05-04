@@ -11,8 +11,8 @@ MatchingApp.service('Api', function($http){
     $http.post('/article/' + article.key + '/edit', _.pick(article, 'title', 'abstract'));
   }
 
-  this.getAbstractWithKey = function(key){
-    return $http.get('/abstract/' + key);
+  this.getArticleWithKey = function(key){
+    return $http.get('/article/' + key);
   }
 
   this.topics = function(){

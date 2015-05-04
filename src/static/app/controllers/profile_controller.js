@@ -23,7 +23,7 @@ MatchingApp.controller('ProfileController', function($scope, $rootScope, Api, Fi
             $scope.activeFile.key = file.key;
           });
 
-          Api.getAbstractWithKey(file.key)
+          Api.getArticleWithKey(file.key)
             .success(function(article){
               $scope.activeFile.loading = false;
               $scope.activeFile.abstract = article.abstract;
