@@ -217,7 +217,7 @@ class Application(tornado.web.Application):
             self.keywords_file_obj.close()
 
         # set keywords parameters
-        tornado.ioloop.IOLoop.instance().run_sync(lambda: set_keywords_parameters(source='xml'))
+        tornado.ioloop.IOLoop.instance().run_sync(lambda: set_keywords_parameters(source='xml'))  # xml or db
 
         set_iteration_parameters()
         form_keywords_info()
