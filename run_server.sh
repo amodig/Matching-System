@@ -5,4 +5,4 @@ source venv/bin/activate
 
 sudo service mongodb start
 cd src
-python app.pydeasys
+python app.py
