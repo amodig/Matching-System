@@ -27,10 +27,11 @@ __maintainer__ = "Arttu Modig"
 __email__ = "arttu.modig@gmail.com"
 __status__ = "Prototype"
 
-# tornado config
+# Tornado config
 define("port", default=8899, type=int)
 define("config_file", default="app_config.yml", help="app_config file")
 
+# MongoDB config
 # MONGO_SERVER_ADDRESS = '192.168.1.68'
 MONGO_SERVER_ADDRESS = 'localhost'
 MONGO_SERVER_PORT = 27017
