@@ -8,7 +8,7 @@ MatchingApp.service('Api', function($http){
   }
 
   this.updateArticle = function(article){
-    $http.post('/article/' + article.key + '/edit', _.pick(article, 'title', 'abstract'));
+    $http.post('/article/' + article.key + '/edit', { new_title: article.title, new_abstract: article.abstract });
   }
 
   this.getArticleWithKey = function(key){
