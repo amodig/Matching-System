@@ -1,0 +1,58 @@
+# Ubuntu install instructions
+#
+# Here's how I think I installed this from scratch on Ubuntu, though
+# I didn't write these down as I went so might misremember the order
+# of some steps etc... gl hf :)
+
+# grab current installation
+git clone https://github.com/Dalar/Matching-System.git
+
+sudo apt-get update
+
+# I think most of these were already installed but just in case
+sudo apt-get install python-virtualenv mongodb mysql-server python-dev
+sudo apt-get install python-scipy
+
+sudo apt-get install -y nodejs
+
+# if the following line doesn't work, then try doing
+#    sudo apt-get install npm
+# first: npm should have come with nodejs but I think it didn't
+# for me
+sudo npm install npm -g
+
+npm config set prefix '~/.npm-packages'
+sudo pico ~/.bashrc
+
+# append the following line to bashrc, then save and close:
+export PATH="$PATH:$HOME/.npm-packages/bin"
+
+# back on the command line
+source ~/.bashrc
+
+npm install -g bower
+npm install -g grunt-cli
+
+# now navigate to the root of the git project you cloned, if you're not
+# there already
+cd Matching-System
+
+# at some point one of the installers might ask you whether to use a
+# library that angular needs or a library that Matching-Project needs,
+# I chose to use the one that M-P needs and it seemed to work okay
+
+virtualenv venv/
+source venv/bin/activate
+pip install -r requirements.txt
+
+npm install
+grunt
+bower install
+bower install angular-route
+
+# if you're exceedingly lucky, everything should now be installed and
+# ready to work
+# 
+# to actually run the thing, run the run_server.sh script and then
+# navigate your browser to http://localhost:8899/ for the new version
+# or http://localhost:8899/index for the old version
