@@ -21,19 +21,17 @@ I think most of these were already installed but just in case
 ```
 sudo apt-get install python-virtualenv mongodb mysql-server python-dev
 sudo apt-get install python-scipy
+sudo apt-get install -y nodejs
 ```
 
-`sudo apt-get install -y nodejs`
-
-if the following line doesn't work, then try doing
-
-`sudo apt-get install npm`
-
-first: npm should have come with node.js but I think it didn't for me
+if the following line doesn't work, then try doing `sudo apt-get install npm` first
+(npm should have come with node.js but I think it didn't for me)
 
 `sudo npm install npm -g`
 
-npm config set prefix '~/.npm-packages'
+`npm config set prefix '~/.npm-packages'`
+
+open:
 
 `sudo pico ~/.bashrc`
 
@@ -41,9 +39,7 @@ append the following line to bashrc, then save and close:
 
 `export PATH="$PATH:$HOME/.npm-packages/bin"`
 
-back on the command line
-
-`source ~/.bashrc`
+back on the command line `source ~/.bashrc`
 
 ```
 npm install -g bower
@@ -72,14 +68,14 @@ bower install
 
 ## Mac OSX (tested on 10.9)
 
-First, install [Homebrew](http://brew.sh/) package manager, and check that it works
+First, install [Homebrew](http://brew.sh/) package manager, and check that it works:
 
 ```shell
 brew update
 brew doctor
 ```
 
-Python 2 is recommended to be installed through Homebrew
+Python 2 is recommended to be installed through Homebrew:
 
 `brew install python2`
 
@@ -90,16 +86,14 @@ Remember to use [virtual environments](http://docs.python-guide.org/en/latest/de
 Use pip only inside virtualenv afterwards!
 
 HINT: It's good practise to make a shell command "syspip" or "gpip" for global pip installs, see e.g.:
-
 http://hackercodex.com/guide/python-development-environment-on-mac-osx/
 
 for more virtualenv power:
-
 http://www.marinamele.com/2014/05/install-python-virtualenv-virtualenvwrapper-mavericks.html
 
 `pip install virtualenvwrapper`
 
-Ge on installing:
+Get on installing:
 
 ```shell
 brew install mongodb
