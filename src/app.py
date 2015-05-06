@@ -61,11 +61,11 @@ class Application(tornado.web.Application):
             url(r'/article/([a-z0-9]+)', ArticleDataHandler, name='article/([a-z0-9]+)'),
             url(r'/article/([a-z0-9]+)/edit', ArticleDataHandler, name='article/([a-z0-9]+)/edit'),
 
-            url(r'/form', FormHandler, name='form'),
+            # url(r'/form', FormHandler, name='form'),
             url(r'/next', NextHandler, name='next'),
             url(r'/remove_person', RemovePersonHandler, name='remove_person'),
             url(r'/search', SearchHandler, name='search'),
-            url(r'/analyzer', AnalyzerHandler, name='analyzer'),
+            # url(r'/analyzer', AnalyzerHandler, name='analyzer'),
             url(r'/email', EmailMeHandler, name='email'),
             url(r'/message', MessageHandler, name='message'),
             url(r'/grav', GravatarHandler, name='grav'),
