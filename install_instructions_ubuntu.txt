@@ -48,6 +48,7 @@ pip install -r requirements.txt
 npm install
 grunt
 bower install
+
 bower install angular-route
 
 # if you're exceedingly lucky, everything should now be installed and
