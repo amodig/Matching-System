@@ -20,6 +20,40 @@ MatchingApp.service('Api', function($http){
       success: function(callback){
         var t = [
           {
+            content: 'Vitae laoreet',
+            weight: 0.9,
+            keywords: [
+              {
+                content: 'Cras vitae',
+                weight: 0.1
+              },
+              {
+                content: 'Cras vitae',
+                weight: 0.4
+              },
+              {
+                content: 'Cras vitae',
+                weight: 0.9
+              },
+              {
+                content: 'Cras vitae',
+                weight: 0.7
+              },
+              {
+                content: 'Cras vitae',
+                weight: 0.5
+              },
+              {
+                content: 'Cras vitae',
+                weight: 0.2
+              },
+              {
+                content: 'Cras vitae',
+                weight: 0.3
+              }
+            ]
+          },
+          {
             content: 'Lorem ipsum dolor sit amet',
             weight: 0.5,
             keywords: [
