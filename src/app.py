@@ -125,17 +125,18 @@ class Application(tornado.web.Application):
 
         # following part is for Analyzer
         @tornado.gen.coroutine
-        def set_keywords_parameters(source='xml'):
+        def set_keywords_parameters(metadata_source='xml', abstract_source='mallet'):
             print "Set keywords for analyzer..."
-            print "Using source:", source
+            print "Using metadata source:", metadata_source
+            print "Using abstract source:", abstract_source
             self.keywords_number = 10
 
-            if source is 'xml':
+            if metadata_source is 'xml':
                 self._num_of_corpora = "all"
                 self.abstracts_filename = "../docs/abstracts/abstracts.xml"  # information of all abstracts
                 self.extractors = Extractors(file_name=self.abstracts_filename)
                 self.original_corpora, self.uploader_names, self.titles = self.extractors.get_information_from_xml(10000)
-            elif source is 'db':
+            elif metadata_source is 'db':
                 self._num_of_corpora = "db"
                 self.extractors = Extractors(database=self.db, collection=u'fs.files')
                 info = yield self.extractors.get_information_from_database()
@@ -148,10 +149,17 @@ class Application(tornado.web.Application):
 
             print "Paper uploaders:", self.uploader_names
 
-            # information of all keywords as a set:
-            self.keywords_filename = "../docs/keywords/abstract_%s.txt" % self._num_of_corpora
-            # keyword lists of each abstract:
-            self.corpus_keywords_filename = "../docs/keywords/corpus_abstract_%s.txt" % self._num_of_corpora
+            if abstract_source is 'mallet':
+                # information of all keywords as a set:
+                self.keywords_filename = "../docs/keywords/mallet_abstract.txt"
+                # keyword lists of each abstract:
+                self.corpus_keywords_filename = "../docs/keywords/mallet_corpus_abstract.txt"
+            elif abstract_source is 'old':
+                # information of all keywords as a set:
+                self.keywords_filename = "../docs/keywords/abstract_%s.txt" % self._num_of_corpora
+                # keyword lists of each abstract:
+                self.corpus_keywords_filename = "../docs/keywords/corpus_abstract_%s.txt" % self._num_of_corpora
+
             # load and set abstract and keyword corpora
             self.corpus_keywords_file_obj = open(self.corpus_keywords_filename, 'r')
             # set preprocessed keyword corpora (this is different than original corpora)
@@ -219,7 +227,7 @@ class Application(tornado.web.Application):
             self.keywords_file_obj.close()
 
         # set keywords parameters
-        tornado.ioloop.IOLoop.instance().run_sync(lambda: set_keywords_parameters(source='xml'))  # xml or db
+        tornado.ioloop.IOLoop.instance().run_sync(lambda: set_keywords_parameters(metadata_source='xml', abstract_source='old'))  # xml or db, old or mallet
 
         set_iteration_parameters()
         form_keywords_info()

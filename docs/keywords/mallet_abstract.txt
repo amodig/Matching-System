@@ -1,0 +1,607 @@
+c__builtin__
+set
+p0
+((lp1
+S'system systems operating environment state implemented designed control main describes implementation external computer current develop part make called dynamic'
+p2
+aS'functions function boolean variables class polynomial degree continuous sum monotone valued variable derivative symmetric give constant form lipschitz quadratic'
+p3
+aS'quality qos requirements service constraints end high effective requirement delay resource priority resources bandwidth meet management aware level support'
+p4
+aS'performance evaluation quality evaluate metrics comparison evaluated compare improve test evaluating good level criteria parameters significant shows specific methodology'
+p5
+aS'task tasks transfer specific perform complex related multiple difficult solve target execution challenging performed performing require shared effective share'
+p6
+aS'project workflow projects provenance management scientific workflows support goals aggregation activities software community experience oss execution report data reports'
+p7
+aS'stage accuracy speed stages accurate procedure cad solution early improved final achieved combination improve calibration combined estimates evaluated shows'
+p8
+aS'components component principal pca composition connected independent ica structure set means composed compositions variance elements including combination interconnection analyze'
+p9
+aS'logic logics semantics modal logical propositional reasoning temporal formulas language complete calculus model formula fragment classical checking satisfiability formulae'
+p10
+aS'account taking takes period advantage periodic place structure consideration case potential methodology form nature type bifurcation net interest effect'
+p11
+aS'algorithms algorithm efficient complexity existing develop linear including perform require class algorithmic compute family computation designing compare addition describe'
+p12
+aS'sensing reconstruction signal cs measurements sparse compressed signals compressive measurement sampling recovery sparsity random imaging acquisition performance samples reconstructed'
+p13
+aS'years attention research recently past interest due literature received studied increasing lot community researchers considerable focus made attracted great'
+p14
+aS'sequence sequences string strings length sigma dna genome binary pattern suffix alphabet matching size sequencing subsequence alignment genomes text'
+p15
+aS'size small large exponential sizes smaller larger space complexity exponentially result grows fixed function total linearly increases input largest'
+p16
+aS'workshop conference international held volume proceedings papers programming researchers systems formal place event satellite aim science computer committee software'
+p17
+aS'local distributed global fusion locally center centralized decentralized neighborhood sensors locality network globally consensus fc scheme manner neighborhoods computation'
+p18
+aS'entropy inequality information shannon inequalities maximum conditional random relative entropies variables distribution measures probability discrete concentration enyi distributions minimum'
+p19
+aS'question open questions answer answers natural problems set answering related posed result asked al interesting long raised exists positive'
+p20
+aS'digital quantization bit analog bits quantized quantizer codebook distortion vector conversion rate adc quantizers scalar uniform resolution finite converter'
+p21
+aS'al result recently showed cite construction give previous constant proof stoc improved improve bound polynomial main due extend case'
+p22
+aS'text document documents topic extraction words wikipedia information topics corpus content articles summarization textual word frequency semantic texts news'
+p23
+aS'approximation algorithm ratio factor polynomial algorithms constant hard problems minimum np give submodular gap lp solution relaxation tsp maximum'
+p24
+aS'space dimensional dimension vector high dimensions vectors projection spaces dimensionality subspace subspaces multidimensional reduction fractal cube structure manifold points'
+p25
+aS'voting manipulation election voters candidates majority vote elections votes winner candidate voter rules coalition rule preferences choice fingerprinting single'
+p26
+aS'channel capacity channels fading receiver transmitter state gaussian broadcast memoryless discrete communication transmission region coding information input achievable noisy'
+p27
+aS'weighted weight weights sum minimum case total edge set algorithm weighting unweighted values version edges obtain finding find computing'
+p28
+aS'channel interference mimo antenna antennas multiple receiver beamforming transmit signal performance user precoding transmitter receivers single channels multi system'
+p29
+aS'free star triangle probe ab freeness wait sierpinski probes diamond si called end renormalization arbitrary computed test writer perfect'
+p30
+aS'simulation model simulations models simulator modelling dynamics simulate environment simulated behaviour tool simulating modeling fire scenarios pedestrian agent dynamic'
+p31
+aS'circuit circuits power depth logic gates gate reversible low computing cmos voltage devices technology current digital synthesis bit adder'
+p32
+aS'throughput wireless access transmission packet network networks mac channel delay protocol packets performance link ieee scheduling control multiple medium'
+p33
+aS'prediction model predict models predictive predictions predicting regression future forecasting accuracy series predicted accurate forecast predictor performance predictors accurately'
+p34
+aS'intelligence interval artificial intervals human ai collective intelligent cognitive life food behavior unit cognition machine common world find computational'
+p35
+aS'form closed expressions expression derived derive analytical function numerical exact formula average asymptotic simulations terms finally obtain arbitrary independent'
+p36
+aS'rank matrix low completion norm subspace matrices entries factorization nuclear robust nmf nonnegative minimization linear outliers recover unknown convex'
+p37
+aS'constant factor optimal bound size complexity bounded bounds linear case give deterministic lower arbitrary small additive logarithmic polynomial independent'
+p38
+aS'partition core partitioning partitions spin function model mixing lambda regular hard ising graph counting graphs independent strong sets spatial'
+p39
+aS'image data embedding watermark watermarking digital hiding steganography embedded secret images steganographic hidden cover bit robustness stego security audio'
+p40
+aS'retrieval information query search relevance documents ir indexing document content user system queries relevant searching database systems hat retrieved'
+p41
+aS'distance metric space distances euclidean spaces metrics manifold embedding measure geometric hyperbolic fr riemannian manifolds points respect geometry curvature'
+p42
+aS'random probability distribution walk high expected randomness uniformly randomly independent walks chosen generators uniform generator generated independently pseudo variables'
+p43
+aS'clustering cluster clusters data algorithm means hierarchical algorithms clustered spectral head partitioning points distance unsupervised heads datasets centers similar'
+p44
+aS'patterns mining pattern data frequent discovery association knowledge algorithm database databases itemsets support rules discover sequential discovering algorithms items'
+p45
+aS'content trust sharing peer collaborative reputation collaboration users internet peers information contents distribution bittorrent centric shared online model share'
+p46
+aS'languages regular automata language finite automaton free deterministic complexity infinite state prove nondeterministic words class rational accepted power classes'
+p47
+aS'robust uncertainty robustness criterion perturbations uncertainties uncertain observation perturbation minimax case respect criteria noise observations bounded errors presence nominal'
+p48
+aS'object objects oriented background scene moving model visual detection vision tracking task recognition video appearance scenes surveillance complex slicing'
+p49
+aS'box black hole boxes white holes pebbling mcc bounding deterministic pegs dialog pebble boxicity previous pebbles ae peg tracing'
+p50
+aS'systems system complex physical control failure critical behavior dynamical large models distributed modern sos solutions components means problems computer'
+p51
+aS'privacy data private differential information preserving sensitive anonymity utility mechanism differentially identity individual personal protection anonymization release leakage concerns'
+p52
+aS'parallel performance processing computing core gpu memory implementation processors computation cpu execution gpus parallelism architectures high multi processor sequential'
+p53
+aS'characterization result previous terms case main studied linear setting give extend previously works characterize class literature extension extends including'
+p54
+aS'protein gene genes expression proteins biological sequence structure dna motif rna interactions bioinformatics motifs sequences interaction microarray folding cancer'
+p55
+aS'level levels high hierarchy hierarchical higher low hierarchies top lower abstraction multi multilevel macro bottom micro multiple scales refinement'
+p56
+aS'citation scientific papers research science journals journal impact citations publications index authors publication indicators cited articles published researchers indicator'
+p57
+aS'point view points views floating set starting local terms represents saddle materialized viewpoints clouds viewpoint tc dyadic arithmetic relies'
+p58
+aS'algebra algebras algebraic commutative cas mathsf idempotent semirings van ss inverse computer semiring symbolic finite tropical package give rational'
+p59
+aS'position relative orientation difference positions calculation realization find realizations orientations determine proper calculated absolute finding calculating form calculate constrained'
+p60
+aS'service services web providers provider composition oriented soa discovery architecture request existing client server users customers clients ws business'
+p61
+aS'problems solutions algorithms solve solving solution optimization combinatorial solved class computational efficient hard introduce classical finding algorithmic related obtain'
+p62
+aS'cost costs computational reduce low total reduction complexity required minimum minimize high reducing reduces achieve reduced additional amount increase'
+p63
+aS'propagation belief bp algorithm passing sp message bethe graphical free energy graph models fixed inference loopy convergence called approximate'
+p64
+aS'fuzzy logic soft system linguistic crisp inference rough neuro deal theory membership sets uncertainty rules systems variables numbers deals'
+p65
+aS'category categories semantics categorical theory algebraic construction notion spaces monad algebras give coalgebras functor sets logic finite algebra monoidal'
+p66
+aS'words word infinite finite length alphabet sequence automatic numbers free sequences letters prove fibonacci factors periodic binary sturmian letter'
+p67
+aS'search algorithm space heuristic local algorithms heuristics solution find finding searching pruning greedy exhaustive instances performance searches experiments efficient'
+p68
+aS'lattice reduction lattices signature reduced signatures algorithm lll basis lr vector interpolation compute reductions integer complexity pod svp closest'
+p69
+aS'mechanism support mechanisms implementation virtual prototype basis model existing potential evaluation called supports control implement vertical handover aspect implemented'
+p70
+aS'set sets independent subset subsets called cardinality family intersection finite rough matroid matroids union defined minimal construct define dominating'
+p71
+aS'source coding rate sources distortion secrecy channel information eavesdropper side encoder gaussian wiretap decoder region case achievable correlated joint'
+p72
+aS'block transformation blocks transformations building rotation transformed case transform tool solution rotations set basic preserving canonical form mapping contest'
+p73
+aS'range wide sc variety including broad generic effective reporting extended ranges full applicable area fundamental typical previous dynamic called'
+p74
+aS'medical health patient clinical patients diagnosis cancer body disease diseases healthcare treatment imaging care diagnostic breast tumor drug human'
+p75
+aS'fact choice make light understanding argue interesting recently similar claim phenomenon underlying lead nature sense strong true explain issue'
+p76
+aS'spam internet malware email card mail anti phishing detection cyber cards users forensic crime fraud online computer detect network'
+p77
+aS'motion light trajectory surface camera trajectories wave calibration speed optical waves cameras field moving flight ray angle water velocity'
+p78
+aS'language programming languages code implementation program programs java functional describe level semantics implemented compiler features library specification syntax written'
+p79
+aS'correlation negative positive correlated correlations balanced cross coefficient investigate values independent degree statistical definite strong result cca auto balance'
+p80
+aS'eps tilde algorithm cdot space poly varepsilon stream streaming approximation algorithms give error cc pass randomized sketch streams running'
+p81
+aS'planar line plane drawing segments polygon crossing points polygons vertices straight segment point edge rectangles edges visibility drawings embedding'
+p82
+aS'find connection connections form call start investigate small move make calls requires change type interesting addition stopping early close'
+p83
+aS'norm regularization sparse regression sparsity lasso problems regularized linear smooth penalty convex norms optimization squares dimensional inverse selection smoothing'
+p84
+aS'divergence distributions generalized family divergences information gaussian fisher kullback measures leibler statistics bregman exponential families distribution kl distance probability'
+p85
+aS'security attacks attack authentication secure malicious password protection vulnerable attacker threats server vulnerabilities information mechanisms user attackers integrity privacy'
+p86
+aS'network networks nodes capacity multicast topology node links flow unicast topologies single multiple capacities routing link arbitrary connected session'
+p87
+aS'spreading spread epidemic model network disease infected infection contact dynamics susceptible rumor individuals diffusion propagation population threshold seed networks'
+p88
+aS'matrix matrices linear covariance vector spectral sparse eigenvalue eigenvalues columns row entries rank rows column singular multiplication symmetric laplacian'
+p89
+aS'generation complex generate set constraints key demonstrate produce existing hand suitable strategy additional current previous flexible requires alternative idea'
+p90
+aS'social twitter media online news content sentiment tweets popularity activity topics posts public popular facebook blogs opinion political people'
+p91
+aS'flow resolution flows conflict super conflicts alignment capacities mn maximum resolved free cfa commodity layout resolving resolutions multicommodity higher'
+p92
+aS'model models modeling parameters describe structure modelling mathematical existing observed similar single probabilistic stochastic realistic generative interaction account comparison'
+p93
+aS'file files format formats switch pieces viruses tp pe sta virus library csvm popular bytes fence fits minimize bmp'
+p94
+aS'monte carlo character characters recognition text handwritten chinese script ocr language system mcmc writing written arabic book features samples'
+p95
+aS'path paths shortest length algorithm pairs source routing graph edge finding route find single disjoint road destination travel routes'
+p96
+aS'assignment instances uniform instance assigned set assignments find called assign multiple balanced assigning partition uniformity quadratic sets mil nonuniform'
+p97
+aS'bound bounds lower upper tight prove obtain derive size bounded complexity result establish minimum bounding function derived improved exponential'
+p98
+aS'convergence algorithm gradient algorithms iteration iterative optimization descent stochastic function iterations linear update convex step converge fast numerical solving'
+p99
+aS'representation representations represented represent compact symbolic form representing set diagrams encoding efficient basis describe terms graphical introduce mesh natural'
+p100
+aS'precision recall experiments simulated double annealing experiment sa test performed generate actual required shows generated result produced tested good'
+p101
+aS'data experiments datasets set large world demonstrate dataset sets synthetic identify significant identification develop perform test task high evaluate'
+p102
+aS'countries government public information country internet urban economic international national areas global city cities world european data population technology'
+p103
+aS'business management organization organizations technology processes companies support development services industry customer customers product amp company products enterprise requirements'
+p104
+aS'phase transition critical random model transitions statistical threshold percolation behavior phases find large field simulations density replica physics parameter'
+p105
+aS'tool automatic automated tools automatically generate annotation generated annotations manual human task generation specific manually existing generating evaluation annotated'
+p106
+aS'agents agent consensus model opinion multi leader dynamics opinions formation states interactions behavior interaction information initial convergence environment reach'
+p107
+aS'ranking rank pagerank top rankings aggregation scores score ranked pairwise ranks lists tournament list importance sports kendall tau personalized'
+p108
+aS'np polynomial complexity hard complete problems prove computational fixed hardness algorithm finding result case computing deciding tractable solvable reduction'
+p109
+aS'items recommendation user users item preferences systems recommender collaborative filtering ratings rating recommendations preference information accuracy system movie cf'
+p110
+aS'frequency channel ofdm systems performance system communication optical division channels wireless power signal cdma bandwidth receiver carrier rate transmission'
+p111
+aS'online regret bandit reward setting learning multi armed optimal offline competitive problems bounds loss exploration unknown rewards arm arms'
+p112
+aS'cloud computing resources resource grid virtual services service distributed infrastructure management environment machines clouds environments virtualization workload demand data'
+p113
+aS'classification learning data features feature classifier training classifiers machine accuracy performance svm vector datasets algorithm support class supervised ensemble'
+p114
+aS'active area research score scoring areas interest importance determine related scores majority focused popular common purpose large previous find'
+p115
+aS'biological systems immune molecular chemical cell reaction artificial inspired cells molecules system networks dynamics species biology reactions computing computational'
+p116
+aS'hardware architecture chip embedded processor implementation processing fpga system instruction high software speed implemented architectures instructions level core area'
+p117
+aS'traffic network congestion internet tcp ip networks protocol packet bandwidth control flow performance packets flows transport routing link voip'
+p118
+aS'high due large data address reliability challenge difficult fine level limited issue reliable challenging task significant major highly grained'
+p119
+aS'force window pressure sliding element windows material mechanical materials fluid elastic forces brute beam flow finite displacement stress contact'
+p120
+aS'result set case prove fixed arbitrary positive function main unique bounded independent quasi obtain exists holds equal pairs setting'
+p121
+aS'planning actions action state decision markov plans mdp problems mdps states processes domains partially observable policy planner world pomdps'
+p122
+aS'role play plays roles key crucial central played complex fundamental critical blocking vital playing significant understanding essential shaping result'
+p123
+aS'layer physical cross layers layered pnc multiplex mac phy coding multi significantly cyber cps single end validation thickness stack'
+p124
+aS'polynomial polynomials algebraic field degree finite fields prime ring complexity basis compute coefficients arithmetic bases characteristic give rational roots'
+p125
+aS'values configuration set missing configurations initial identifying null unique distinct terms determined independent resulting incomplete complete count introduce ordered'
+p126
+aS'term long short terms standing st sharing period longer periods lived examine preserved addition create fast preservation timescale formulate'
+p127
+aS'relay forward source network relays channel destination scheme relaying nodes coding cooperative transmission decode duplex node hop rate half'
+p128
+aS'modulation coded symbol coding phase symbols bit constellation nc scheme error shift constellations qam bicm signal db ber psk'
+p129
+aS'hash table hashing tables functions md lookup space function collision bit random sensitive values search cuckoo key minwise collisions'
+p130
+aS'user interface interaction human computer interactive visual virtual visualization interfaces graphical system reality display hand screen world gestures perception'
+p131
+aS'strategy strategies optimal alice bob sequential observation eve achieve choose set mixed pure probability limited level choice common partial'
+p132
+aS'proof proofs theorem prover interactive formal coq proving provers assistant correctness reasoning formalization mathematical axioms arithmetic soundness mathematics prove'
+p133
+aS'increase increases increasing rate due significant average speed increased higher reduce effect decrease amount change decreases leads find reduced'
+p134
+aS'vehicle vehicles micro road traffic transportation mems air safety devices car vehicular travel transport device high silicon driver temperature'
+p135
+aS'automata state finite cellular automaton states reachability nets petri pushdown timed net systems ca deterministic infinite counter checking transitions'
+p136
+aS'estimation estimate estimator estimates error estimators estimating variance maximum data likelihood estimated parameters parameter accuracy sample statistical samples unknown'
+p137
+aS'users user access information end profile system profiles active sharing multiple share online shared individual scenario behavior form find'
+p138
+aS'notion definition introduce define generalized defined terms set concept definitions classical extension extended called notions setting finally related examples'
+p139
+aS'memory cache data read access write flash performance size shared os storage external space ram disk memories replacement caching'
+p140
+aS'verification model specification systems checking formal specifications synthesis system safety refinement requirements tool abstraction verify software correctness implementation behavior'
+p141
+aS'region interference rate user gaussian achievable capacity outer regions sum ic case scheme coding bounds strong receivers transmitters splitting'
+p142
+aS'human people social behavior individual activity interactions individuals activities patterns participants cognitive interaction person emotions humans actions behaviors collective'
+p143
+aS'lambda calculus rewriting terms proof reduction term logic system rules call linear rewrite prove cut calculi higher systems sequent'
+p144
+aS'finite decidable logic recursive complete infinite fragment fragments undecidable decidability class hierarchy prove complexity expressive structures resp nested fo'
+p145
+aS'coding codes decoding code encoding error polar erasure list decoder rate linear block scheme complexity length reed solomon codeword'
+p146
+aS'transform fourier frequency wavelet signal coefficients discrete spectral signals fast domain band transforms complex spectrum frequencies harmonic wavelets basis'
+p147
+aS'series swap dynamic pin dtw identify pins warping udc potential segments leading fractal schematic swaps truncated papers shrinking characteristic'
+p148
+aS'theorem proof result prove theory strong version give proofs lemma existence proved theorems conjecture classical generalization class holds notion'
+p149
+aS'assembly tile temperature thermal tiles model heat tiling tilings building system shape atam construction universal plane assemble cooling buildings'
+p150
+aS'software development source code open engineering project tools tool quality developers package projects effort methodology oriented library reuse defect'
+p151
+aS'bi satellite sign directional signed ambiguity signs residual orbit space satellites act effective attitude called direction orbits earth complementary'
+p152
+aS'traditional direct make advantages directly limitations common section solution alternative good overcome makes due called means fact apply needed'
+p153
+aS'scheme schemes access optimal efficient existing achieves id terms achieve addition analyze sharing al finally simulation requires outperforms construct'
+p154
+aS'assumptions assumption strong weak consistency consistent model setting case assume previous hold guarantees settings natural sense finally stronger weaker'
+p155
+aS'product decomposition tensor products tau decompositions cp tensors cartesian structure higher line kronecker natural decomposed sum dot multilinear components'
+p156
+aS'multi multiple single simultaneously scenarios se individual finally addition simultaneous combining combination independent common demonstrate access trade scenario setting'
+p157
+aS'approximation computation exact approximate algorithm compute algorithms computing approximations efficient computed fast computational error accurate computations accuracy computationally approximating'
+p158
+aS'map maps mapping mappings gp organizing som rst mapped injective logistic reduce mpe probable computing describes complex representation changing'
+p159
+aS'image images segmentation color processing pixel resolution regions pixels quality high visual spatial algorithm texture noise region detection edge'
+p160
+aS'domain domains attributes attribute specific names templates template adaptation tt relational form knowledge mapping relations transfer encoded categorical elements'
+p161
+aS'state art kernel space kernels outperforms experiments terms significantly large demonstrate previous recently steady spaces efficient linear states benchmark'
+p162
+aS'rules rule association chr fs confidence combination update generated extended induction handling rewrite called rewriting derived granular conditions explicit'
+p163
+aS'part ii iii parts iv nu main composite consists ordinal basic combination elements divided push hierarchical contributions composed modular'
+p164
+aS'delta coloring leq geq colors mathbb color prove colored mathbf chi ge integer chromatic interval rm called kappa constant'
+p165
+aS'quantum classical states entanglement state qubits qubit entangled computation error information mechanics measurement theory measurements bell communication computers physical'
+p166
+aS'nodes sensor network node networks wireless distributed sensors communication wsns wsn sink protocol simulation gossip sensing aggregation hop information'
+p167
+aS'tree trees spanning node nodes binary structure leaves rooted leaf phylogenetic steiner root minimum depth maximum branching forest degree'
+p168
+aS'systems system stability dynamics nonlinear dynamical linear stable switching conditions lyapunov continuous observer chaotic theory invariant discrete convergence class'
+p169
+aS'key security secret secure encryption public scheme cryptography cryptographic protocol keys cipher attack sharing cryptosystem encrypted schemes attacks exchange'
+p170
+aS'variables causal conditional independence variable models dependencies dependence directed structure dependency graph data graphical bayesian graphs causality markov dag'
+p171
+aS'class classes equivalence defined define called natural studied family equivalent special including related finally restricted identify textit includes broad'
+p172
+aS'location localization locations facility spatial accuracy positioning information placement gps position geographic line distance sensors measurements indoor sensor area'
+p173
+aS'networks network nodes degree complex node links link world topology structure scale connectivity random small topological centrality free connected'
+p174
+aS'small large fraction high close sufficiently arbitrarily larger left gap random median constant shows total smaller similar called red'
+p175
+aS'max cut min directed graph minimum arc digraph acyclic digraphs arcs cuts set graphs circular maximum terminals sum find'
+p176
+aS'robot robots environment team robotic control motion mobile robotics autonomous navigation environments planning exploration teams task sensor sensors tasks'
+p177
+aS'delay queue buffer arrival service packet packets queues delays system queueing scheduling model rate performance average stability traffic priority'
+p178
+aS'case worst special extended studied extend result scenario finally average previous generalized previously version provided interesting exact simultaneous investigate'
+p179
+aS'expansion sums moments series terms recurrence pm functions coefficients integrals integral explicit expansions harmonic recursive formulas infinite sum obtain'
+p180
+aS'theory mathematical basic computational tools information computation theories structure examples concepts develop fundamental models statistical classical view including ideas'
+p181
+aS'probability density outage distribution probabilities function sigma random point poisson distributions fading high eta success independent loss values pdf'
+p182
+aS'neural network networks training learning deep artificial layer trained hidden classification units ann data recognition performance function architecture recurrent'
+p183
+aS'optimal policy policies control optimality solution dynamic greedy function decision performance cost programming solutions markov objective utility derive expected'
+p184
+aS'query queries data database answer answers oracle answering databases efficient set evaluation processing join querying efficiently result search tuples'
+p185
+aS'input output multiple inputs single mimo outputs linear soft called takes similar equivalent siso scalar form pre provided target'
+p186
+aS'cite dual duality rc ms gs reservoir emph primal crt iso solving determined called equations divide ka conquer optimization'
+p187
+aS'linear programming integer lp variables polytope fractional program formulation nonlinear mixed inequalities constraints vector combination coefficients relaxation programs binary'
+p188
+aS'pr mod bug bugs debugging deadlock checkpoint au ib sn il restart checkpointing fix ees debugger replay sont cpc'
+p189
+aS'sparse recovery signal dictionary sparsity measurements signals sensing support linear minimization vector compressed pursuit measurement recover algorithm basis matrix'
+p190
+aS'list sorting array sort elements algorithm arrays variant merging versa vice comparisons lists stack sorted variants permutation ordered sequence'
+p191
+aS'partial relation relations ordering ordered orders partially poset equivalence complete total ps prove orderings respect structure induced elements defined'
+p192
+aS'recognition face features feature images image extraction classification database identification facial biometric system visual human matching extracted descriptors fingerprint'
+p193
+aS'constraint constraints sat variables formula satisfaction problems boolean csp satisfiability formulas solvers clauses solver instances cnf solving variable instance'
+p194
+aS'probabilistic stochastic deterministic probability randomized model expected random probabilities processes uncertain randomization setting distributions finally randomness uncertainty expectation simulation'
+p195
+aS'large scale small scalable high efficient scales thousands efficiently scalability performance practical data world million magnitude due existing requires'
+p196
+aS'performance efficiency high improve significantly low existing demonstrate improved achieve accuracy computational improves magnitude experiments improvement reduce efficient orders'
+p197
+aS'average threshold maximum values thresholds case length ratio fixed larger determine small greater determined defined equal level strict studied'
+p198
+aS'algorithm genetic evolutionary optimization algorithms fitness population problems evolution mutation ga swarm solutions search objective ant selection pso crossover'
+p199
+aS'communication distributed coordination communications links end inter model communicate systems communicating network common required decentralized goal medium direct link'
+p200
+aS'storage repair server data distributed client bandwidth nodes node replication systems servers failures regenerating failure clients system stored requests'
+p201
+aS'conditions condition sufficient existence case prove satisfy give derive unique uniqueness guarantee satisfied satisfying satisfies establish solution class set'
+p202
+aS'learning machine learn algorithms training learned sample examples reinforcement active supervised generalization problems task tasks setting learner function pac'
+p203
+aS'data database xml relational databases schema warehouse transactions sql query management access metadata queries store schemas systems transaction stored'
+p204
+aS'label labels semi labeling labeled supervised keyboard unlabeled keys inventions layout labelings cse speed multilabel ancestry datasets keyboards pb'
+p205
+aS'implementation issues existing problems address issue evaluation addresses proposals due challenges specific practical open overcome implemented limitations source benchmark'
+p206
+aS'semantic ontology web ontologies knowledge language rdf domain concepts information semantics description owl integration data semantically relations linked sparql'
+p207
+aS'operators operator functional closure contraction revision spaces introduce merging defined hilbert derived change base bases postulates form valued banach'
+p208
+aS'group groups abelian isomorphism finite members automorphism subgroup structure invariant action form symmetric semigroup elements permutation subgroups generated membership'
+p209
+aS'operations operation arithmetic particle join basic addition particles performed multiplication numbers atomic called pf copy division da split resampling'
+p210
+aS'codes decoding ldpc code parity check low density decoder binary performance error channel iterative convolutional ensembles rate turbo block'
+p211
+aS'data processing information large big mining sets sources amount set collection stream collected storage streams multiple raw massive datasets'
+p212
+aS'dynamic peer static update updates peers change overlay deletion dynamically maintain distributed insertion deletions fully maintaining insertions reconfiguration updated'
+p213
+aS'cycle cycles permutation asynchronous permutations hamiltonian synchronous odd set length duty classes prove called enumeration give disjoint cyclic hamilton'
+p214
+aS'power grid load smart energy demand system grids generation balancing electricity voltage supply wind control electric renewable line loads'
+p215
+aS'spectrum primary secondary cognitive radio sensing users channel cr user su pu interference access channels sus throughput network networks'
+p216
+aS'processes describe related features including relevant systems information types modelling aspects examples include part mechanisms basis description point type'
+p217
+aS'architecture system systems management integration distributed support software components platform implementation development environment requirements features module environments dynamic integrated'
+p218
+aS'error errors correction correct correcting prone withdrawn burst corrected capability incorrect bit relative small detection reduce erroneous correctly free'
+p219
+aS'knowledge base expert domain system bases representation experts systems acquisition reasoning specific prior set background ci common domains form'
+p220
+aS'web search page pages user users information engine engines google sites internet content site world access browser websites wide'
+p221
+aS'game games equilibrium players player nash equilibria strategies strategy payoff winning pure coalition strategic play existence cooperative price ne'
+p222
+aS'sampling filter filters samples filtering sample kalman sampled linear bank noise uniform lifting response importance band pass bloom reconstruction'
+p223
+aS'nearest neighbor puzzle neighbors nn colouring colour moves colours board knn puzzles solve solving sudoku neighbour chess tower game'
+p224
+aS'temporal events event spatial patterns spatio activity response occurrence dynamics specific emergency sequences inter disaster occur focus spatiotemporal complex'
+p225
+aS'emph round rounds pa submodular mis monotone distributed oracle diameter nk natural studied probability tilde arbitrary obtain token requires'
+p226
+aS'cell cells cellular coverage networks tier interference small macro femtocell network frequency macrocell femtocells heterogeneous capacity deployment spectrum access'
+p227
+aS'step steps forward initial backward final single sequence consists end back addition put paradox form intermediate means introduce takes'
+p228
+aS'compression index compressed data length indices space indexes size bits lossless memory text encoding lz compress redundancy lossy coding'
+p229
+aS'information mutual theoretic processing side amount theory sources measure communication entropy exchange flow incomplete relevant source fundamental systems provided'
+p230
+aS'video streaming multimedia frames videos frame quality stream streams content audio media tv user live motion broadcasting buffer dvb'
+p231
+aS'conventional mode joint multiple information existing performance improve demonstrate combined structure potential modes full resulting reduce ability achieved additional'
+p232
+aS'main contribution goal model hand introduce set contributions called technical aim basic respect idea find purpose focus obtain finally'
+p233
+aS'measure measures similarity metrics metric similar measuring pair pairs distance comparison compare quality set index similarities comparing define common'
+p234
+aS'turing curve machines computable machine universal curves numbers finite functions computability elliptic pairing computational rational natural theory halting tm'
+p235
+aS'target tracking targets radar track coupling multiple cd moving sar position drift tracker coupled spatial resolution doppler multi waveforms'
+p236
+aS'diversity complexity decoding space full rate ml code multiplexing antennas dmt mimo tradeoff block codes gain transmit performance achieve'
+p237
+aS'power allocation optimal rate resource constraints transmission constraint control sum transmit utility average system maximize total algorithm optimization resources'
+p238
+aS'codes code construction distance cyclic minimum linear constructions binary length weight optimal dual correcting hamming parameters constructed mds construct'
+p239
+aS'routing network ad hoc networks nodes mobile protocol protocols mobility wireless node performance end packet delay hop route simulation'
+p240
+aS'model modeling hybrid models continuous discrete complex dynamic behavior level modeled space environment specific meta underlying coupled multi driven'
+p241
+aS'processing pre efficient existing fast incremental additional post main effective required require designed improve makes full implemented modified easily'
+p242
+aS'shape surface shapes geometric rigid registration contour geometry skeleton surfaces mesh contours curvature deformation correspondence boundary local object meshes'
+p243
+aS'programs program logic programming semantics termination answer asp set execution loop constraint prolog atoms concurrent stable static interpretation declarative'
+p244
+aS'music neurons neural spike spiking musical pl synaptic audio brain neuron sound neuronal trains pitch spikes train memory biological'
+p245
+aS'factors differences impact features characteristics relationship studies empirical significant statistical patterns findings observed quantitative similar identify influence analyze examine'
+p246
+aS'topological complex homology topology simplicial persistence persistent surface complexes space surfaces spaces dimensional discrete invariants compute manifold quasi genus'
+p247
+aS'synchronization tags tag rfid tagging clock timing oscillators passive reader identification frequency synchronized synchronize coupled systems clocks folksonomies radio'
+p248
+aS'computer science fields field engineering vision scientific areas physics mathematics biology research computing theoretical scientists processing theory sciences natural'
+p249
+aS'gamma preservation physics hep high energy unique nuclear overline group lhc rcc mdm experiments cern sharp spm subsampling otis'
+p250
+aS'scheduling algorithm jobs job competitive online schedule ratio bin scheduler total packing machines schedules machine optimal load minimize deadline'
+p251
+aS'detection false detect system monitoring intrusion detector detecting anomaly alarm detectors ids change systems detected probability anomalies monitor positives'
+p252
+aS'asymptotic large limit scaling random finite infinity regime size asymptotically behavior theory scales derive small function analyze infty grows'
+p253
+aS'optimization convex solution constraints problems optimal algorithm constrained solve function constraint objective solutions minimization programming dual solving solved relaxation'
+p254
+aS'mathcal set cover covering cal elements bf subset element family size subsets cap cup sf find subseteq minimum determine'
+p255
+aS'effect effects behavior trade parameters impact side presence variations dependent analyze case including varying induced environment variation respect account'
+p256
+aS'structure structures space structured structural lg tree hierarchical nested dynamic supports linear construction spanner flat representation represented spanners efficiently'
+p257
+aS'control controller system loop systems controllers feedback state closed plant linear dc simulation controlled controllability optimal dynamics tracking input'
+p258
+aS'energy power consumption efficiency efficient wireless battery lifetime harvesting saving transfer total communication sensor consumed reduce aware management harvested'
+p259
+aS'mechanism mechanisms auction auctions revenue optimal agents welfare truthful price valuations allocation budget social incentive bidders items pricing buyers'
+p260
+aS'feedback dof csi freedom degrees csit information state user delayed scheme transmitter limited sum alignment perfect case transmitters achieve'
+p261
+aS'algorithm algorithms efficient running computing linear optimal runs input previous finding fast computes give size faster run finds version'
+p262
+aS'implementation significant efficient existing potential demonstrate improvements improvement practical computation terms full shows implemented current makes including efficiency improved'
+p263
+aS'parallel manipulators machining kinematic workspace manipulator stiffness joint machine space inverse tool singular kinematics robot orthoglide joints parameters axis'
+p264
+aS'graph graphs vertices edge edges vertex connected degree directed connectivity undirected maximum subgraph bipartite regular planar nodes minimum complete'
+p265
+aS'points point set convex geometric plane sets unit voronoi hull euclidean triangulation dimensional geometry space radius fixed distance delaunay'
+p266
+aS'semantics equivalence systems bisimulation calculus concurrent trace processes operational transition notion bisimilarity traces equivalences behaviour relations compositional theory weak'
+p267
+aS'community networks communities network structure detection modularity nodes overlapping world social complex algorithms clustering structures node groups modules detect'
+p268
+aS'matching stable perfect maximum matchings bipartite pattern match algorithm finding preference pairs matched graph find matches weight marriage cardinality'
+p269
+aS'phi width bounded psi parameter treewidth fixed parameterized cop tractable robber mso cops height backdoor graphs class prove fpt'
+p270
+aS'grammar grammars parsing language parser syntactic sentences semantic natural sentence free structures parse linguistic unification processing feature dependency formalism'
+p271
+aS'models model inference bayesian learning probabilistic distribution mixture latent prior variables gaussian likelihood posterior distributions graphical structure probability parameters'
+p272
+aS'selection feature selected select symmetry subset set selecting features crowd workers criteria crowdsourcing criterion breaking large relevant symmetries selects'
+p273
+aS'base station users stations bs user cellular cell network downlink uplink bss interference system networks mobile rate performance throughput'
+p274
+aS'theoretical practical numerical procedure empirical practice analyze studies case previous literature finally procedures develop gap existing simulations perform demonstrate'
+p275
+aS'message messages passing receiver broadcast common information communication receivers sender confidential send amp exchange sends private obtain transmitted intended'
+p276
+aS'belief reasoning probabilistic theory probability inference uncertainty evidence probabilities qualitative bayesian conditional knowledge uncertain revision beliefs shafer dempster networks'
+p277
+aS'social network networks influence online dynamics users individuals interactions structure diffusion evolution friends ties relationships interaction find facebook individual'
+p278
+aS'graphs graph vertex vertices parameterized set clique polynomial fixed parameter bounded problems size minor planar treewidth dominating subgraph cover'
+p279
+aS'protocol protocols communication adversary party byzantine computation parties distributed secure agreement consensus stabilizing security oblivious asynchronous round adversarial correct'
+p280
+aS'complexity computational kolmogorov randomness algorithmic terms complexities computation measure cl polynomial notion computability length function computing investigate strings program'
+p281
+aS'concept common concepts description principle form basic elements called introduce entities defined specific principles features basis conceptual reference key'
+p282
+aS'equations equation differential numerical solution finite boundary linear solutions diffusion problems discrete nonlinear element system field solving dimensional discretization'
+p283
+aS'research future development challenges current systems issues field potential survey technology related area tools spreadsheet aspects major technologies researchers'
+p284
+aS'adaptive performance adaptation scheme algorithm reduced estimation lms simulation square adaptively squares convergence simulations parameters varying sr recursive diffusion'
+p285
+aS'market risk price financial markets prices pricing model trading stock economic profit consumers demand customers money competition investment consumer'
+p286
+aS'minimal conjecture maximal length prove family maximum families give conjectured construct normal equal numbers sequence case extremal true proved'
+p287
+aS'markov chain state processes finite states stationary chains hidden continuous stochastic discrete sequence distribution transition infinite mixing ergodic hmm'
+p288
+aS'cooperation cooperative dilemma game evolutionary cooperate evolution behavior individual public individuals prisoner strategies cooperators reciprocity conditions stable goods incentive'
+p289
+aS'mobile devices wireless device communication technology network access phone users internet services technologies mobility smart system networks user data'
+p290
+aS'parameters parameter model data values sensitivity tuning parametric set parameterized regression function response space choice hyper sensitive optimization respect'
+p291
+aS'brain eeg bci subjects stimuli mould response slime functional responses spatial auditory activity stimulus experiments computer physarum polycephalum signal'
+p292
+aS'rate error probability rates optimal square performance minimum asymptotic exponent loss fixed maximum bit terms mmse average achievable finite'
+p293
+aS'decision making decisions utility information influence expected maker make uncertainty preferences diagram diagrams criteria choice sequential made procedures elicitation'
+p294
+aS'noise signal gaussian snr ratio additive high low signals noisy performance white error regime presence power optimal corrupted minimum'
+p295
+aS'students learning education teaching student university educational research computer courses teachers technology skills school academic tools environment tool universities'
+p296
+aS'binary symmetric valued separation asymmetric reverse skew conservative case compilation asymmetry called wise complex symmetry previous obdd special variation'
+p297
+aS'distribution distributions law power degree model probability exponential growth statistical random attachment exponent normal uniform empirical preferential tail observed'
+p298
+aS'test testing fault tests hypothesis faults tolerant tolerance diagnosis coverage generation tester failure defective faulty group detection tested items'
+p299
+aS'language word speech words text corpus english translation natural languages processing lexical linguistic recognition machine discourse statistical texts information'
+p300
+aS'type types system typed session theory typing higher dependent safe inference subtyping sessions intersection inductive recursive checking theoretic polymorphic'
+p301
+atp302
+Rp303
+.

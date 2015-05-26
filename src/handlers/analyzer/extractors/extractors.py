@@ -216,6 +216,53 @@ class Extractors():
         f_obj.close()                  
         f_corpus_obj.close()
 
+    def set_keywords_from_mallet(self):
+        """Read keywords and paper abstracts from Mallet topic model outputs"""
+        topic_keys_filename = "../docs/mallet/mallet_topic_keys.txt"
+        doc_topics_filename = "../docs/mallet/mallet_doc_topics.txt"
+
+        output_topic_keys_filename = "../docs/keywords/mallet_abstract.txt"
+        output_doc_topics_filename = "../docs/keywords/mallet_corpus_abstract.txt"
+
+        file = open(topic_keys_filename, 'r')
+        topics = dict()
+        nextline = file.readline()
+        while (nextline != ''):
+            topic_key = nextline.split('\t')
+            keyword = topic_key[2]
+            keyword_with_newline_removed = keyword[:-2]
+            topics[topic_key[0]] = keyword_with_newline_removed
+            nextline = file.readline()
+        file.close()
+
+        topicset = set(topics.values())
+        file_keyword_list = open(output_topic_keys_filename, 'w')
+        pickle.dump(topicset, file_keyword_list)
+        file_keyword_list.close()
+        
+        file = open(doc_topics_filename, 'r')
+        nextline = file.readline()
+        nextline = file.readline()
+        corpora_representation_list = []
+        while (nextline != ''):
+            linelist = nextline.split('\t')
+            filename = linelist[1]
+            topic_list = []
+            topic_number_reference = 2
+            topic_probability_reference = 3
+            while(float(linelist[topic_probability_reference]) >= 0.1):
+                topic_name = topics[linelist[topic_number_reference]]
+                topic_list.append(topic_name)
+                topic_number_reference += 2
+                topic_probability_reference += 2
+            corpora_representation_list.append(','.join(topic_list))
+            nextline = file.readline()
+        file.close()
+        
+        file_abstract_list = open(output_doc_topics_filename, 'w')
+        pickle.dump(corpora_representation_list, file_abstract_list)
+        file.close()
+
 
 @tornado.gen.coroutine
 def main1():
