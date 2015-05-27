@@ -125,7 +125,7 @@ class Application(tornado.web.Application):
 
         # following part is for Analyzer
         @tornado.gen.coroutine
-        def set_keywords_parameters(source='xml'):
+        def set_keywords_parameters(source='xml'):  # change the source if you wish
             print "Set keywords for analyzer..."
             print "Using source:", source
             self.keywords_number = 10
