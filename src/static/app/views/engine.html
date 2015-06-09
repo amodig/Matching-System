@@ -1,7 +1,59 @@
-<div id="cluster-container">
-  <div cluster ng-model="topics"></div>
-</div>
+<button class="btn btn-primary pull-right" ng-click="next()">Next <i class="fa fa-long-arrow-right"></i></button>
 
-<div style="clear: both;" class="text-center">
-  <button class="btn btn-primary btn-lg" ng-click="next()">Next <span class="glyphicon glyphicon-chevron-right"></span></button>
+<div style="clear: both"></div>
+
+<div id="engine-container">
+  <div id="topics-container" ng-class="{ 'hasRightPanel': relatedArticles }">
+    <h2>Topics</h2>
+
+    <button class="btn btn-default btn-block" id="toggle-history" ng-click="toggleHistory()" ng-show="currentIteration > 1">
+      <span ng-hide="showHistory">Show my history <i class="fa fa-chevron-down"></i></span>
+      <span ng-show="showHistory">Hide my history <i class="fa fa-chevron-up"></i></span>
+    </button>
+
+    <ul id="history-list" ng-show="showHistory">
+      <li ng-repeat="history in iterationHistory | orderBy: 'itration' | limitTo: -5">
+        <h4 class="text-center">{[history.iteration]}. iteration</h4>
+
+        <div class="progress">
+          <div class="progress-bar" ng-style="{ 'width': topic.portion }" tooltip content="topic.keywordsToString" ng-repeat="topic in history.topics">
+            {[topic.keywordsToString]}
+          </div>
+        </div>
+      </li>
+      <li><h4 class="text-center">Current iteration</li></li>
+    </ul>
+
+    <p class="text-muted text-center" ng-show="loading">
+      <i class="fa fa-spinner fa-spin"></i> Loading...
+    </p>
+
+    <ul id="topic-list" ng-hide="loading">
+      <li ng-repeat="topic in topics" ng-class="{ 'chosen': topic.selected }">
+        <div class="topic-keywords" ng-click="chooseTopic(topic)">
+          <span ng-repeat="keyword in topic.keywords" ng-style="{ 'font-size': 1 + keyword.weight + 'em' }">{[keyword.content]}</span>
+        </div>
+
+        <div ui-slider="{ orientation: 'horizontal', range: 'min', min: 0, max: 100 }" ng-model="topic.weight"></div>
+      </li>
+    </ul>
+  </div>
+
+  <div id="topic-articles-container" ng-show="relatedArticles">
+    <div class="wrapper">
+      <button type="button" class="close pull-right" aria-label="Close" ng-click="unchooseTopics()"><span aria-hidden="true" style="font-size: 1.5em">&times;</span></button>
+
+      <h2>Most related articles</h2>
+
+      <div polar-chart ng-model="relatedArticles" click="chooseArticle"></div>
+
+      <div ng-show="chosenArticle">
+        <h3>{[chosenArticle.title]}</h3>
+        <p class="text-muted">{[chosenArticle.authors]}</p>
+        <p>
+          {[chosenArticle.abstract]}
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

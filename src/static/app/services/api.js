@@ -18,136 +18,55 @@ MatchingApp.service('Api', function($http){
   this.topics = function(){
     return {
       success: function(callback){
-        var t = [
+        var topics = [
           {
-            content: 'Vitae laoreet',
-            weight: 0.9,
-            keywords: [
-              {
-                content: 'Cras vitae',
-                weight: 0.1
-              },
-              {
-                content: 'Cras vitae',
-                weight: 0.4
-              },
-              {
-                content: 'Cras vitae',
-                weight: 0.9
-              },
-              {
-                content: 'Cras vitae',
-                weight: 0.7
-              },
-              {
-                content: 'Cras vitae',
-                weight: 0.5
-              },
-              {
-                content: 'Cras vitae',
-                weight: 0.2
-              },
-              {
-                content: 'Cras vitae',
-                weight: 0.3
-              }
-            ]
+            weight: Math.round(Math.random()*100),
+            selected: false
           },
           {
-            content: 'Lorem ipsum dolor sit amet',
-            weight: 0.5,
-            keywords: [
-              {
-                content: 'Lorem ipsum',
-                weight: 0.2
-              },
-              {
-                content: 'Lorem ipsum',
-                weight: 0.8
-              },
-              {
-                content: 'Lorem ipsum',
-                weight: 0.32
-              },
-              {
-                content: 'Lorem ipsum',
-                weight: 0.7
-              },
-              {
-                content: 'Lorem ipsum',
-                weight: 0.4
-              },
-              {
-                content: 'Lorem ipsum',
-                weight: 0.5
-              },
-              {
-                content: 'Lorem ipsum',
-                weight: 0.9
-              },
-              {
-                content: 'Lorem ipsum',
-                weight: 0.12
-              },
-              {
-                content: 'Lorem ipsum',
-                weight: 0.39
-              },
-              {
-                content: 'Lorem ipsum',
-                weight: 0.5
-              }
-            ]
+            weight: Math.round(Math.random()*100),
+            selected: false
           },
           {
-            content: 'Dolor sit amet',
-            weight: 0.5,
-            keywords: [
-              {
-                content: 'Dolor sit',
-                weight: 0.6
-              },
-              {
-                content: 'Dolor sit',
-                weight: 0.43
-              },
-              {
-                content: 'Dolor sit',
-                weight: 0.17
-              },
-              {
-                content: 'Dolor sit',
-                weight: 0.24
-              },
-              {
-                content: 'Dolor sit',
-                weight: 0.8
-              },
-              {
-                content: 'Dolor sit',
-                weight: 0.55
-              },
-              {
-                content: 'Dolor sit',
-                weight: 0.9
-              },
-              {
-                content: 'Dolor sit',
-                weight: 0.62
-              },
-              {
-                content: 'Dolor sit',
-                weight: 0.77
-              },
-              {
-                content: 'Dolor sit',
-                weight: 0.38
-              }
-            ]
+            weight: Math.round(Math.random()*100),
+            selected: false
+          },
+          {
+            weight: Math.round(Math.random()*100),
+            selected: false
+          },
+          {
+            weight: Math.round(Math.random()*100),
+            selected: false
+          },
+          {
+            weight: Math.round(Math.random()*100),
+            selected: false
           }
-        ]
+        ];
 
-        callback(t);
+        topics.forEach(function(topic){
+          topic.relatedArticles = [];
+          topic.keywords = [];
+
+          _.times(10, function(){
+            topic.keywords.push({
+              content: 'lorem',
+              weight: Math.random()
+            });
+          });
+
+          _.times(5, function(){
+            topic.relatedArticles.push({
+              title: 'Lorem ipsum dolor sit amet',
+              authors: 'Lorem ipsum, Dolor sit',
+              abstract: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sodales ex eget nibh facilisis, eget condimentum neque sollicitudin. Sed rutrum tempus malesuada. Donec laoreet nec sapien quis dictum. Nulla ultrices pretium lorem, sit amet malesuada magna sagittis nec. Nullam id purus posuere, pretium quam non, pulvinar elit. Suspendisse purus elit, sodales et magna sit amet, molestie tempus turpis. Phasellus ut accumsan purus.',
+              weight: Math.random()
+            });
+          });
+        });
+
+        callback(topics);
       }
     }
   }

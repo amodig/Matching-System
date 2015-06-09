@@ -1,4 +1,4 @@
-var MatchingApp = angular.module('MatchingApp', ['ngRoute', 'ngSanitize', 'ui.gravatar', 'btford.markdown']);
+var MatchingApp = angular.module('MatchingApp', ['ngRoute', 'ngSanitize', 'ui.gravatar', 'btford.markdown', 'ui.slider']);
 
 MatchingApp.config(function($routeProvider){
   $routeProvider
