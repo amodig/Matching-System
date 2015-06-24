@@ -1,13 +1,14 @@
-MatchingApp.controller('IterationController', function($scope, $rootScope, Api, Utils){
+MatchingApp.controller('IterationController', function($scope, $rootScope, $routeParams, $location, Api, Utils){
   $rootScope.activeLink = 'engine';
 
+  $scope.keyword = $routeParams.keyword;
   $scope.iterationHistory = [];
   $scope.currentIteration = 1;
 
   function fetchTopics(){
     $scope.loading = true;
 
-    Api.topics().success(function(topics){
+    Api.topics($scope.keyword).success(function(topics){
       $scope.topics = topics;
       $scope.loading = false;
     });
@@ -38,6 +39,12 @@ MatchingApp.controller('IterationController', function($scope, $rootScope, Api, 
 
   $scope.toggleHistory = function(){
     $scope.showHistory = !$scope.showHistory;
+  }
+
+  $scope.newSearch = function(){
+    if(confirm('Are you sure you want to start a new search?')){
+      $location.path('engine/search');
+    }
   }
 
   $scope.next = function(){

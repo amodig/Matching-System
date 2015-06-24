@@ -6,9 +6,13 @@ MatchingApp.config(function($routeProvider){
       controller: 'ProfileController',
       templateUrl: 'static/app/views/profile.html'
     })
-    .when('/engine', {
+    .when('/engine/topics/:keyword', {
       controller: 'IterationController',
       templateUrl: 'static/app/views/engine.html'
+    })
+    .when('/engine/search', {
+      controller: 'SearchController',
+      templateUrl: 'static/app/views/search.html'
     })
     .otherwise({
       redirectTo: '/profile'

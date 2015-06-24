@@ -1,11 +1,12 @@
+<h1>Topics matching <span class="text-muted"><i>"{[keyword]}"</i></span></h1>
+
 <button class="btn btn-primary pull-right" ng-click="next()">Next <i class="fa fa-long-arrow-right"></i></button>
+<button class="btn btn-default pull-right" style="margin-right: 10px" ng-click="newSearch()"><i class="fa fa-search"></i> Start a new search</button>
 
 <div style="clear: both"></div>
 
 <div id="engine-container">
   <div id="topics-container" ng-class="{ 'hasRightPanel': relatedArticles }">
-    <h2>Topics</h2>
-
     <button class="btn btn-default btn-block" id="toggle-history" ng-click="toggleHistory()" ng-show="currentIteration > 1">
       <span ng-hide="showHistory">Show my history <i class="fa fa-chevron-down"></i></span>
       <span ng-show="showHistory">Hide my history <i class="fa fa-chevron-up"></i></span>
@@ -34,7 +35,7 @@
           <span ng-repeat="keyword in topic.keywords" ng-style="{ 'font-size': 1 + keyword.weight + 'em' }">{[keyword.content]}</span>
         </div>
 
-        <div ui-slider="{ orientation: 'horizontal', range: 'min', min: 0, max: 100 }" ng-model="topic.weight"></div>
+        <div ui-slider="{ orientation: 'horizontal', range: 'min', min: 0, max: 100, animate: true }" ng-model="topic.weight"></div>
       </li>
     </ul>
   </div>

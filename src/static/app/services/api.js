@@ -15,7 +15,9 @@ MatchingApp.service('Api', function($http){
     return $http.get('/article/' + key);
   }
 
-  this.topics = function(){
+  this.topics = function(keyword){
+    console.log(encodeURIComponent(keyword));
+    
     return {
       success: function(callback){
         var topics = [
