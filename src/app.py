@@ -5,6 +5,7 @@ Application includes setting Tornado handlers, configs and basic methods for the
 
 from handlers.handlers import *
 from handlers import uimodules
+from handlers.newHandlers import *
 
 import tornado.httpserver
 import tornado.gen
@@ -19,8 +20,8 @@ import uuid
 import base64
 import pickle
 
-__author__ = "Yuan (Alex) Gao, Arttu Modig"
-__credits__ = "Yuan (Alex) Gao, Arttu Modig, Kalle Ilves, Han Xiao"
+__author__ = "Yuan (Alex) Gao, Arttu Modig, Kaj Sotala"
+__credits__ = "Yuan (Alex) Gao, Arttu Modig, Kalle Ilves, Han Xiao, Kaj Sotala"
 __license__ = "MIT"
 __version__ = "0.1"
 __maintainer__ = "Arttu Modig"
@@ -64,6 +65,11 @@ class Application(tornado.web.Application):
             url(r'/article/([a-z0-9]+)', ArticleDataHandler, name='article/([a-z0-9]+)'),
             url(r'/article/([a-z0-9]+)/edit', ArticleDataHandler, name='article/([a-z0-9]+)/edit'),
             url(r'/grav', GravatarHandler, name='grav'),
+
+            url(r'/topics', TopicHandler, name='topics'),
+            url(r'/topic/([a-z0-9]+)/articles', TopicArticleHandler, name='topic/([a-z0-9]+)/articles'),
+            url(r'/feedback', FeedbackHandler, name='feedback'),
+
 
             # url(r'/form', FormHandler, name='form'),
             # url(r'/analyzer', AnalyzerHandler, name='analyzer'),
@@ -133,9 +139,9 @@ class Application(tornado.web.Application):
 
             if metadata_source is 'xml':
                 self._num_of_corpora = "all"
-                self.abstracts_filename = "../docs/abstracts/abstracts.xml"  # information of all abstracts
+                self.abstracts_filename = "../docs/abstracts/abstracts_70k.xml"  # information of all abstracts
                 self.extractors = Extractors(file_name=self.abstracts_filename)
-                self.original_corpora, self.uploader_names, self.titles = self.extractors.get_information_from_xml(10000)
+                self.original_corpora, self.uploader_names, self.titles = self.extractors.get_information_from_xml(5000)
             elif metadata_source is 'db':
                 self._num_of_corpora = "db"
                 self.extractors = Extractors(database=self.db, collection=u'fs.files')
@@ -150,21 +156,29 @@ class Application(tornado.web.Application):
             print "Paper uploaders:", self.uploader_names
 
             if abstract_source is 'mallet':
-                # information of all keywords as a set:
+                # information of all topics as a set:
                 self.keywords_filename = "../docs/keywords/mallet_abstract.txt"
-                # keyword lists of each abstract:
+                # topic lists of each abstract:
                 self.corpus_keywords_filename = "../docs/keywords/mallet_corpus_abstract.txt"
+                # a dictionary of topic number-keyword list mappings
+                self.topic_keywords_filename = "../docs/keywords/mallet_topic_keywords.txt"
             elif abstract_source is 'old':
                 # information of all keywords as a set:
                 self.keywords_filename = "../docs/keywords/abstract_%s.txt" % self._num_of_corpora
                 # keyword lists of each abstract:
                 self.corpus_keywords_filename = "../docs/keywords/corpus_abstract_%s.txt" % self._num_of_corpora
 
-            # load and set abstract and keyword corpora
-            self.corpus_keywords_file_obj = open(self.corpus_keywords_filename, 'r')
+            # load and set abstract and keyword cd
+            self.corpus_keywords_file_obj = open(self.corpus_keywords_filename, 'rb')
             # set preprocessed keyword corpora (this is different than original corpora)
             self.corpora = pickle.load(self.corpus_keywords_file_obj)
             self.corpus_keywords_file_obj.close()
+
+            if self.topic_keywords_filename is not None:
+                # set keyword data
+                self.topic_keywords_obj = open(self.topic_keywords_filename, 'rb')
+                self.corpus_keywords = pickle.load(self.topic_keywords_obj)
+                self.topic_keywords_obj.close()
 
         def form_persons_info():
             print "amount of original corpora:", len(self.original_corpora)
@@ -215,7 +229,7 @@ class Application(tornado.web.Application):
 
         def form_keywords_info():
             # set of all keywords
-            self.keywords_file_obj = open(self.keywords_filename, 'r')
+            self.keywords_file_obj = open(self.keywords_filename, 'rb')
             self.keywords_set = pickle.load(self.keywords_file_obj)
             # length of all keywords
             self.current_selected_keyword_length = len(list(self.keywords_set))
@@ -227,7 +241,7 @@ class Application(tornado.web.Application):
             self.keywords_file_obj.close()
 
         # set keywords parameters
-        tornado.ioloop.IOLoop.instance().run_sync(lambda: set_keywords_parameters(metadata_source='xml', abstract_source='old'))  # xml or db, old or mallet
+        tornado.ioloop.IOLoop.instance().run_sync(lambda: set_keywords_parameters(metadata_source='xml', abstract_source='mallet'))  # xml or db, old or mallet
 
         set_iteration_parameters()
         form_keywords_info()

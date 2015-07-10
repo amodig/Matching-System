@@ -1,0 +1,1202 @@
+(dp0
+S'216'
+p1
+S'code decode decod performance ldpc_code design propose complexity stbc ml decoder turbo decode_complexity rate convolutional_code symbol paritycheck bit base'
+p2
+sS'217'
+p3
+S'design optimization propose joint optimal constraint allocation solution optimize maximize optimization_problem formulate maximization power_allocation power formulation multiple fairness solve'
+p4
+sS'214'
+p5
+S'topological emotion homology hole persistent persistence topology complex black emotional space simplicial_complex white affective diagram cohomology homotopy simplicial algebraic'
+p6
+sS'215'
+p7
+S'search heuristic planning plan domain planner search_space prune search_algorithm solution use action state technique approach generate planning_problem branch competition'
+p8
+sS'212'
+p9
+S'matching list match correspondence matching_problem bipartite bipartite_graph pair similarity perfect_matching instance m order popular md hr preference call find'
+p10
+sS'213'
+p11
+S'map transformation mapping use subject brain bcus pr response onto som obtain interface stimulus transform eeg call study paradigm'
+p12
+sS'210'
+p13
+S'role play entity many important among identify provide eg central aspect problem several various number name fundamental including relate'
+p14
+sS'211'
+p15
+S'logic semantics theory formula proof category logical fragment calculus reasoning operator axiom language extension extend firstorder prove completeness modal'
+p16
+sS'165'
+p17
+S'block encode bit binary size use defect inspection encoding one can within operation ht per original consecutive value code'
+p18
+sS'264'
+p19
+S'space xml schema document use structure type dt represent define dimension domain xpath null spacetime describe can set requirement'
+p20
+sS'265'
+p21
+S'query database data answer relational join schema sql search result tuple relational_database store topk query_processing data_structure efficient query_answer answer_query'
+p22
+sS'218'
+p23
+S'feature attribute select subset feature_selection base relevant propose extract identify identification dimensionality redundant three contain feature_set application classification distinguishing'
+p24
+sS'219'
+p25
+S'model learn bayesian data prior inference latent distribution parameter structure likelihood topic posterior infer variational probabilistic use topic_model demonstrate'
+p26
+sS'133'
+p27
+S'team ranking clone tournament sport score competition ear hat cup league connector soccer w skill football competitor robocup reo'
+p28
+sS'132'
+p29
+S'circuit design power device voltage use switch logic technology gate cmos analog propose digital current converter memristor area simulation'
+p30
+sS'131'
+p31
+S'property show family prove natural define satisfy introduce study call particular respect certain notion relate base associate theory strong'
+p32
+sS'130'
+p33
+S'language automata automaton state deterministic decidable finite problem show complexity word nondeterministic undecidable regular regular_language decidability fragment finite_automata prove'
+p34
+sS'137'
+p35
+S'user information system access provide need interaction share ie user_can scenario may improve able service interactive individual intervention specify'
+p36
+sS'136'
+p37
+S'estimation estimate estimator variance parameter derive mean statistical measurement performance ml sample unknown mse maximum_likelihood gaussian optimal observation bound'
+p38
+sS'135'
+p39
+S'network cell base_station cellular_network interference b coverage downlink bss uplink femtocell mobile cellular cooperation dd lte deployment backhaul ap'
+p40
+sS'134'
+p41
+S'use complex can simple provide application allow example set describe tool problem represent require approach way form implement framework'
+p42
+sS'139'
+p43
+S'cloud service cloud_compute resource provider compute cost infrastructure data_center server workload provision user vm service_provider customer offer virtual_machine storage'
+p44
+sS'138'
+p45
+S'image watermark embed use wavelet method digital technique data pixel steganography compression hiding hide coefficient secret quality original information'
+p46
+sS'166'
+p47
+S'standard extension original extend new result introduce present application apply base allow version paper additional modification improvement classical provide'
+p48
+sS'24'
+p49
+S'sparse problem method regularization sparsity projection lasso penalty solve norm subspace term regression pca regularize linear solution matrix approach'
+p50
+sS'25'
+p51
+S'region deterministic boundary zone point tau two seed area outside rendezvous within obtain interest either find plane inside connect'
+p52
+sS'26'
+p53
+S'probability probabilistic random give stochastic show choose expected one model probability_distribution randomly set result assume compute value two function'
+p54
+sS'27'
+p55
+S'service architecture application environment support context distribute workflow platform integration requirement base integrate web_service technology provide management component dynamic'
+p56
+sS'20'
+p57
+S'source distortion source_code problem encod side_information decod compression rate joint ratedistortion separation correlate lossy function consider distribute optimal encode'
+p58
+sS'21'
+p59
+S'pair re cross two extractor pairwise cg mutually construction obtain us show exclusive possible separate opposite least explicit consist'
+p60
+sS'22'
+p61
+S'approach use technique propose_approach combine problem advantage paper implement demonstrate evaluate compare approach_base paper_present example hybrid exploit improve work'
+p62
+sS'23'
+p63
+S'memory hash storage store read io disk use hash_function space write flash_memory access require flash block ss hash_table cell'
+p64
+sS'160'
+p65
+S'video frame multimedia stream quality video_stream content application motion media background sequence tv surveillance audio camera broadcasting low clip'
+p66
+sS'28'
+p67
+S'work many year paper however research new still several progress early last recently short much idea two past although'
+p68
+sS'29'
+p69
+S'prediction predict model forecast time_sery predictive use expert predictor accuracy future advice accurate average weather best error outcome regression'
+p70
+sS'161'
+p71
+S'quantum classical state entanglement quantum_state qubit measurement quantum_algorithm quantum_channel entangle quantum_system communication quantum_computer quantum_computation protocol quantum_information prover bell oneway'
+p72
+sS'289'
+p73
+S'algorithm problem give time use present running_time complexity known fast input improve size simple compute algorithm_compute first time_complexity work'
+p74
+sS'0'
+p75
+S'inference bayesian_network model variable network marginal probabilistic graphical_model bp structure probability conditional belief_network exact compute approximation bn evidence probabilistic_inference'
+p76
+sS'4'
+p77
+S'rule stop give use simple set can induction rewrite inductive form update chr inference ie define rulebased accord rule_base'
+p78
+sS'281'
+p79
+S'entropy inequality divergence distribution measure information mutual_information conditional random_variable generalize information_theory show renyi derive result quantity shannon_entropy informationtheoretic relative_entropy'
+p80
+sS'8'
+p81
+S'l cut lp relaxation linear_program instance sdp problem round max integrality_gap semidefinite_program expansion result unique_game prove hierarchy formulation inequality'
+p82
+sS'283'
+p83
+S'partial move puzzle board auxiliary number peg rc position solve show require sudoku variant possible evader one call full'
+p84
+sS'163'
+p85
+S'tool use software library package available developed implement file format interface application program open_source base user easy development create'
+p86
+sS'285'
+p87
+S'large approach method scale algorithm require use number computationally alignment scalable demonstrate often dataset thousand however expensive computational size'
+p88
+sS'284'
+p89
+S'large small size can number require one result even ie close fraction many subset simple achieve support dense possible'
+p90
+sS'287'
+p91
+S'set partition subset family cardinality intersection collection union close define can form element disjoint problem call base consider contain'
+p92
+sS'286'
+p93
+S'discuss present describe paper detail system article description implementation report discussion approach finally review section include author work briefly'
+p94
+sS'119'
+p95
+S'biological gene genome molecular dna reaction chemical cell protein molecule species biology evolutionary genetic population complex model organism process'
+p96
+sS'271'
+p97
+S'base propose use different paper order two obtain compare term several present also design evaluate comparison various consider finally'
+p98
+sS'258'
+p99
+S'spectrum channel primary secondary sense secondary_user cognitive_radio cr primary_user cognitive su pu spectrum_sense interference sus access throughput network cognitive_radio_network'
+p100
+sS'120'
+p101
+S'code construction construct binary codeword linear_code decode parameter family distance minimum_distance weight optimal bound perfect length linear erasure cyclic_code'
+p102
+sS'121'
+p103
+S'multiple single cell combine can one simultaneously combination allow simultaneous individual separation separate selective technique information require among independent'
+p104
+sS'122'
+p105
+S'consensus convergence average state agreement network update reach topology converge byzantine asynchronous majority neighbor value dynamics asymptotic communication prove'
+p106
+sS'123'
+p107
+S'function computable give set class symmetric value boolean_function derivative compute use prove continuous real rational construct partial lipschitz sum'
+p108
+sS'124'
+p109
+S'lattice cellular_automata cellular reduction automaton dimension vector lr lll lattice_code nest integer onedimensional short distributive sphere il point latticebased'
+p110
+sS'125'
+p111
+S'patient medical disease health cancer clinical use diagnosis treatment care healthcare drug data breast tumor hospital diagnostic information heart'
+p112
+sS'126'
+p113
+S'study result analysis experiment effect finding suggest show may examine report investigate identify performance reveal find evidence found experimental'
+p114
+sS'127'
+p115
+S'layer threshold ensemble couple coupling multilayer spatially saturation show observe ldpc multiplex regular spatial approach spatiallycouple degree multiplex_network variable'
+p116
+sS'128'
+p117
+S'representation represent view structure compact show describe diagram symbolic introduce efficient present different can support construct capture allow extend'
+p118
+sS'129'
+p119
+S'assumption can show assume adversary even perfect knowledge require guarantee limit strong ie consider allow presence adversarial underlying prove'
+p120
+sS'269'
+p121
+S'de la le et bruijn ce en un nous dan une facto pour floorplan que du novo sur assembly'
+p122
+sS'268'
+p123
+S'citation journal science publication impact indicator paper scientific author research field cite article researcher publish factor index hindex number'
+p124
+sS'167'
+p125
+S'increase can also base due efficiency however improve increasing paper advantage become efficient system available decrease potential existing therefore'
+p126
+sS'118'
+p127
+S'result also can paper find effective time large good however better less finding found since produce efficient case require'
+p128
+sS'59'
+p129
+S'index stack power invert call banzhaf barrier arrow bitmap measure whittle btree fb shapleyshubik crack breathing variant simple sdm'
+p130
+sS'58'
+p131
+S'mimo channel antenna user receiver beamform precode csit transmitter dof system scheme linear interference_alignment achieve show interference_channel ia signal'
+p132
+sS'55'
+p133
+S'factor ratio amp papr span paper reduce two high slm peak cone different zero peaktoaverage_power light dac vlc magnitude'
+p134
+sS'54'
+p135
+S'game player strategy equilibrium payoff equilibria play cooperation nash_equilibrium coalition win game_theory show strategic objective study outcome action nash_equilibria'
+p136
+sS'57'
+p137
+S'result generalize give show obtain general consider one term simple et_al classical particular form first corresponding generalization version prove'
+p138
+sS'56'
+p139
+S'word w letter factor length alphabet finite infinite_word sturmian binary prove number shift fibonaccus infinite language abelian give u'
+p140
+sS'51'
+p141
+S'point plane polygon line p convex rectangle contain disk circle geometric unit r simple segment two guard convex_hull visibility'
+p142
+sS'50'
+p143
+S'word text corpus language semantic tag annotation lexical sentence task translation dictionary lexicon document english automatic linguistic statistical sense'
+p144
+sS'53'
+p145
+S'target track trajectory moving object motion radar location drift tracker movement association multiple clutter data particle_filter spatial scenario present'
+p146
+sS'52'
+p147
+S'operation arithmetic number integer machine multiplication binary use computation addition prime digit precision conversion modular require division modulo numerical'
+p148
+sS'259'
+p149
+S'signal measurement recovery reconstruction sparse recover sparsity dictionary compress_sense sparse_signal support c reconstruct compressive_sense vector basis coefficient compressive measurement_matrix'
+p150
+sS'298'
+p151
+S'model behavior dynamics interaction individual evolution population process system social mechanism can pattern effect different interact phenomenon observe study'
+p152
+sS'299'
+p153
+S'chain instruction execution thread application latency grain execute program port sand multithread speculative adapter permission jump traversal slowdown race'
+p154
+sS'296'
+p155
+S'problem solution solve give two general apply optimization_problem formulation finding solve_problem heuristic feasible instance optimal_solution reduce solution_problem procedure find'
+p156
+sS'297'
+p157
+S'business organization management customer process company product service enterprise model industry actor business_process information_system factor technology risk support market'
+p158
+sS'294'
+p159
+S'communication digital communicate information decentralize communications coordination via among centralize network system medium allow exchange message computation communication_system communication_network'
+p160
+sS'295'
+p161
+S'document web search page query search_engine content retrieval user information ranking text web_page link keyword use relevant index information_retrieval'
+p162
+sS'292'
+p163
+S'c b p cal e set let subset exist denote ab mathcal following n t h gt lt family'
+p164
+sS'293'
+p165
+S'expansion basis sery coefficient ideal base inverse algorithm polynomial use term function rational compute recurrence grobner order computation calculation'
+p166
+sS'290'
+p167
+S'trust reputation identity mechanism anonymity authority dn anonymous tor sybil malicious security trustworthiness privacy transaction user provide certificate use'
+p168
+sS'291'
+p169
+S'data estimate model accuracy parameter method miss accurate measurement experiment error calibration identification measure demonstrate perform provide observe approach'
+p170
+sS'164'
+p171
+S'program language code implementation program_language execution support implement abstract semantics java compiler specification c programmer describe abstraction call tool'
+p172
+sS'201'
+p173
+S'condition give result set show general provide case establish derive prove existence guarantee satisfy arbitrary sufficient consider sufficient_condition characterize'
+p174
+sS'199'
+p175
+S'language character speech text word recognition use english arabic system speaker handwritten script dialogue speech_recognition written spoken chinese language_model'
+p176
+sS'179'
+p177
+S'first second two third one three base contribution finally apply extend first_one consist step twofold second_one make take similar'
+p178
+sS'200'
+p179
+S'equivalence calculus process bisimulation semantics notion net bisimilarity probabilistic system label calculi transition_system concurrent behaviour simulation theory define picalculus'
+p180
+sS'195'
+p181
+S'process diffusion stationary time ergodic stochastic_process observer markov generate dynamic random rate random_walk value finitestate drift markov_process levy describe'
+p182
+sS'194'
+p183
+S'value variable show additive determine give consider one sign depend absolute also range obtain negative function positive multiplicative define'
+p184
+sS'197'
+p185
+S'fuzzy mine data_mine association_rule rule knowledge data database rough_set use attribute fuzzy_logic process extract discovery frequent_itemset discover support fuzzy_set'
+p186
+sS'178'
+p187
+S'dimension tile shape fractal assembly multidimensional selfassembly temperature til tile_assembly tiling grid square dimensional set type universal show construction'
+p188
+sS'191'
+p189
+S'network node link model topology property degree complex_network connectivity structure degree_distribution connect centrality topological edge find characteristic cluster smallworld'
+p190
+sS'190'
+p191
+S'reduction rewrite term right left transformation rule rewrite_system ac tr termination term_rewrite_system side confluence reduce preserve term_rewrite infinitary orthogonal'
+p192
+sS'193'
+p193
+S'rate scale density average number show increase grow function ratio limit regime per exponent decrease parameter constant high analyze'
+p194
+sS'192'
+p195
+S'order element array fractional poset linear partial_order permutation chain ordering partially respect binary sequence lexicographic multiset induce arbitrary fo'
+p196
+sS'115'
+p197
+S'metric metrics distance quantify measure base di metric_learn quantification respect set give characterize relate mahalanobi euclidean metric_space show atlas'
+p198
+sS'114'
+p199
+S'color edge conjecture proper every prove interval chromatic_number number least two graph_g delta list colorable coloring edgecolor vertice tcolor'
+p200
+sS'88'
+p201
+S'resource share bandwidth allocation collaborative allocate available among request multiple resource_allocation allow distribute can collaboration cost access different efficient'
+p202
+sS'89'
+p203
+S'event time temporal change action dynamic pattern evolve occur can sequence evolution represent static behavior information spatial context duration'
+p204
+sS'111'
+p205
+S'string compression compress data_structure space length text index suffix sigma encode character bit symbol substring give array tree pattern'
+p206
+sS'110'
+p207
+S'image segmentation method feature shape object detection texture region imaging descriptor visual pixel segment scene detect extract scale registration'
+p208
+sS'113'
+p209
+S'spread epidemic contact disease infection individual process rumor propagation infect threshold population seed outbreak dynamics virus diffusion study sir'
+p210
+sS'112'
+p211
+S'measure quality similarity score ranking propose base metrics correlation evaluate define study rank two relative compare assessment quantify objective'
+p212
+sS'82'
+p213
+S'uncertainty decision theory reasoning evidence probability qualitative uncertain probabilistic utility knowledge decision_making belief represent preference inference rule information possibility'
+p214
+sS'83'
+p215
+S'vote election preference voter candidate manipulation control majority winner system score manipulate electoral outcome partition_function weighted complexity lbp number'
+p216
+sS'80'
+p217
+S'noise robust robustness noisy perturbation presence error corrupt outlier signal uncertainty show smooth gaussian outly denoise respect environment gaussian_noise'
+p218
+sS'81'
+p219
+S'project research country technology public policy organization government development international issue service ict develop innovation digital within create infrastructure'
+p220
+sS'86'
+p221
+S'student learn course university use education teaching educational teacher environment learner elearn school research study train tool skill grade'
+p222
+sS'87'
+p223
+S'research application field new technique area various focus issue design development study paper challenge survey many current work review'
+p224
+sS'84'
+p225
+S'optimization genetic_algorithm search fitness problem use evolutionary evolutionary_algorithm solution ga ant landscape multiobjective population mutation heuristic evolution ea crossover'
+p226
+sS'85'
+p227
+S'analysis provide tool analyze present base result method approach analyse statistical study application apply quantitative important framework example perform'
+p228
+sS'251'
+p229
+S'theory field mathematical principle physical science theoretical apply computational physics mathematics computer_science fundamental discuss basic law idea algorithmic engineering'
+p230
+sS'198'
+p231
+S'core unit ca cellular_automata also attractor consist au multiple rule coreperiphery tion obsolescence mica truss periphery mostly rus eml'
+p232
+sS'256'
+p233
+S'dependency direct dependence dc indirect functional show dependent among chase two relationship acyclic spurious graph link met base cyclic'
+p234
+sS'206'
+p235
+S'facility connection site coin client facility_location open cost problem opening crosstalk cac connect line fi emulation side ufl drop'
+p236
+sS'226'
+p237
+S'tree root node binary branch leave phylogenetic forest label child subtree leaf tree_structure construct height depth parent search_tree give'
+p238
+sS'257'
+p239
+S'monitor trace log system detect debug slice behavior activity cause report anomaly measurement collect identify diagnose real capture detection'
+p240
+sS'3'
+p241
+S'r et_al j m recently result paper introduce li arxiv case ieee wang math pp comput phy e tran'
+p242
+sS'177'
+p243
+S'use evaluation different result evaluate three compare comparison benchmark test report four method experiment measure perform several new two'
+p244
+sS'254'
+p245
+S'protocol message communication party secure exchange use security round can key send transfer multiparty require without may channel participant'
+p246
+sS'7'
+p247
+S'robot motion robotic manipulator environment control parallel joint trajectory design machine position workspace kinematic force space autonomous vehicle movement'
+p248
+sS'247'
+p249
+S'knowledge ontology domain semantic semantic_web use system language concept annotation description web rdf represent reasoning knowledge_base term expert owl'
+p250
+sS'273'
+p251
+S'load demand balance symmetry profile cost consumer load_balance breaking peak reduce consumption appliance capacity dr number electricity production price'
+p252
+sS'255'
+p253
+S'opinion influence twitter social_network social sentiment tweet individual political cultural social_media media topic people trend spread society blog diffusion'
+p254
+sS'225'
+p255
+S'approximation approximate exact result algorithm error provide method give guarantee tsp accurate yield accuracy prove efficient problem technique tour'
+p256
+sS'245'
+p257
+S't test use hypothesis time t_case whether generate coverage group_test tester suite defective base item identify require generation ot'
+p258
+sS'244'
+p259
+S'technology will world use computer internet become need information way future challenge change digital like development life day research'
+p260
+sS'108'
+p261
+S'privacy data information private sensitive differential_privacy mechanism preserve individual release protect utility leakage guarantee concern privacypreserve differentially database personal'
+p262
+sS'109'
+p263
+S'show can may simple one even many different however example standard general fact type become find rather particular work'
+p264
+sS'241'
+p265
+S'network flow network_code multicast capacity packet source broadcast sink linear_network_code unicast link receiver transmission message random index_code node maximum'
+p266
+sS'240'
+p267
+S'method use technique propose_method obtain apply compare method_base calculate problem analysis work standard advantage comparison demonstrate application compute generate'
+p268
+sS'243'
+p269
+S'traffic internet content network ip cp address isp networking router data bgp ipv access flow network_traffic host distribution rout'
+p270
+sS'242'
+p271
+S'visualization visual virtual use camera interactive display computer interaction system graphic visualize depth scene render movement view layout object'
+p272
+sS'102'
+p273
+S'channel receiver message gaussian eavesdropper transmitter capacity capacity_region interference rate decode case broadcast_channel interference_channel secrecy code show achievable use'
+p274
+sS'103'
+p275
+S'rank oracle rotation si relative random bar blackbox bilinear give stretch show access te sdc fork angle generic polynomial_time'
+p276
+sS'100'
+p277
+S'size table large use result small batch step lookup amount parameter recursive increasing fit increase reduce constant show time'
+p278
+sS'101'
+p279
+S'question answer universal give answer_question can set open ask whether raise also pose particular relate natural form following resolve'
+p280
+sS'106'
+p281
+S'sequence length subsequence long short generate linear_complexity binary_sequence shift lc symbol common randomness string period autocorrelation produce present sequential'
+p282
+sS'107'
+p283
+S'strategy mix different show two achieve strategy_base one large optimal_strategy choose combine simple follow lead consider adaptive random pure'
+p284
+sS'104'
+p285
+S'queue delay time buffer arrival service packet policy system model average priority switch traffic schedule server consider arrive length'
+p286
+sS'105'
+p287
+S'user online social content social_network tag activity site website community popularity facebook information share online_social_network post people twitter study'
+p288
+sS'39'
+p289
+S'detection detector detect probability decision performance signal rate change observation false_alarm show propose false presence threshold false_positive hypothesis low'
+p290
+sS'38'
+p291
+S'discrete continuous hybrid domain variable function language finite logarithm case arbitrary value discretization class hybrid_system deterministic contain exact cost_function'
+p292
+sS'33'
+p293
+S'algebra decomposition algebraic theory variety operation base lift commutative duality semiring canonical theorem dual free structure product property boolean'
+p294
+sS'32'
+p295
+S'framework model propose different design can present develop provide generic existing general structure within demonstrate context particular various derive'
+p296
+sS'31'
+p297
+S'can one time possible may need order allow without many consider even must whether able certain free since however'
+p298
+sS'30'
+p299
+S'filter use bank design median response mean bloom propose base adaptive denoise impulse fir signal transfer_function nonlocal bilateral apply'
+p300
+sS'37'
+p301
+S'model simulation present consider propose_model capture study apply standard simulate validate realistic structure generate building tool incorporate accurate compare'
+p302
+sS'36'
+p303
+S'signature people age use participant online person gender factor personality individual saudi acceptance social base study personal accept arabia'
+p304
+sS'35'
+p305
+S'use approach can result provide work new without allow demonstrate existing propose also thus rely solution simple many however'
+p306
+sS'34'
+p307
+S'computation compute computational machine ture_machine efficient complexity power efficiently perform require can_compute ture paradigm way example thus computer program'
+p308
+sS'246'
+p309
+S'location spatial area coverage place placement motif geographic name geographical locate locationbased use position physical identifier lb geospatial proximity'
+p310
+sS'282'
+p311
+S'problem show complexity polynomial_time give prove reduction instance hard count polynomial p nphard even np npcomplete case known polynomialtime'
+p312
+sS'252'
+p313
+S'formula clause sat satisfiability variable boolean solver instance assignment resolution propositional solve satisfying cnf_formula sat_solver unsatisfiable satisfiable cnf literal'
+p314
+sS'205'
+p315
+S'signal frequency system ofdm spectrum channel power receiver spectral pulse estimation bandwidth carrier spread design waveform noise radio digital'
+p316
+sS'223'
+p317
+S'x f m n y p z give let l gt u r lt leq xi j mn b'
+p318
+sS'176'
+p319
+S'difference synchronization behaviour two synchronize clock different show oscillator use similarity identical coupling similar among couple length number introduce'
+p320
+sS'60'
+p321
+S'study show result variant several use one simple case studied classical close model give also literature theoretical class interesting'
+p322
+sS'61'
+p323
+S'generate generation generator use random key randomness keyboard random_number pseudorandom random_bit sequence seed mt test computer bit application random_number_generator'
+p324
+sS'62'
+p325
+S'music sound audio art musical song pitch stateofthe fm artist recording spectrogram chord auditory nmf acoustic instrument genre note'
+p326
+sS'63'
+p327
+S'scheme propose propose_scheme base scheme_base secret_share introduce also distribute existing scheme_propose compare design access efficient require new improve outperform'
+p328
+sS'64'
+p329
+S'cycle permutation cyclic length hamiltonian digraph degree transposition direct short simple acyclic duty sigma bijection contain least paper fv'
+p330
+sS'65'
+p331
+S'product inner line cartesian tensor outer pf bundle bt skeleton spl kronecker respect direct two dot dimension elastic prime'
+p332
+sS'66'
+p333
+S'technique base hybrid propose apply effective improve combine application also new combination reduce paper developed technique_use different paper_present novel'
+p334
+sS'67'
+p335
+S'mode period periodic st harmonic oscillation slope bifurcation periodicity pt give oscillator cbc can analyze frequency da associate different'
+p336
+sS'68'
+p337
+S'label learn dataset approach method task train classification domain show stateoftheart feature propose instance discriminative multiple supervise problem unlabel'
+p338
+sS'69'
+p339
+S'interference power transmission channel receiver user link capacity fade transmitter derive outage_probability rate performance consider multiuser throughput optimal outage'
+p340
+sS'175'
+p341
+S'input output use produce cc result take function generate linear two without arbitrary single ie allow map algorithm input_output'
+p342
+sS'174'
+p343
+S'kernel transform function wavelet quantization signal hilbert_space quantizer reproduce harmonic spherical sphere derive directional nonlinear domain rkh extend quantize'
+p344
+sS'173'
+p345
+S'will one way also like work need make change possible take many look get form level find try view'
+p346
+sS'172'
+p347
+S'mechanism auction price revenue valuation buyer item agent bidder optimal budget incentive ad seller bid allocation design market good'
+p348
+sS'171'
+p349
+S'application distribute system grid environment use resource architecture design management infrastructure support implementation provide processing virtual performance network simulation'
+p350
+sS'170'
+p351
+S'consistency asynchronous concurrent operation concurrency synchronous synchronization lock consistent atomic replication deadlock ensure primitive thread distribute sequential transaction implementation'
+p352
+sS'203'
+p353
+S'configuration interval realization real give d space pin initial isolate pebble line unit set isolation tau combinatorial start study'
+p354
+sS'222'
+p355
+S'belief revision paradox change state postulate epistemic consistent proposition true believe contraction world inconsistency agent revise may knowledge_base principle'
+p356
+sS'288'
+p357
+S'task require approach can work perform complex process order present automate domain automatically many difficult experiment must evaluate accomplish'
+p358
+sS'181'
+p359
+S'policy reward regret action learn state mdp stochastic markov_decision_process problem arm reinforcement_learn online exploration pomdp environment discount optimal value_function'
+p360
+sS'253'
+p361
+S'weight weighted sum maximum give total minimum case edge_weight assign show average unweighted also w equal value associate every'
+p362
+sS'248'
+p363
+S'attack security network detect threat malicious attacker detection vulnerability email mechanism spam malware defense protect identify secure prevent vulnerable'
+p364
+sS'182'
+p365
+S'bound lower_bound upper_bound show prove obtain tight case result give known general optimal establish derive also gap small arbitrary'
+p366
+sS'183'
+p367
+S'new construction call way introduce construct also light article order idea feature need name create old previous another property'
+p368
+sS'180'
+p369
+S'workshop conference th international held proceedings paper researcher volume_contain aim together event program system satellite application accept university take_place'
+p370
+sS'2'
+p371
+S'control controller system design feedback control_system stability plant loop propose dynamics disturbance nonlinear controllability uncertainty linear state law base'
+p372
+sS'162'
+p373
+S'packet throughput delay network transmission protocol traffic channel link wireless rate tcp schedule ieee layer transmit wireless_network performance flow'
+p374
+sS'187'
+p375
+S'selection select criterion choice use choose parameter set best different one number consider order among depend process determine accord'
+p376
+sS'184'
+p377
+S'graph edge subgraph clique algorithm vertice laplacian vertex node small triangle structure spectral connect sparse partition direct_graph isomorphism random_graph'
+p378
+sS'6'
+p379
+S'two one three give type ii set show study four another common case also latter investigate consist connect former'
+p380
+sS'220'
+p381
+S'curve point surface space embed geometric manifold dimension geometry shape triangulation plane dimensional planar curvature smooth give map affine'
+p382
+sS'186'
+p383
+S'optimal cost tradeoff minimize show maximize use optimize consider optimality design strategy expected average utility achieve two solution algorithm'
+p384
+sS'188'
+p385
+S'optimization gradient convex convergence problem dual stochastic function objective_function smooth descent minimization optimization_problem point iteration update coordinate convergence_rate global'
+p386
+sS'189'
+p387
+S'use material temperature process thermal device design optical structure surface heat simulation beam pressure mechanical wave micro flow mem'
+p388
+sS'202'
+p389
+S'algorithm iteration iterative method convergence solution converge fix_point solve solver sp loop equation apply message_pass prove linear convergent computation'
+p390
+sS'196'
+p391
+S'human cognitive activity intelligence crowd process perception task crowdsource machine ability people action interaction brain computer intelligent artificial_intelligence learn'
+p392
+sS'221'
+p393
+S'data processing database access dataset generate can store data_set volume storage big_data require record data_source data_analysis data_warehouse analyze format'
+p394
+sS'185'
+p395
+S'channel symbol modulation snr constellation fade capacity receiver system optical bit fade_channel performance signal transmission high average low db'
+p396
+sS'99'
+p397
+S'version assignment paper author assign basic withdrawn simplify two modify original one simplification introduce give swap minmax arxiv new'
+p398
+sS'98'
+p399
+S'constraint problem variable solution constrain solve csp consistency subject solver instance domain soft global optimization satisfy algorithm formulation enforce'
+p400
+sS'168'
+p401
+S'proof theorem prove result conjecture use lemma give strong version every state argument generalize hold property fact also imply'
+p402
+sS'169'
+p403
+S'performance use improve achieve term reduce propose base effect compare increase without significant due evaluate improvement enhance efficiency impact'
+p404
+sS'229'
+p405
+S'matrix rank tensor eigenvalue entry column vector decomposition row spectral symmetric eigenvector subspace dimension compute random_matrix factorization covariance_matrix lowrank'
+p406
+sS'228'
+p407
+S'graph edge vertice vertex connect planar_graph path g every draw planar minimum connectivity degree arc embed pair tree subgraph'
+p408
+sS'91'
+p409
+S'energy power energy_consumption sensor_node node wsn wireless_sensor_network energy_efficiency battery sensor_network energy_harvest sensor wireless_sensor_network_wsn wireless power_consumption saving consume sink data'
+p410
+sS'90'
+p411
+S'distance fault edit selfstabilize similarity frechet pairwise transient measure distance_measure diagnosis tolerant distance_two byzantine compute faulty distance_function pair fault_tolerance'
+p412
+sS'93'
+p413
+S'learn algorithm learn_algorithm example generalization hypothesis loss risk learner empirical class sample task distribution sample_complexity statistical data active_learn dimension'
+p414
+sS'92'
+p415
+S'relay cooperative source scheme destination transmission relay_channel relay_node forward df network relay_network protocol link cooperation strategy transmit af halfduplex'
+p416
+sS'95'
+p417
+S'software design development project requirement process tool quality approach system architecture engineering methodology software_development support developer effort practice need'
+p418
+sS'94'
+p419
+S'system base present implement time process way level control paper_present order achieve implementation developed operate introduce consist system_design whole'
+p420
+sS'97'
+p421
+S'relation relationship structure property establish investigate form complete differential study relate theory closure define representation present discuss induce connection'
+p422
+sS'96'
+p423
+S'face recognition use fingerprint facial database biometric feature expression identification face_recognition template image face_image extract iris hand human gesture'
+p424
+sS'11'
+p425
+S'item recommendation user rate rating recommender_system similarity information collaborative_filter preference movie recommend base accuracy data recommendation_system personalize dataset cf'
+p426
+sS'10'
+p427
+S'k lt n show ok number m give every least nk fix prove l t log digraph geq arc'
+p428
+sS'13'
+p429
+S'problem case consider known unknown scenario show result ie number assume observation one particular eg several whose observe possible'
+p430
+sS'12'
+p431
+S'dynamic update change static time deletion data_structure operation maintain incremental insertion dynamically delete support can ad heap maintenance amortize'
+p432
+sS'15'
+p433
+S'distribution correlation show correlate law model statistics exponential mean tail decay parameter independent analysis random probability frequency powerlaw behavior'
+p434
+sS'14'
+p435
+S'device mobile technology application wireless system user service mobile_device smart access network communication environment smartphone home phone compute design'
+p436
+sS'17'
+p437
+S'structure structural protein fold sequence flat function hierarchical many rna secondary prediction explore acid unstructure exploit substructure complex amino'
+p438
+sS'16'
+p439
+S'count fourier_transform dft fast computability fft cl compound discrete extension convolution nonuniform parallel ng basis multiplication uniform qft canonical'
+p440
+sS'19'
+p441
+S'feedback quantization delay quantize bit codebook csi use rate limit design vector link back gain quantizer feedback_channel propose system'
+p442
+sS'18'
+p443
+S'module interface composition design component modular web_service approach process base describe compose integration composite engine pa integrate functional operation'
+p444
+sS'117'
+p445
+S'market price risk financial trade stock economic option portfolio return transaction contract investment competition money exchange asset bank firm'
+p446
+sS'250'
+p447
+S'complexity regular randomness omega show regularity algorithmic exclusion complexity_measure exponential triple mutual random kolmogorov_complexity computational_complexity optimal witness irregular prefix'
+p448
+sS'116'
+p449
+S'problem parameterize sc parameter treewidth graph size k polynomial kernel fpt bound fixedparameter_tractable result show dominate_set admit width parameterize_complexity'
+p450
+sS'274'
+p451
+S'lower_bound q ep size result bound communication_complexity prove randomize et_al query p constant function query_complexity discrepancy deterministic monotone polynomial'
+p452
+sS'204'
+p453
+S'n m delta constant show time epsilon lt o bound gt k size log give least log_n leq pi'
+p454
+sS'275'
+p455
+S'fusion resolution image data satellite spatial spectral use sense remote fuse band information astronomical hyperspectral sky pixel telescope high'
+p456
+sS'151'
+p457
+S'set minimal cover maximal family give show combinatorial construction construct subset property two unique enumeration number call can determine'
+p458
+sS'150'
+p459
+S'sensor simulation sense use sensor_network distribute simulator body field fc monitor simulate immune_system artificial_immune_system fusion_center fusion environment simulation_model ais'
+p460
+sS'153'
+p461
+S'pattern stream frequent data_stream sketch mine use pass algorithm space frequency count discover discovery set memory sequential moment data'
+p462
+sS'152'
+p463
+S'sort window graphical cube sliding comparison element application list use screen user_interface gui key menu item quicksort operation box'
+p464
+sS'155'
+p465
+S'g v h graph graph_g edge vertice u hypergraph every let k vertex t e set independent_set size maximum'
+p466
+sS'154'
+p467
+S'operator merge splitting scatter set operation split introduce cw dtc base represent str function define replacement linear analyze eigenfunction'
+p468
+sS'157'
+p469
+S'equation solution numerical flow method integral fluid solve scheme linear problem finite nonlinear obtain model differential_equation formulation diffusion derive'
+p470
+sS'156'
+p471
+S'cluster data kmean algorithm cluster_algorithm partition method group dataset similarity data_point subspace number base data_set approach similar spectral_cluster center'
+p472
+sS'159'
+p473
+S'peer repair storage pp node file overlay peertopeer bandwidth chunk download content distribute data pp_network regenerate_code distribute_storage_system bittorrent capacity'
+p474
+sS'158'
+p475
+S'problem algorithm give matroid online approximation_algorithm pack approximation set approximation_ratio bin cost cover competitive_ratio improve subset online_algorithm present submodular_function'
+p476
+sS'277'
+p477
+S'define definition concept notion introduce context term give extend provide interpretation call theory formal general property paper allow example'
+p478
+sS'234'
+p479
+S'group member generate subgroup automorphism element semigroup abelian finite free isomorphism structure order lie action product monoid permutation construct'
+p480
+sS'238'
+p481
+S'object orient model sr represent type complex define reference structure base class container call describe part representation moving relation'
+p482
+sS'239'
+p483
+S'localization position environment location measurement accuracy indoor sensor propagation use gp range localize radio track rss anchor accurate distance'
+p484
+sS'279'
+p485
+S'parallel use implementation performance processor architecture gpu compute core gpus computation algorithm memory cpu code multicore mapreduce cluster parallelism'
+p486
+sS'207'
+p487
+S'classification classifier use feature train method dataset accuracy data classify learn ensemble performance svm base class machine_learn algorithm binary'
+p488
+sS'235'
+p489
+S'algorithm fast time speed show technique reduce implementation present several result compare approach order_magnitude computational experiment require small slow'
+p490
+sS'236'
+p491
+S'algorithm adaptive propose performance base propose_algorithm parameter algorithm_base version convergence perform efficient improve iterative algorithm_propose compare modify adapt recursive'
+p492
+sS'237'
+p493
+S'class characterization define characterize generalize paper include several subclass introduce one corresponding call example term also identify known belong'
+p494
+sS'230'
+p495
+S'causal variable model dag markov independence effect structure explanation observe causality cause data direct_acyclic_graph conditional_independence bayesian_network assumption pearl identify'
+p496
+sS'231'
+p497
+S'information use can knowledge base source extract present contain state common available partial complete general form encode infer provided'
+p498
+sS'232'
+p499
+S'vehicle traffic city urban road area data transportation vehicular mobility driver car travel safety pedestrian route emergency air human'
+p500
+sS'233'
+p501
+S'use base identify analysis determine present paper relate specific analyze main characteristic various consider order number concept mean classify'
+p502
+sS'224'
+p503
+S'linear vector nonlinear obtain scalar quadratic inequality map form space set known non subspace result linearity coefficient piecewise solution'
+p504
+sS'280'
+p505
+S'realtime loss adaptation transaction online voip application voice adapt burst adaptive change require ip cumulative commit due mechanism without'
+p506
+sS'48'
+p507
+S'different use individual multiple across range may diversity single within aggregation also aggregate share several level common many explore'
+p508
+sS'49'
+p509
+S'path short_path edge time length along walk rout pair short route bottleneck flow visit distance travel compute node long'
+p510
+sS'46'
+p511
+S'type term type_system contract higherorder calculus system lambdacalculus recursion recursive session property lambda_calculus prove type_theory reduction function lambda program'
+p512
+sS'47'
+p513
+S'part one form order functional several various provide result type way mean can term parameter paper transform example possible'
+p514
+sS'44'
+p515
+S'component active principal mu passive activation independent ica activate structure decompose separation cb part contract separate allow order consist'
+p516
+sS'45'
+p517
+S'proof abstract formal coq syntax mathematical use reasoning expression formalization automate language unification proof_assistant translation theorem_prover nominal higherorder mathematics'
+p518
+sS'42'
+p519
+S'however approach may often base result one limit thus make due issue since possible situation difficult practical application number'
+p520
+sS'43'
+p521
+S'em box bf mp call admissible sf maker sun set study specify dead qi breaker goal chair fa previously'
+p522
+sS'40'
+p523
+S'stable stability criterion border maximum preference instability woman unstable marriage man division check quasi notion even bmi verify sex'
+p524
+sS'41'
+p525
+S'level hierarchy hierarchical multilevel segment patent rt lower high_level fine two second different da base abstraction granularity coarse low'
+p526
+sS'1'
+p527
+S'number polytope dimension guess show combinatorial convex complexity can ct many linearly equal grow whose depend must facet ddimensional'
+p528
+sS'5'
+p529
+S'sampling sample distribution markov_chain random estimate monte_carlo bias uniform rate mix mcmc gibb importance efficient random_walk sampling_method error probability'
+p530
+sS'9'
+p531
+S'community network social_network social structure community_structure link modularity overlap node community_detection ty group method cluster detect identify find partition'
+p532
+sS'272'
+p533
+S'state stochastic system dynamics dynamical_system stability markov_chain switch show deterministic linear analysis limit convergence nonlinear equation theory transition derive'
+p534
+sS'146'
+p535
+S'scientific research science review data community repository archive article journal metadata physics collaboration peer publication scientist researcher publish preservation'
+p536
+sS'147'
+p537
+S'random threshold phase_transition model critical large transition spin random_graph study replica cluster percolation ensemble statistical_physics instance density partition_function temperature'
+p538
+sS'144'
+p539
+S'power energy grid smart_grid load supply line power_grid system generation power_system flow voltage control wind charge renewable electric electrical'
+p540
+sS'145'
+p541
+S'security secure attack key encryption authentication scheme use cryptographic cryptography protocol password encrypt cipher propose base cryptosystem rfid message'
+p542
+sS'142'
+p543
+S'external probe internal mm prostate push biopsy volume us pull good mr bad inside fit guide op trus lsc'
+p544
+sS'143'
+p545
+S'train neural_network learn deep network layer neuron spike model architecture neural unit input multilayer artificial_neural_network feature hide recurrent weight'
+p546
+sS'140'
+p547
+S'grammar parse sentence parser language discourse structure semantic syntactic use natural_language linguistic meaning semantics formalism processing lexical ambiguity context'
+p548
+sS'141'
+p549
+S'local global locally distribute neighborhood coordinate base globally locality apply structure large neighbourhood information small obtain localize within single'
+p550
+sS'209'
+p551
+S'channel capacity rate asymptotic show limit error_probability polar_code zero derive regime asymptotically error_exponent finite consider memoryless exponent large shannon'
+p552
+sS'208'
+p553
+S'attention receive recently interest however attract many paper little research gain considerable lot due recent_year effort work new researcher'
+p554
+sS'148'
+p555
+S'minimum radius ball square rho span_tree give maximum center length distance result constant width dimension stretch time r small'
+p556
+sS'149'
+p557
+S'phase alpha beta ma parameter diagram value bc retrieval two order singular alphagt determine latin magnitude amplitude decrease shift'
+p558
+sS'77'
+p559
+S'rout network node protocol rout_protocol mobility route packet manet forward delay wireless use link performance ad_hoc_network path mobile topology'
+p560
+sS'76'
+p561
+S'logic_program semantics program reasoning logic asp default atom language extension answer_set rule extend disjunctive description_logic declarative answer_set_program argumentation nonmonotonic'
+p562
+sS'75'
+p563
+S'asymmetric mould slime symmetric asymmetry physarum plasmodium transport tube wire maze protoplasmic polycephalum direction master living part single laboratory'
+p564
+sS'74'
+p565
+S'node network distribute message round communication neighbor broadcast topology connectivity connect wireless_network distribute_algorithm graph random_walk node_network decentralize local token'
+p566
+sS'73'
+p567
+S'gaussian mixture regression density distribution conditional variable estimate statistical pdf estimation variance coefficient use regression_model pl marginal expectation multivariate'
+p568
+sS'72'
+p569
+S'mesh method interpolation boundary use domain finite_element grid present solver patch formulation problem smooth field surface spline multiscale element'
+p570
+sS'71'
+p571
+S'agent model environment leader action multiagent distribute behavior multiagent_system formation coalition state negotiation agent_can decision interaction dynamic mobile_agent autonomous'
+p572
+sS'70'
+p573
+S'schedule job spreadsheet task scheduler machine schedule_problem processor time deadline schedule_algorithm resource execution speed dynamic minimize reduce priority makespan'
+p574
+sS'278'
+p575
+S'error correct correction floor use detect cause bit error_rate error_correction minimize control guarantee small due protection less relative paper'
+p576
+sS'79'
+p577
+S'high use low show lower achieve provide transfer can reduce compare precision require however increase base propose large level'
+p578
+sS'78'
+p579
+S'circuit gate depth reversible nc quantum arithmetic compute logic synthesis boolean show size design parity logical test vp boolean_function'
+p580
+sS'263'
+p581
+S'use step procedure base process stage initial can present first propose construct set final start simple work describe original'
+p582
+sS'249'
+p583
+S'polynomial degree field root prime coefficient algebraic sum q finite_field number give rational real integer formula complexity compute characteristic'
+p584
+sS'262'
+p585
+S'parameter gamma colour sensitivity parametric tuning value tune determine proper change sensitive variation improper coloured type parameter_space parameter_value give'
+p586
+sS'227'
+p587
+S'ordinal set prove language counter infinite resp buchi tolerance borel accept countable hierarchy tower omega exist relation bb infinitary'
+p588
+sS'261'
+p589
+S'finite strong weak infinite show result prove positive every ie property termination complete class exist equivalent study establish strictly'
+p590
+sS'270'
+p591
+S'failure reliability redundancy ii cascade iii resilience system can robustness recovery fail card iv reliable robust redundant resilient single'
+p592
+sS'260'
+p593
+S'memory architecture hardware processor design cache implementation application core fpga embed processing chip implement performance soc array instruction speed'
+p594
+sS'276'
+p595
+S'verification specification system property verify abstraction synthesis use safety model_check refinement check state formal abstract specify technique reachability symbolic'
+p596
+sS'267'
+p597
+S'server client request web cache cach file access user use browser remote policy proxy service session replacement web_application internet'
+p598
+sS'266'
+p599
+S'case two one consider can single different use switch general obtain study ie corresponding several possible independent particular split'
+p600
+s.
