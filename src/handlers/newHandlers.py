@@ -144,15 +144,6 @@ class FeedbackHandler(BaseHandler):
         # get the keywords that has highest score.
         self.application.keywords = (self.application.ranked_keywords[-self.application.keywords_number:])[::-1]
 
-        # sort the persons
-        keywords_id = [keyword["id"] for keyword in self.application.keywords]
-
-        def sort_persons(person):
-            return len(set(person["keywords"]) & set(keywords_id))
-
-        persons_info = self.application.corpora_user_id.values()
-        persons = sorted(persons_info, key=sort_persons, reverse=True)
-
         self.topics = [keyword for keyword in self.application.keywords]
 
         messenger = Messenger(self.topics, self.application.corpus_keywords, 20)
