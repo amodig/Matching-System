@@ -6,6 +6,7 @@ import datetime
 
 class TopicHandler(BaseHandler):
     def get(self, key):
+        # parameter 'key' defines number of keywords to return in association with each topic
         print key
         if (key is None) or (key == ''):
             key = 19
@@ -57,6 +58,57 @@ class TopicArticleHandler(BaseHandler):
 
         print message
         self.json_ok(message)
+
+    def post(self):
+        pass
+
+
+class TopicSearchHandler(BaseHandler):
+    def get(self, searchstring, keyword_number):
+        if (keyword_number is None) or (keyword_number == ""):
+                keyword_number = 19
+        else:
+            keyword_number = int(keyword_number)
+            if keyword_number > 19:
+                keyword_number = 19
+
+        # reset the iteration number
+        self.application.iter_num = 0
+        # load the data from the front end
+        keywords = searchstring.replace(" ", "_")
+        # initialize temp container for sending keywords
+        temp = []
+        for item in self.application.corpus_keywords.items():
+            item_keywords = item[1]
+            if keywords in item_keywords.split(" "):
+                temp.append(item[0])
+
+        self.application.filtered_keywords = temp
+        self.application.keywords = self.application.filtered_keywords[self.application.keywords_number *
+                                                                           self.application.iter_num:
+                                                                           self.application.keywords_number *
+                                                                           (self.application.iter_num + 1)]
+
+        self.topics = self.application.filtered_keywords
+
+        self.message_list = []
+
+        for i in range(0, len(self.topics)):
+            keyword_list = (self.application.corpus_keywords[self.topics[i]]).split()
+            keyword_list = keyword_list[0:keyword_number]
+            keyword_dict_list = []
+            for j in range(0, len(keyword_list)):
+                newdict = {"label": keyword_list[j], "weight": 0.2}
+                keyword_dict_list.append(newdict)
+            dict = {"id": self.topics[i],
+                  "keywords": keyword_dict_list,
+                  "weight": 0.1,
+                }
+            self.message_list.append(dict)
+
+        self.message = {"topics": self.message_list}
+
+        self.json_ok(self.message)
 
     def post(self):
         pass

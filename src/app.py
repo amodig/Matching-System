@@ -68,6 +68,7 @@ class Application(tornado.web.Application):
 
             url(r'/topics[/]*([0-9]*)', TopicHandler, name='topics/([0-9]*)'),
             url(r'/topic/([a-z0-9]+)/articles', TopicArticleHandler, name='topic/([a-z0-9]+)/articles'),
+            url(r'/topicsearch/([\w]+)[/]*([0-9]*)', TopicSearchHandler, name='topicsearch/([a-z]+)'),
             url(r'/feedback', FeedbackHandler, name='feedback'),
 
 
