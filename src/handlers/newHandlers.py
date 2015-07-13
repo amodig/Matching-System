@@ -22,22 +22,8 @@ class TopicHandler(BaseHandler):
 
         self.message_list = []
 
-        for i in range(0, len(self.topics)):
-            keyword_list = (self.application.corpus_keywords[self.topics[i]]).split()
-            keyword_list = keyword_list[0:key]
-            keyword_dict_list = []
-            for j in range(0, len(keyword_list)):
-                newdict = {"label": keyword_list[j], "weight": 0.2}
-                keyword_dict_list.append(newdict)
-            dict = {"id": self.topics[i],
-                  "keywords": keyword_dict_list,
-                  "weight": 0.1,
-                }
-            self.message_list.append(dict)
-
-        self.message = {"topics": self.message_list}
-
-        self.json_ok(self.message)
+        messenger = Messenger(self.topics, self.application.corpus_keywords, key)
+        self.json_ok(messenger.generateJSONMessage())
 
     def post(self):
         pass
@@ -91,24 +77,8 @@ class TopicSearchHandler(BaseHandler):
 
         self.topics = self.application.filtered_keywords
 
-        self.message_list = []
-
-        for i in range(0, len(self.topics)):
-            keyword_list = (self.application.corpus_keywords[self.topics[i]]).split()
-            keyword_list = keyword_list[0:keyword_number]
-            keyword_dict_list = []
-            for j in range(0, len(keyword_list)):
-                newdict = {"label": keyword_list[j], "weight": 0.2}
-                keyword_dict_list.append(newdict)
-            dict = {"id": self.topics[i],
-                  "keywords": keyword_dict_list,
-                  "weight": 0.1,
-                }
-            self.message_list.append(dict)
-
-        self.message = {"topics": self.message_list}
-
-        self.json_ok(self.message)
+        messenger = Messenger(self.topics, self.application.corpus_keywords, keyword_number)
+        self.json_ok(messenger.generateJSONMessage())
 
     def post(self):
         pass
@@ -184,10 +154,22 @@ class FeedbackHandler(BaseHandler):
         persons = sorted(persons_info, key=sort_persons, reverse=True)
 
         self.topics = [keyword for keyword in self.application.keywords]
+
+        messenger = Messenger(self.topics, self.application.corpus_keywords, 20)
+        self.json_ok(messenger.generateJSONMessage())
+
+class Messenger():
+    def __init__(self, topics, keywords, number_keywords):
+        self.topics = topics
+        self.keywords = keywords
+        self.number_keywords = number_keywords
+
+    def generateJSONMessage(self):
         self.message_list = []
 
         for i in range(0, len(self.topics)):
-            keyword_list = (self.application.corpus_keywords[self.topics[i]]).split()
+            keyword_list = (self.keywords[self.topics[i]]).split()
+            keyword_list = keyword_list[0:self.number_keywords]
             keyword_dict_list = []
             for j in range(0, len(keyword_list)):
                 newdict = {"label": keyword_list[j], "weight": 0.2}
@@ -200,8 +182,4 @@ class FeedbackHandler(BaseHandler):
 
         self.message = {"topics": self.message_list}
 
-        print self.message
-        self.json_ok(self.message)
-
-
-
+        return self.message
