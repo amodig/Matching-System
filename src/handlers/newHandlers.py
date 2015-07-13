@@ -6,11 +6,13 @@ import datetime
 
 class TopicHandler(BaseHandler):
     def get(self, key):
-        key = int(key)
         print key
-        if key > 19:
+        if (key is None) or (key == ''):
             key = 19
-        print key
+        else:
+            key = int(key)
+            if key > 19:
+                key = 19
         self.application.form_new_keywords_information()
         self.application.analyzer.reset_current()
         # defines the number of the keywords received by the front end

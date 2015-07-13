@@ -66,7 +66,7 @@ class Application(tornado.web.Application):
             url(r'/article/([a-z0-9]+)/edit', ArticleDataHandler, name='article/([a-z0-9]+)/edit'),
             url(r'/grav', GravatarHandler, name='grav'),
 
-            url(r'/topics/([0-9]*)', TopicHandler, name='topics/([0-9]*)'),
+            url(r'/topics[/]*([0-9]*)', TopicHandler, name='topics/([0-9]*)'),
             url(r'/topic/([a-z0-9]+)/articles', TopicArticleHandler, name='topic/([a-z0-9]+)/articles'),
             url(r'/feedback', FeedbackHandler, name='feedback'),
 
