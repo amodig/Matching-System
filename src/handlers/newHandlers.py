@@ -5,7 +5,12 @@ from random import sample
 import datetime
 
 class TopicHandler(BaseHandler):
-    def get(self):
+    def get(self, key):
+        key = int(key)
+        print key
+        if key > 19:
+            key = 19
+        print key
         self.application.form_new_keywords_information()
         self.application.analyzer.reset_current()
         # defines the number of the keywords received by the front end
@@ -16,6 +21,7 @@ class TopicHandler(BaseHandler):
 
         for i in range(0, len(self.topics)):
             keyword_list = (self.application.corpus_keywords[self.topics[i]]).split()
+            keyword_list = keyword_list[0:key]
             keyword_dict_list = []
             for j in range(0, len(keyword_list)):
                 newdict = {"label": keyword_list[j], "weight": 0.2}
@@ -28,7 +34,6 @@ class TopicHandler(BaseHandler):
 
         self.message = {"topics": self.message_list}
 
-        print self.message
         self.json_ok(self.message)
 
     def post(self):
