@@ -163,6 +163,8 @@ class Application(tornado.web.Application):
                 self.corpus_keywords_filename = "../docs/keywords/mallet_corpus_abstract.txt"
                 # a dictionary of topic number-keyword list mappings
                 self.topic_keywords_filename = "../docs/keywords/mallet_topic_keywords.txt"
+                # a list containing dictionaries of keyword weights for each topic
+                self.topic_keyword_weights_filename = "../docs/keywords/mallet_topic_keywordweights.txt"
             elif abstract_source is 'old':
                 # information of all keywords as a set:
                 self.keywords_filename = "../docs/keywords/abstract_%s.txt" % self._num_of_corpora
@@ -180,6 +182,10 @@ class Application(tornado.web.Application):
                 self.topic_keywords_obj = open(self.topic_keywords_filename, 'rb')
                 self.corpus_keywords = pickle.load(self.topic_keywords_obj)
                 self.topic_keywords_obj.close()
+
+                self.topic_keyword_weights_obj = open(self.topic_keyword_weights_filename, 'rb')
+                self.topic_keyword_weights = pickle.load(self.topic_keyword_weights_obj)
+                self.topic_keyword_weights_obj.close()
 
         def form_persons_info():
             print "amount of original corpora:", len(self.original_corpora)

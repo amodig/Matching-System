@@ -22,7 +22,7 @@ class TopicHandler(BaseHandler):
 
         self.message_list = []
 
-        messenger = Messenger(self.topics, self.application.corpus_keywords, key)
+        messenger = Messenger(self.topics, self.application, key)
         self.json_ok(messenger.generateJSONMessage())
 
     def post(self):
@@ -77,7 +77,7 @@ class TopicSearchHandler(BaseHandler):
 
         self.topics = self.application.filtered_keywords
 
-        messenger = Messenger(self.topics, self.application.corpus_keywords, keyword_number)
+        messenger = Messenger(self.topics, self.application, keyword_number)
         self.json_ok(messenger.generateJSONMessage())
 
     def post(self):
@@ -146,24 +146,27 @@ class FeedbackHandler(BaseHandler):
 
         self.topics = [keyword for keyword in self.application.keywords]
 
-        messenger = Messenger(self.topics, self.application.corpus_keywords, 20)
+        messenger = Messenger(self.topics, self.application, 20)
         self.json_ok(messenger.generateJSONMessage())
 
 class Messenger():
-    def __init__(self, topics, keywords, number_keywords):
+    def __init__(self, topics, application, number_keywords):
         self.topics = topics
-        self.keywords = keywords
+        self.keywords = application.corpus_keywords
+        self.keywordweights = application.topic_keyword_weights
         self.number_keywords = number_keywords
 
     def generateJSONMessage(self):
         self.message_list = []
-
         for i in range(0, len(self.topics)):
+            dictionary = self.keywordweights[int(self.topics[i])]
             keyword_list = (self.keywords[self.topics[i]]).split()
             keyword_list = keyword_list[0:self.number_keywords]
             keyword_dict_list = []
             for j in range(0, len(keyword_list)):
-                newdict = {"label": keyword_list[j], "weight": 0.2}
+                weight = float(dictionary[keyword_list[j]])
+                weight = round(weight, 2)
+                newdict = {"label": keyword_list[j], "weight": weight}
                 keyword_dict_list.append(newdict)
             dict = {"id": self.topics[i],
                   "keywords": keyword_dict_list,
