@@ -30,14 +30,19 @@ class TopicHandler(BaseHandler):
 
 class TopicArticleHandler(BaseHandler):
     def get(self, key):
+
+        articles = self.application.articles_associated_with_topic[key]
+        articles = articles[0:4]
+
         message_list = []
 
-        for i in range(0,5):
+        for article_number in articles:
+            article = self.application.all_articles[article_number]
             message_list.append({
-                "title": 'Lorem',
-                "authors": 'Lorem, Ipsum, Dolor',
-                "abstract": 'Lorem ipsum',
-                "weight": 0.5
+                "title": article["title"],
+                "authors": article["author"],
+                "abstract": article["abstract"],
+                "weight": article["weight"]
             })
 
         message = {"articles": message_list}

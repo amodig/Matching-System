@@ -187,6 +187,36 @@ class Application(tornado.web.Application):
                 self.topic_keyword_weights = pickle.load(self.topic_keyword_weights_obj)
                 self.topic_keyword_weights_obj.close()
 
+        # overlapping with old system, adding this separately to maintain compatibility with old for now...
+        def form_papers_info():
+            self.all_articles = [None] * len(self.corpora)
+            self.articles_associated_with_topic = {}
+            i = 0
+
+            for title, original_corpus, decomposed_corpus, user in zip(self.titles, self.original_corpora,
+                                                                       self.corpora, self.uploader_names):
+                self.all_articles[i] = {}
+                self.all_articles[i]["title"] = title
+                self.all_articles[i]["abstract"] = original_corpus
+                self.all_articles[i]["author"] = user
+                valid_keywords = 0
+
+                for keyword in decomposed_corpus.split(","):
+                    for keyword_info in self.keywords_info:
+                        if keyword == keyword_info["text"]:
+                            topic_list = self.articles_associated_with_topic.get(keyword, [])
+                            topic_list.append(i)
+                            self.articles_associated_with_topic[keyword] = topic_list
+                            valid_keywords += 1
+
+                self.all_articles[i]["weight"] = 1.00 / valid_keywords
+
+                i += 1
+
+            print self.all_articles[0:5]
+            print self.articles_associated_with_topic["1"]
+
+
         def form_persons_info():
             print "amount of original corpora:", len(self.original_corpora)
             print "amount of preprocessed corpora:", len(self.corpora)
@@ -253,6 +283,7 @@ class Application(tornado.web.Application):
         set_iteration_parameters()
         form_keywords_info()
         form_persons_info()
+        form_papers_info()
         analyze_data()
         print "Ready!"
 
