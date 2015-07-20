@@ -165,6 +165,8 @@ class Application(tornado.web.Application):
                 self.topic_keywords_filename = "../docs/keywords/mallet_topic_keywords.txt"
                 # a list containing dictionaries of keyword weights for each topic
                 self.topic_keyword_weights_filename = "../docs/keywords/mallet_topic_keywordweights.txt"
+                # a list of dicts, containing the various topicweights for each article
+                self.articles_topicweights_filename = "../docs/keywords/mallet_topic_articleweights.txt"
             elif abstract_source is 'old':
                 # information of all keywords as a set:
                 self.keywords_filename = "../docs/keywords/abstract_%s.txt" % self._num_of_corpora
@@ -187,6 +189,10 @@ class Application(tornado.web.Application):
                 self.topic_keyword_weights = pickle.load(self.topic_keyword_weights_obj)
                 self.topic_keyword_weights_obj.close()
 
+                self.articles_topicweights_obj = open(self.articles_topicweights_filename, 'rb')
+                self.articles_topicweights = pickle.load(self.articles_topicweights_obj)
+                self.articles_topicweights_obj.close()
+
         # overlapping with old system, adding this separately to maintain compatibility with old for now...
         def form_papers_info():
             self.all_articles = [None] * len(self.corpora)
@@ -201,15 +207,30 @@ class Application(tornado.web.Application):
                 self.all_articles[i]["author"] = user
                 valid_keywords = 0
 
+                # yes this is terrible and needs a rewrite
                 for keyword in decomposed_corpus.split(","):
                     for keyword_info in self.keywords_info:
                         if keyword == keyword_info["text"]:
-                            topic_list = self.articles_associated_with_topic.get(keyword, [])
-                            topic_list.append(i)
-                            self.articles_associated_with_topic[keyword] = topic_list
+                            def compare_article_weights(x,y):
+                                x_article_dict = self.articles_topicweights[int(x)]
+                                y_article_dict = self.articles_topicweights[int(y)]
+                                x_weight = float(x_article_dict[keyword])
+                                y_weight = float(y_article_dict[keyword])
+                                comparison = 0
+                                if x_weight > y_weight:
+                                    comparison = -1
+                                else:
+                                    comparison = 1
+                                return comparison
+
+                            article_list = self.articles_associated_with_topic.get(keyword, [])
+                            article_list.append(i)
+                            # sort article list based on how strongly each is associated with keyword
+                            sorted_article_list = sorted(article_list, cmp=compare_article_weights)
+                            self.articles_associated_with_topic[keyword] = sorted_article_list
                             valid_keywords += 1
 
-                self.all_articles[i]["weight"] = 1.00 / valid_keywords
+
 
                 i += 1
 

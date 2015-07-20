@@ -38,16 +38,17 @@ class TopicArticleHandler(BaseHandler):
 
         for article_number in articles:
             article = self.application.all_articles[article_number]
+            weight_dict = self.application.articles_topicweights[article_number]
+            weight = weight_dict[key]
             message_list.append({
                 "title": article["title"],
                 "authors": article["author"],
                 "abstract": article["abstract"],
-                "weight": article["weight"]
+                "weight": weight
             })
 
         message = {"articles": message_list}
 
-        print message
         self.json_ok(message)
 
     def post(self):
