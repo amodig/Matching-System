@@ -142,7 +142,7 @@ class Application(tornado.web.Application):
                 self._num_of_corpora = "all"
                 self.abstracts_filename = "../docs/abstracts/abstracts_70k.xml"  # information of all abstracts
                 self.extractors = Extractors(file_name=self.abstracts_filename)
-                self.original_corpora, self.uploader_names, self.titles = self.extractors.get_information_from_xml(5000)
+                self.original_corpora, self.uploader_names, self.titles = self.extractors.get_information_from_xml(2500)
             elif metadata_source is 'db':
                 self._num_of_corpora = "db"
                 self.extractors = Extractors(database=self.db, collection=u'fs.files')
