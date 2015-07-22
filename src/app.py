@@ -154,8 +154,6 @@ class Application(tornado.web.Application):
                 # set keywords (might take a while):
                 # yield self.extractors.set_keywords_from_database()  # recommended to run only when needed
 
-            print "Paper uploaders:", self.uploader_names
-
             if abstract_source is 'mallet':
                 # information of all topics as a set:
                 self.keywords_filename = "../docs/keywords/mallet_abstract.txt"
@@ -205,7 +203,6 @@ class Application(tornado.web.Application):
                 self.all_articles[i]["title"] = title
                 self.all_articles[i]["abstract"] = original_corpus
                 self.all_articles[i]["author"] = user
-                valid_keywords = 0
 
                 # yes this is terrible and needs a rewrite
                 for keyword in decomposed_corpus.split(","):
@@ -228,15 +225,10 @@ class Application(tornado.web.Application):
                             # sort article list based on how strongly each is associated with keyword
                             sorted_article_list = sorted(article_list, cmp=compare_article_weights)
                             self.articles_associated_with_topic[keyword] = sorted_article_list
-                            valid_keywords += 1
 
 
 
                 i += 1
-
-            print self.all_articles[0:5]
-            print self.articles_associated_with_topic["1"]
-
 
         def form_persons_info():
             print "amount of original corpora:", len(self.original_corpora)
