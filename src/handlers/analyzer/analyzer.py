@@ -1,5 +1,6 @@
 from ..database_messager import MysqlMessenger
 
+from numpy import empty
 from numpy import nan
 from numpy import set_printoptions
 from numpy import savetxt
@@ -109,6 +110,30 @@ class Analyzer():
         target_matrix = tfidfm
         # print target_matrix.T
         return target_matrix.T
+
+    def calculateNewX(self, topics, corpus, topicweights):
+        # create matrix that has documents as the outer arrays and keywords as the inner arrays
+        initialmatrix = empty(shape=(len(corpus),len(topics)))
+        # for each topic cell, retrieve the topic weight for that document; if 0, use 0.0001
+        i = 0
+        topiclocation = {}
+        for topic in topics:
+            topiclocation[topic] = i
+            i += 0
+        i = 0
+        for document in corpus:
+            array = [0.0000001] * len(topics)
+            weightdict = topicweights[document]
+            for item in weightdict.items():
+                if int(item[0]) in topics:
+                    weight = float(item[1])
+                    array[topiclocation[int(item[0])]] = weight
+            initialmatrix[i] = array
+            i += 1
+
+        matrixtoreturn = initialmatrix.T
+
+        return matrixtoreturn
         
     def calculate_y(self, weights, current_X_row_num):
         y = zeros((1, current_X_row_num)).T
@@ -116,15 +141,20 @@ class Analyzer():
             y[index, 0] = weights[index]
         return y
         
-    def analyze(self, keywords, all_corpus, weights):
+    def analyze(self, keywords, all_corpus, weights, topicweights=None):
         """
         This function analyzes the relativity of keywords according to the experiences
         @params keywords of last time
         @params all_corpus of abstracts
         @params weights of each keywords
+        @params the topicweights associated with each article
         """
-        
-        input_matrix = self.calculate_X(keywords, all_corpus)
+
+        if topicweights==None:
+            input_matrix = self.calculate_X(keywords, all_corpus)
+        else:
+            input_matrix = self.calculateNewX(keywords, all_corpus, topicweights)
+
         #print sum_matrix(input_matrix, 1)
         self._current_X_row_num, self._current_X_column_num = input_matrix.shape
         cy = self.calculate_y(weights, self._current_X_row_num)

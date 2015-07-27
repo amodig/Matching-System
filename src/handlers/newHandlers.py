@@ -157,7 +157,7 @@ class FeedbackHandler(BaseHandler):
 
         # get scores of all the keywords ordered in list order
         before = datetime.datetime.now()
-        scores = self.application.analyzer.analyze(keywords, self.application.corpora, weights)
+        scores = self.application.analyzer.analyze(keywords, range(len(self.application.corpora)), weights, self.application.articles_topicweights)
         after = datetime.datetime.now()
         print "Time Consumption of Function Analyzer: ", after - before
         scores_sum = [sum(score) for score in scores]
