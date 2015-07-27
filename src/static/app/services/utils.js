@@ -18,7 +18,7 @@ MatchingApp.service('Utils', function(){
 
     var data = _.map(topics, function(topic){
       return {
-        keywordsToString: _(topic.keywords).map(function(keyword){ return keyword.content }).value().join(', '),
+        keywordsToString: _(topic.keywords).map(function(keyword){ return keyword.label }).value().join(', '),
         portion: (topic.weight / weightSum) * 100 + '%'
       }
     });

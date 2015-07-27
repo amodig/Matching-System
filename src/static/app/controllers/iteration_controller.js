@@ -6,12 +6,24 @@ MatchingApp.controller('IterationController', function($scope, $rootScope, $rout
   $scope.currentIteration = 1;
 
   function fetchTopics(){
+    $scope.chosenArticle = null;
+    $scope.relatedArticles = null;
     $scope.loading = true;
 
-    Api.topics($scope.keyword).success(function(topics){
-      $scope.topics = topics;
-      $scope.loading = false;
-    });
+    if($scope.currentIteration == 1){
+      Api.topics($scope.keyword).success(function(topics){
+        console.log(topics);
+        $scope.topics = topics.topics;
+        $scope.loading = false;
+      });
+    }else{
+      var feedback = _.map($scope.topics, function(topic){ return { text: parseInt(topic.id), weight: topic.weight } });
+
+      Api.next(feedback).success(function(topics){
+        $scope.topics = topics;
+        $scope.loading = false;
+      });
+    }
   }
 
   fetchTopics();
@@ -27,7 +39,16 @@ MatchingApp.controller('IterationController', function($scope, $rootScope, $rout
 
   $scope.chooseTopic = function(topic){
     $scope.unchooseTopics();
-    $scope.relatedArticles = Utils.articlesToChartData(topic.relatedArticles);
+
+    if(topic.relatedArticles){
+      $scope.relatedArticles = Utils.articlesToChartData(topic.relatedArticles);
+    }else{
+      Api.getTopicRelatedArticles(topic.id).success(function(articles){
+        topic.relatedArticles = articles.articles;
+        $scope.relatedArticles = Utils.articlesToChartData(topic.relatedArticles);
+      });
+    }
+
     $scope.chosenArticle = _.max(topic.relatedArticles, 'weight');
 
     topic.selected = true;
@@ -57,8 +78,6 @@ MatchingApp.controller('IterationController', function($scope, $rootScope, $rout
     });
 
     $scope.currentIteration++;
-
-    console.log($scope.iterationHistory);
 
     fetchTopics();
   }
