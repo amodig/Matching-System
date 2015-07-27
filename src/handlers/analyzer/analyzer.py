@@ -115,13 +115,10 @@ class Analyzer():
         # create matrix that has documents as the outer arrays and keywords as the inner arrays
         initialmatrix = empty(shape=(len(corpus),len(topics)))
         # for each topic cell, retrieve the topic weight for that document; if 0, use 0.0001
-        i = 0
         topiclocation = {}
-        for topic in topics:
+        for i, topic in enumerate(topics):
             topiclocation[topic] = i
-            i += 0
-        i = 0
-        for document in corpus:
+        for i, document in enumerate(corpus):
             array = [0.0000001] * len(topics)
             weightdict = topicweights[document]
             for item in weightdict.items():
@@ -129,7 +126,6 @@ class Analyzer():
                     weight = float(item[1])
                     array[topiclocation[int(item[0])]] = weight
             initialmatrix[i] = array
-            i += 1
 
         matrixtoreturn = initialmatrix.T
 
