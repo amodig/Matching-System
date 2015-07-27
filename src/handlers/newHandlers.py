@@ -5,6 +5,9 @@ from random import sample
 import datetime
 
 class TopicHandler(BaseHandler):
+    def _lists_overlap(self, a, b):
+        return bool(set(a) & set(b))
+
     def get(self, key):
         # parameter 'key' defines number of keywords to return in association with each topic
         print key
@@ -20,7 +23,14 @@ class TopicHandler(BaseHandler):
         self.topics_no = 10
         self.topics = sample(self.application.keywords_set, self.topics_no)
 
-        self.message_list = []
+        temp = []
+
+        for keyword_info in self.application.keywords_info:
+            if self._lists_overlap(self.topics, keyword_info["text"].split()):
+                temp.append(keyword_info)
+
+        self.application.filtered_keywords = temp
+        self.application.keywords = temp
 
         messenger = Messenger(self.topics, self.application, key)
         self.json_ok(messenger.generateJSONMessage())
@@ -56,6 +66,9 @@ class TopicArticleHandler(BaseHandler):
 
 
 class TopicSearchHandler(BaseHandler):
+    def _lists_overlap(self, a, b):
+        return bool(set(a) & set(b))
+
     def get(self, searchstring, keyword_number):
         if (keyword_number is None) or (keyword_number == ""):
                 keyword_number = 19
@@ -69,11 +82,17 @@ class TopicSearchHandler(BaseHandler):
         # load the data from the front end
         keywords = searchstring.replace(" ", "_")
         # initialize temp container for sending keywords
+        temp0 = []
         temp = []
+
         for item in self.application.corpus_keywords.items():
             item_keywords = item[1]
             if keywords in item_keywords.split(" "):
-                temp.append(item[0])
+                temp0.append(item[0])
+
+        for keyword_info in self.application.keywords_info:
+            if self._lists_overlap(temp0, keyword_info["text"].split()):
+                temp.append(keyword_info)
 
         self.application.filtered_keywords = temp
         self.application.keywords = self.application.filtered_keywords[self.application.keywords_number *
@@ -129,7 +148,7 @@ class FeedbackHandler(BaseHandler):
         data = json.loads(self.request.body)
 
         # keywords info consists a list of tuples. It stores name of keyword and weight of keyword
-        keywords_info = [(keyword["text"], keyword["weight"]) for keyword in data["topics"]]
+        keywords_info = [(keyword["text"], keyword["weight"]) for keyword in data]
         # Decompose the keywords_info array to two arrays.
         # One of them contains keywords, another of them contains weights of keywords
         keywords, weights = zip(*keywords_info)
@@ -151,6 +170,7 @@ class FeedbackHandler(BaseHandler):
         self.application.keywords = (self.application.ranked_keywords[-self.application.keywords_number:])[::-1]
 
         self.topics = [keyword for keyword in self.application.keywords]
+        self.topics = [topic["text"] for topic in self.topics]
 
         messenger = Messenger(self.topics, self.application, 20)
         self.json_ok(messenger.generateJSONMessage())
