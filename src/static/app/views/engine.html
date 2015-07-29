@@ -1,3 +1,5 @@
+<div id="chartjs-tooltip"></div>
+
 <h1>Topics matching <span class="text-muted"><i>"{[keyword]}"</i></span></h1>
 
 <button class="btn btn-primary pull-right" ng-click="next()">Next <i class="fa fa-long-arrow-right"></i></button>
@@ -25,7 +27,7 @@
       <li><h4 class="text-center">Current iteration</li></li>
     </ul>
 
-    <p class="text-muted text-center" ng-show="loading">
+    <p class="text-muted text-center" ng-show="loading" style="margin-top: 25px; font-size: 2em">
       <i class="fa fa-spinner fa-spin"></i> Loading...
     </p>
 
@@ -46,14 +48,18 @@
 
       <h2>Most related articles</h2>
 
-      <div polar-chart ng-model="relatedArticles" click="chooseArticle"></div>
+      <div polar-chart ng-model="relatedArticles" click="chooseArticle" legend-container="polar-legend"></div>
+
+      <div id="polar-legend" style="margin-top: 25px"></div>
+
+      <p class="text-muted" style="margin-top: 25px" ng-hide="chosenArticle">
+        Choose an article from the chart by clicking it.
+      </p>
 
       <div ng-show="chosenArticle">
         <h3>{[chosenArticle.title]}</h3>
         <p class="text-muted">{[chosenArticle.authors]}</p>
-        <p>
-          {[chosenArticle.abstract]}
-        </p>
+        <p mathjax-bind="chosenArticle.abstract"></p>
       </div>
     </div>
   </div>
