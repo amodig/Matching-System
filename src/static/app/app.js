@@ -1,3 +1,12 @@
+MathJax.Hub.Config({
+	tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    processEscapes: true
+  }
+});
+
+MathJax.Hub.Configured();
+
 var MatchingApp = angular.module('MatchingApp', ['ngRoute', 'ngSanitize', 'ui.gravatar', 'btford.markdown', 'ui.slider']);
 
 MatchingApp.config(function($routeProvider){

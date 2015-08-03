@@ -20,12 +20,12 @@
 	</head>
 
 	<body ng-controller="KeywordController">
-		
+
 		<!-- SEARCH FORM AND KEYWORD SUGGESTIONS -->
 		<div class="container-basic container-dark" id="search-container">
 
 			<div class="wrapper">
-				
+
 				<!-- SEARCH FORM -->
 				<form>
 					<input type="text" ng-model="search_word" class="form-control text-field-rounded" id="search-field" placeholder="What are you looking for?">
@@ -38,7 +38,7 @@
 				<div class="text-center">
 
 					<button id="suggest-keywords-trigger" ng-click="toggle_keyword_suggestions()"><i class="fa fa-list marg-right"></i>Suggest keywords<i class="fa fa-angle-down marg-left" ng-hide="show_keyword_suggestions"></i><i class="fa fa-angle-up marg-left" ng-show="show_keyword_suggestions"></i></button>
-				
+
 				</div>
 
 				<div class="keyword-suggestions-list">
@@ -49,7 +49,7 @@
 						<button class="btn btn-green btn-rounded" ng-click="load_more_keyword_suggestions()"><i class="fa fa-plus marg-right"></i>More</button>
 						<button class="btn btn-blue btn-rounded" ng-click="search()"><i class="fa fa-search marg-right"></i>Search</button>
 					</div>
-				
+
 				</div>
 
 			</div>
@@ -58,7 +58,7 @@
 
 		<!-- KEYWORDS DISPLAY -->
 		<div class="container-basic" id="keywords-container">
-			
+
 			<h2>
 				Keywords
 				<button class="btn pull-right" id="next-iteration" data-toggle="tooltip" data-placement="bottom" title="Carry on to the next iteration" ng-click="next()">
@@ -75,7 +75,7 @@
 			<div class="keywords-display">
 
 				<div class="keyword-box animated bounceIn" data-keywordId="{[{keyword.id}]}" ng-repeat="keyword in current_keywords | filter: filter_removed_keywords" ng-mouseenter="highlight_keywords_persons(keyword)" ng-mouseleave="un_highlight_keywords_persons()">
-					
+
 					<input type="text" class="keyword-knob" data-width="70" data-height="70" data-displayPrevious="true" data-fgColor="#0097cf" data-bgColor="#ffffff" data-angleArc="250" data-angleOffset="-125" data-thickness=".3" value="{[{keyword.weight}]}" ng-model="keyword.weight">
 					<div class="text-center" style="margin-top: 10px">
 						<span class="arrow"></span>
@@ -157,7 +157,7 @@
 		<div id="keywords-display-layer" ng-class="{ 'bring-front': show_keyword_layer }">
 			<div id="article-highlight-display" class="media">
 			    <img class="media-object pull-left" src="{[{current_article.author_profile_picture}]}" style="width: 160px; height: auto; margin-right: 20px">
-			
+
 			  	<div class="media-body">
 			   		<h3>{[{current_article.highlighted_title}]}</h3>
 					<span class="text-muted" ng-bind-html="current_article.highlighted_abstract"></span>
