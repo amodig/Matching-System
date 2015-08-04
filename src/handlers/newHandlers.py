@@ -100,7 +100,8 @@ class TopicSearchHandler(BaseHandler):
                                                                            self.application.keywords_number *
                                                                            (self.application.iter_num + 1)]
 
-        self.topics = self.application.filtered_keywords
+        self.topics = temp0[self.application.keywords_number * self.application.iter_num:self.application.keywords_number *
+                                                                           (self.application.iter_num + 1)]
 
         messenger = Messenger(self.topics, self.application, keyword_number)
         self.json_ok(messenger.generateJSONMessage())

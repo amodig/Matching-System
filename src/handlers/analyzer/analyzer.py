@@ -114,7 +114,7 @@ class Analyzer():
     def calculateNewX(self, topics, corpus, topicweights):
         # create matrix that has documents as the outer arrays and keywords as the inner arrays
         initialmatrix = empty(shape=(len(corpus),len(topics)))
-        # for each topic cell, retrieve the topic weight for that document; if 0, use 0.0001
+        # for each topic cell, retrieve the topic weight for that document; if 0, use 0.0000001
         topiclocation = {}
         for i, topic in enumerate(topics):
             topiclocation[topic] = i
