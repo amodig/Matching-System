@@ -11,7 +11,11 @@ MatchingApp.controller('IterationController', function($scope, $rootScope, $rout
     $scope.loading = true;
 
     if($scope.currentIteration == 1){
-      Api.topics($scope.keyword).success(function(topics){
+      Api.topics({
+        keyword: $scope.keyword,
+        topicCount: 10
+      })
+      .success(function(topics){
         $scope.topics = topics.topics;
         $scope.loading = false;
       });
@@ -49,6 +53,10 @@ MatchingApp.controller('IterationController', function($scope, $rootScope, $rout
     }
 
     topic.selected = true;
+  }
+
+  $scope.choosePerson = function(person){
+    $scope.chosenPerson = person;
   }
 
   $scope.chooseArticle = function(article){

@@ -68,7 +68,6 @@ MatchingApp.service('Api', function($http){
   }
 
   this.next = function(feedback){
-    console.log(feedback)
     return $http.post('/feedback', feedback);
   }
 
@@ -76,8 +75,8 @@ MatchingApp.service('Api', function($http){
     return $http.get('/topic/' + topicId + '/articles');
   }
 
-  this.topics = function(keyword){
-    var encodedKeyword = encodeURIComponent(keyword);
+  this.topics = function(options){
+    var encodedKeyword = encodeURIComponent(options.keyword);
 
     return $http.get('/topics');
   }

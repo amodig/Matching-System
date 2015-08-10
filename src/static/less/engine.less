@@ -15,6 +15,69 @@
   max-width: 600px;
 }
 
+#article-people-list{
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+  min-height: 80px;
+
+  li{
+    float: left;
+
+    &:not(:first-child){
+      div{
+        margin-left: -25px;
+      }
+    }
+
+    div{
+      display: inline-block;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background-color: rgb(240,240,240);
+      border: 2px solid white;
+      box-shadow: 0px 0px 3px fadeout(black, 60%);
+      transition: 0.5s;
+      background-size: cover;
+      background-position: center center;
+      cursor: pointer;
+
+      &:hover{
+        z-index: 2;
+        transform: scale(1.2);
+        transition: 0.5s;
+      }
+    }
+  }
+}
+
+#person-modal{
+  top: 60px;
+
+  #person-picture{
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: rgb(240,240,240);
+    border: 2px solid white;
+    box-shadow: 0px 0px 3px fadeout(black, 60%);
+    background-size: cover;
+    background-position: center center;
+  }
+
+  .modal-header{
+    position: relative;
+
+    h4{
+      margin-left: 60px;
+    }
+  }
+}
+
 #engine-container{
   width: 100%;
   display: table;

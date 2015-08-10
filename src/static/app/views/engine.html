@@ -60,6 +60,36 @@
         <h3>{[chosenArticle.title]}</h3>
         <p class="text-muted">{[chosenArticle.authors]}</p>
         <p mathjax-bind="chosenArticle.abstract"></p>
+
+        <p class="text-muted">People related to this article</p>
+
+        <ul id="article-people-list">
+          <li ng-repeat="person in chosenArticle.people">
+            <div tooltip content="person.name" ng-style="{ 'background-image': 'url(' + person.profile_picture + ')' }" ng-click="choosePerson(person)"></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="person-modal" tabindex="-1" role="dialog" modal show="chosenPerson">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div id="person-picture" ng-style="{ 'background-image': 'url(' + chosenPerson.profile_picture + ')' }"></div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">{[chosenPerson.name]}</h4>
+
+      </div>
+      <div class="modal-body">
+        <ul class="list-unstyled">
+          <li><strong>Email:</strong> {[chosenPerson.email]}</li>
+          <li><strong>Phone:</strong> {[chosenPerson.phone]}</li>
+          <li><strong>Room:</strong> {[chosenPerson.room]}</li>
+          <li><strong>group:</strong> {[chosenPerson.group]}</li>
+          <li><strong>Homepage:</strong> <a ng-href="{[chosenPerson.homepage]}" target="_blank">{[chosenPerson.homepage]}<i class="fa fa-external-link" style="margin-left: 4px;"></i></a></li>
+        </ul>
       </div>
     </div>
   </div>
