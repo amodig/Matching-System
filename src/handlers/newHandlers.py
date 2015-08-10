@@ -43,6 +43,7 @@ class TopicArticleHandler(BaseHandler):
 
         articles = self.application.articles_associated_with_topic[key]
         articles = articles[0:4]
+        authors = self.application.authors
 
         message_list = []
 
@@ -52,7 +53,7 @@ class TopicArticleHandler(BaseHandler):
             weight = weight_dict[key]
             message_list.append({
                 "title": article["title"],
-                "authors": article["author"],
+                "people": [authors[person] for person in article["people"]],
                 "abstract": article["abstract"],
                 "weight": weight
             })

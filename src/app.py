@@ -195,6 +195,7 @@ class Application(tornado.web.Application):
         def form_papers_info():
             self.all_articles = [None] * len(self.corpora)
             self.articles_associated_with_topic = {}
+            self.authors = {}
             i = 0
 
             for title, original_corpus, decomposed_corpus, user in zip(self.titles, self.original_corpora,
@@ -202,7 +203,20 @@ class Application(tornado.web.Application):
                 self.all_articles[i] = {}
                 self.all_articles[i]["title"] = title
                 self.all_articles[i]["abstract"] = original_corpus
-                self.all_articles[i]["author"] = user
+                self.all_articles[i]["people"] = []
+
+                for author in user.split(','):
+                    author = author.strip()
+                    if author not in self.authors.keys():
+                        self.authors[author] = {}
+                        self.authors[author]["name"] = author
+                        self.authors[author]["email"] = "Random@email.com"
+                        self.authors[author]["room"] = "D212"
+                        self.authors[author]["phone"] = "+358 9999 9999"
+                        self.authors[author]["homepage"] = "http://random.homepage.com"
+                        self.authors[author]["group"] = "Secure Systems"
+                        self.authors[author]["profile_picture"] = "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg"
+                    self.all_articles[i]["people"].append(author)
 
                 # yes this is terrible and needs a rewrite
                 for keyword in decomposed_corpus.split(","):
