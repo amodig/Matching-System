@@ -27,6 +27,7 @@
     "Chart.js": "~1.0.2",
     "jquery": "~2.1.4",
     "jquery-ui": "~1.11.4",
-    "ngSticky": "d-oliveros/ngSticky#~1.7.9"
+    "ngSticky": "d-oliveros/ngSticky#~1.7.9",
+    "blueimp-md5": "~1.1.1"
   }
 }
