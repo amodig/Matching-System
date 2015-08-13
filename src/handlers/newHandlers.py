@@ -32,7 +32,7 @@ class TopicHandler(BaseHandler):
         self.application.filtered_keywords = temp
         self.application.keywords = temp
 
-        messenger = Messenger(self.topics, self.application, key)
+        messenger = Messenger(self.topics, self.topics, self.application, key)
         self.json_ok(messenger.generateJSONMessage())
 
     def post(self):
@@ -71,6 +71,8 @@ class TopicSearchHandler(BaseHandler):
         return bool(set(a) & set(b))
 
     def get(self, searchstring, keyword_number):
+        self.topics_no = 10
+
         if (keyword_number is None) or (keyword_number == ""):
                 keyword_number = 19
         else:
@@ -91,6 +93,13 @@ class TopicSearchHandler(BaseHandler):
             if keywords in item_keywords.split(" "):
                 temp0.append(item[0])
 
+        random_topics = []
+        while (len(temp0) < self.topics_no):
+            topics_to_get = self.topics_no - len(temp0)
+            sampled_topics = sample(self.application.keywords_set, self.topics_no)
+            random_topics = list(set(sampled_topics) - set(temp0))
+            temp0.extend(random_topics)
+
         for keyword_info in self.application.keywords_info:
             if self._lists_overlap(temp0, keyword_info["text"].split()):
                 temp.append(keyword_info)
@@ -104,7 +113,7 @@ class TopicSearchHandler(BaseHandler):
         self.topics = temp0[self.application.keywords_number * self.application.iter_num:self.application.keywords_number *
                                                                            (self.application.iter_num + 1)]
 
-        messenger = Messenger(self.topics, self.application, keyword_number)
+        messenger = Messenger(self.topics, random_topics, self.application, keyword_number)
         self.json_ok(messenger.generateJSONMessage())
 
     def post(self):
@@ -174,12 +183,13 @@ class FeedbackHandler(BaseHandler):
         self.topics = [keyword for keyword in self.application.keywords]
         self.topics = [topic["text"] for topic in self.topics]
 
-        messenger = Messenger(self.topics, self.application, 20)
+        messenger = Messenger(self.topics, [], self.application, 20)
         self.json_ok(messenger.generateJSONMessage())
 
 class Messenger():
-    def __init__(self, topics, application, number_keywords):
+    def __init__(self, topics, random_topics, application, number_keywords):
         self.topics = topics
+        self.random_topics = random_topics
         self.keywords = application.corpus_keywords
         self.keywordweights = application.topic_keyword_weights
         self.number_keywords = number_keywords
@@ -199,6 +209,7 @@ class Messenger():
             dict = {"id": self.topics[i],
                   "keywords": keyword_dict_list,
                   "weight": 0.1,
+                  "random": (self.topics[i] in self.random_topics),
                 }
             self.message_list.append(dict)
 
