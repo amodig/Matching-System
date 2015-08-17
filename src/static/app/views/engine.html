@@ -32,7 +32,11 @@
     </p>
 
     <ul id="topic-list" ng-hide="loading">
-      <li ng-repeat="topic in topics" ng-class="{ 'chosen': topic.selected }">
+      <li ng-repeat="topic in topics" ng-class="{ 'chosen': topic.selected, 'randomly-chosen': topic.random }">
+        <div class="random-topic" tooltip content="'This topic was randomly chosen'" ng-show="topic.random">
+          <i class="fa fa-random"></i>
+        </div>
+
         <div class="topic-keywords" ng-click="chooseTopic(topic)">
           <span ng-repeat="keyword in topic.keywords" ng-style="{ 'font-size': 1 + keyword.weight + 'em' }">{[keyword.label]}</span>
         </div>

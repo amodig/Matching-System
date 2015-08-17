@@ -151,6 +151,23 @@
         margin: 0px;
         padding: 0px;
         border-bottom: 1px solid @lightGrey;
+        position: relative;
+
+        .random-topic{
+          background-color: @yellow;
+          width: 40px;
+          text-align: center;
+          color: white;
+          padding: 13px 0px;
+          position: absolute;
+          right: 0px;
+          bottom: 0px;
+          border: 1px solid darken(@yellow, 10%);
+        }
+
+        &.randomly-chosen{
+          padding-right: 40px;
+        }
 
         &.chosen{
 
