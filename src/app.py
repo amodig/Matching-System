@@ -155,6 +155,7 @@ class Application(tornado.web.Application):
                 self.abstracts_filename = "../docs/abstracts/bibtex.txt"
                 self.extractors = Extractors(file_name=self.abstracts_filename)
                 self.original_corpora, self.uploader_names, self.titles = self.extractors.get_information_from_bibtex(2500)
+                self.valid_people_filename = '../docs/people/people.txt'
 
                 # set keywords (might take a while):
                 # yield self.extractors.set_keywords_from_database()  # recommended to run only when needed
@@ -196,6 +197,12 @@ class Application(tornado.web.Application):
                 self.articles_topicweights = pickle.load(self.articles_topicweights_obj)
                 self.articles_topicweights_obj.close()
 
+            if self.valid_people_filename is not None:
+                self.valid_people_file = open(self.valid_people_filename, mode='r')
+                self.valid_people = [line.strip() for line in self.valid_people_file]
+                print self.valid_people
+                self.valid_people_file.close()
+
         # overlapping with old system, adding this separately to maintain compatibility with old for now...
         def form_papers_info():
             self.all_articles = [None] * len(self.corpora)
@@ -210,18 +217,21 @@ class Application(tornado.web.Application):
                 self.all_articles[i]["abstract"] = original_corpus
                 self.all_articles[i]["people"] = []
 
-                for author in user.split(','):
+                # print user
+
+                for author in user.split('and'):
                     author = author.strip()
-                    if author not in self.authors.keys():
-                        self.authors[author] = {}
-                        self.authors[author]["name"] = author
-                        self.authors[author]["email"] = "Random@email.com"
-                        self.authors[author]["room"] = "D212"
-                        self.authors[author]["phone"] = "+358 9999 9999"
-                        self.authors[author]["homepage"] = "http://random.homepage.com"
-                        self.authors[author]["group"] = "Secure Systems"
-                        self.authors[author]["profile_picture"] = "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg"
-                    self.all_articles[i]["people"].append(author)
+                    if (self.valid_people == None) or (author in self.valid_people):
+                        if author not in self.authors.keys():
+                            self.authors[author] = {}
+                            self.authors[author]["name"] = author
+                            self.authors[author]["email"] = "Random@email.com"
+                            self.authors[author]["room"] = "D212"
+                            self.authors[author]["phone"] = "+358 9999 9999"
+                            self.authors[author]["homepage"] = "http://random.homepage.com"
+                            self.authors[author]["group"] = "Secure Systems"
+                            self.authors[author]["profile_picture"] = "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg"
+                        self.all_articles[i]["people"].append(author)
 
                 # yes this is terrible and needs a rewrite
                 for keyword in decomposed_corpus.split(","):

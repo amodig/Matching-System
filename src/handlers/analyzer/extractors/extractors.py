@@ -151,7 +151,8 @@ class Extractors():
                 title = processLine(splitline, thefile)
                 if current_author is None:
                     print "Title " + title + " has no associated author!"
-                titles.append(title)
+                if title not in titles:
+                    titles.append(title)
                 corpora.append("")
             if len(corpora) == number_of_corpora:
                 break
