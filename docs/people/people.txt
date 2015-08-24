@@ -1,17 +1,17 @@
-N. Asokan
-Aapo Hyvärinen
-Giulio Jacucci
-Jussi Kangasharju
-Jyrki Kivinen
-Mikko Koivisto
-Veli Mäkinen
-Tomi Männistö
-Jürgen Münch
-Petri Myllymäki
-Valtteri Niemi
-Jukka Paakki
-Juha Puustjärvi
-Teemu Roos
-Sasu Tarkoma
-Hannu Toivonen
-Esko Ukkonen
+N. Asokan, N.Asokan[at]cs.helsinki.fi, D212, +358 2941 51225, http://cs.helsinki.fi/~asokan, Secure Systems, http://www.cs.helsinki.fi/sites/default/files/user-pictures/picture-6380.jpg
+Aapo Hyvärinen, Aapo.Hyvarinen[at]cs.helsinki.fi, A343, +358 2941 51234, http://www.cs.helsinki.fi/u/ahyvarin/, Neuroinformatics, http://www.cs.helsinki.fi/u/ahyvarin/images/omakuva08a.jpg
+Giulio Jacucci, Giulio.Jacucci[at]cs.helsinki.fi, D231, +358 2941 51153, http://www.cs.helsinki.fi/people/jacucci, Ubiquitous Interaction, http://www.cs.helsinki.fi/sites/default/files/user-pictures/picture-324.jpg
+Jussi Kangasharju, Jussi.Kangasharju[at]cs.helsinki.fi, A220, +358 50 415 1708, http://www.cs.helsinki.fi/people/jakangas, Collaborative Networking (CoNe), http://www.cs.helsinki.fi/sites/default/files/user-pictures/picture-230.jpg
+Jyrki Kivinen, Jyrki.Kivinen[at]cs.helsinki.fi, B229a, +358 2941 51279, http://www.cs.helsinki.fi/u/jkivinen/, Machine Learning, http://www.cs.helsinki.fi/u/jkivinen/JyrkiKivinen.jpg
+Mikko Koivisto, Mikko.Koivisto[at]cs.helsinki.fi, A310, +358 2941 51171, http://www.cs.helsinki.fi/u/mkhkoivi/, Sums of Products, http://www.cs.helsinki.fi/u/mkhkoivi/dubrovnik-r.jpg
+Veli Mäkinen, Veli.Makinen[at]cs.helsinki.fi, A239b, +358 2941 51281, http://www.cs.helsinki.fi/u/vmakinen/, Genome-scale Algorithmics, http://www.cs.helsinki.fi/sites/default/files/user-pictures/picture-141.jpg
+Tomi Männistö, Tomi.Mannisto[at]cs.helsinki.fi, C230b, +358 2941 51224, http://www.cs.helsinki.fi/u/tomimann/, Product Requirements and Architecture, http://www.cs.helsinki.fi/u/tomimann/TM.gif
+Jürgen Münch, Juergen.Muench[at]cs.helsinki.fi, C230a, +358 2941 51330, http://www.sserg.org/team/prof-dr-juergen-muench, Software Systems Engineering, http://www.cs.helsinki.fi/sites/default/files/user-pictures/picture-6067.png
+Petri Myllymäki, Petri.Myllymaki[at]cs.helsinki.fi, A320, +358 40 5531162, http://www.cs.helsinki.fi/u/myllymak/, Complex Systems Computation, http://www.cs.helsinki.fi/u/myllymak/pm%20140311.jpg
+Valtteri Niemi, Valtteri.Niemi[at]cs.helsinki.fi, D233, , http://www.cs.helsinki.fi/people/pvniemi, ,
+Jukka Paakki, Jukka.Paakki[at]cs.helsinki.fi, D240b, +358 2941 51387, http://www.cs.helsinki.fi/u/paakki/, , http://www.cs.helsinki.fi/u/paakki/kuvat/ovet5.jpg
+Juha Puustjärvi, Juha.Puustjarvi[at]cs.helsinki.fi, D237, +358 2941 51152, http://www.cs.helsinki.fi/u/puustjar/, , http://www.cs.helsinki.fi/sites/default/files/root/hallinto/kuvia/puustjarv.jpg
+Teemu Roos, Teemu.Roos[at]cs.helsinki.fi, A322, +358 2941 51187, http://www.cs.helsinki.fi/u/ttonteri/, Information Complexity and Learning, http://www.cs.helsinki.fi/u/ttonteri/pics/teemulandemed.jpg
+Sasu Tarkoma, Sasu.Tarkoma[at]cs.helsinki.fi, D229, +358 50 3841517, http://www.cs.helsinki.fi/u/starkoma, Content-centric structures and networking, http://www.cs.helsinki.fi/u/starkoma/sasu_kuva2.jpg
+Hannu Toivonen, Hannu.Toivonen[at]cs.helsinki.fi, B229b, +358 50 9112405, http://www.cs.helsinki.fi/hannu.toivonen/, Discovery group: Data Mining and Computational Creativity, http://www.cs.helsinki.fi/sites/default/files/user-pictures/picture-13.jpg
+Esko Ukkonen, Esko.Ukkonen[at]cs.helsinki.fi, A239a, +358 2941 51280, http://www.cs.helsinki.fi/u/ukkonen/, Combinatorial Pattern Matching, http://www.cs.helsinki.fi/u/ukkonen/Ukkonen%20Esko%202602-14_1_webphoto%20HY_Linda%20Tammisto.jpg

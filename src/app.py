@@ -198,16 +198,32 @@ class Application(tornado.web.Application):
                 self.articles_topicweights_obj.close()
 
             if self.valid_people_filename is not None:
+                self.authors = {}
                 self.valid_people_file = open(self.valid_people_filename, mode='r')
-                self.valid_people = [line.strip() for line in self.valid_people_file]
-                print self.valid_people
+                people_data = [line.strip() for line in self.valid_people_file]
+                for entry in people_data:
+                    fields = entry.split(',')
+                    author = fields[0].strip()
+                    self.authors[author] = {}
+                    self.authors[author]["name"] = author
+                    self.authors[author]["email"] = fields[1].strip()
+                    self.authors[author]["room"] = fields[2].strip()
+                    self.authors[author]["phone"] = fields[3].strip()
+                    self.authors[author]["homepage"] = fields[4].strip()
+                    self.authors[author]["group"] = fields[5].strip()
+                    profile_picture = "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg"
+                    if len(fields) > 6:
+                        if len(fields[6].strip()):
+                            profile_picture = fields[6].strip()
+                    self.authors[author]["profile_picture"] = profile_picture
+
+                print self.authors
                 self.valid_people_file.close()
 
         # overlapping with old system, adding this separately to maintain compatibility with old for now...
         def form_papers_info():
             self.all_articles = [None] * len(self.corpora)
             self.articles_associated_with_topic = {}
-            self.authors = {}
             i = 0
 
             for title, original_corpus, decomposed_corpus, user in zip(self.titles, self.original_corpora,
@@ -221,16 +237,7 @@ class Application(tornado.web.Application):
 
                 for author in user.split('and'):
                     author = author.strip()
-                    if (self.valid_people == None) or (author in self.valid_people):
-                        if author not in self.authors.keys():
-                            self.authors[author] = {}
-                            self.authors[author]["name"] = author
-                            self.authors[author]["email"] = "Random@email.com"
-                            self.authors[author]["room"] = "D212"
-                            self.authors[author]["phone"] = "+358 9999 9999"
-                            self.authors[author]["homepage"] = "http://random.homepage.com"
-                            self.authors[author]["group"] = "Secure Systems"
-                            self.authors[author]["profile_picture"] = "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg"
+                    if (author in self.authors.keys()):
                         self.all_articles[i]["people"].append(author)
 
                 # yes this is terrible and needs a rewrite
