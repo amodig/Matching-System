@@ -132,7 +132,7 @@ class Application(tornado.web.Application):
 
         # following part is for Analyzer
         @tornado.gen.coroutine
-        def set_keywords_parameters(metadata_source='xml', abstract_source='mallet'):
+        def set_keywords_parameters(metadata_source='bibtex', abstract_source='mallet'):
             print "Set keywords for analyzer..."
             print "Using metadata source:", metadata_source
             print "Using abstract source:", abstract_source
@@ -150,6 +150,11 @@ class Application(tornado.web.Application):
                 self.original_corpora = info['corpora']
                 self.uploader_names = info['uploader_names']
                 self.titles = info['titles']
+            elif metadata_source is 'bibtex':
+                self._num_of_corpora = "all"
+                self.abstracts_filename = "../docs/abstracts/bibtex.txt"
+                self.extractors = Extractors(file_name=self.abstracts_filename)
+                self.original_corpora, self.uploader_names, self.titles = self.extractors.get_information_from_bibtex(2500)
 
                 # set keywords (might take a while):
                 # yield self.extractors.set_keywords_from_database()  # recommended to run only when needed
@@ -305,7 +310,7 @@ class Application(tornado.web.Application):
             self.keywords_file_obj.close()
 
         # set keywords parameters
-        tornado.ioloop.IOLoop.instance().run_sync(lambda: set_keywords_parameters(metadata_source='xml', abstract_source='mallet'))  # xml or db, old or mallet
+        tornado.ioloop.IOLoop.instance().run_sync(lambda: set_keywords_parameters(metadata_source='bibtex', abstract_source='mallet'))  # xml, db or bibtex, old or mallet
 
         set_iteration_parameters()
         form_keywords_info()

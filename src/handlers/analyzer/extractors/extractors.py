@@ -113,6 +113,60 @@ class Extractors():
         info = {"corpora": corpora, "uploader_names": uploaders, "titles": titles}
         raise tornado.gen.Return(info)
 
+    def get_information_from_bibtex(self, number_of_corpora, file_name=None):
+        def processLine(splitline, thefile):
+            lines = []
+            openparentheses = splitline[1].count('{') - splitline[1].count('}')
+            splitline[1] = splitline[1].lstrip()
+            lines.append(splitline[1])
+            while openparentheses > 0:
+                currentline = thefile.readline()
+                openparentheses = openparentheses + currentline.count('{') - currentline.count('}')
+                lines.append(currentline.lstrip())
+            line = " ".join(lines)
+            line = line.translate(None, "{}")
+            line = line[:-2]
+            line = line.replace('\n', "")
+            return line
+
+        corpora = []
+        author_names = []
+        titles = []
+        if file_name is None:
+            file_name = self._file_name
+        thefile = open(file_name, 'r')
+        nextline = thefile.readline()
+        while nextline:
+            if "@proceedings" in nextline or "@book" in nextline:
+                proceedings = True
+            elif nextline.find("@") == 0:
+                proceedings = False
+                current_author = None
+            splitline = nextline.split('=')
+            if (splitline[0] == '  author    ' and proceedings == False):
+                author = processLine(splitline, thefile)
+                author_names.append(author)
+                current_author = author
+            if (splitline[0] == '  title     ' and proceedings == False):
+                title = processLine(splitline, thefile)
+                if current_author is None:
+                    print "Title " + title + " has no associated author!"
+                titles.append(title)
+                corpora.append("")
+            if len(corpora) == number_of_corpora:
+                break
+            nextline = thefile.readline()
+        thefile.close()
+        if not (len(corpora) == len(author_names) == len(titles)):
+            print "Warning: mismatch in number of abstracts, authors, and titles (" + str(len(corpora)) + ", " + str(len(author_names)) + ", " + str(len(titles)) + ")"
+        return corpora, author_names, titles
+
+
+
+
+
+
+
     def get_information_from_xml(self, number_of_corpora, file_name=None):
         """
         Read papers from database and return all the words (and paper titles) that belongs to one author in a list
