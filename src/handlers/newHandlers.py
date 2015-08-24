@@ -42,7 +42,22 @@ class TopicArticleHandler(BaseHandler):
     def get(self, key):
 
         articles = self.application.articles_associated_with_topic[key]
-        articles = articles[0:4]
+        articles_to_fetch = min(len(articles), 5)
+
+        added_articles = []
+        added_article_titles = set()
+        i = 0
+        while (len(added_articles) < articles_to_fetch):
+            article = self.application.all_articles[i]
+            if (article["title"]) not in added_article_titles:
+                added_articles.append(articles[i])
+                added_article_titles.add(article["title"])
+            else:
+                print "Discarded duplicate article " + (article["title"])
+            i += 1
+
+        articles = added_articles
+
         authors = self.application.authors
 
         message_list = []
