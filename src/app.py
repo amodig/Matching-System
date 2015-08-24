@@ -154,7 +154,7 @@ class Application(tornado.web.Application):
                 self._num_of_corpora = "all"
                 self.abstracts_filename = "../docs/abstracts/bibtex.txt"
                 self.extractors = Extractors(file_name=self.abstracts_filename)
-                self.original_corpora, self.uploader_names, self.titles = self.extractors.get_information_from_bibtex(2500)
+                self.original_corpora, self.uploader_names, self.titles, self.urls = self.extractors.get_information_from_bibtex(2500)
                 self.valid_people_filename = '../docs/people/people.txt'
 
                 # set keywords (might take a while):
@@ -226,12 +226,13 @@ class Application(tornado.web.Application):
             self.articles_associated_with_topic = {}
             i = 0
 
-            for title, original_corpus, decomposed_corpus, user in zip(self.titles, self.original_corpora,
-                                                                       self.corpora, self.uploader_names):
+            for title, original_corpus, decomposed_corpus, user, url in zip(self.titles, self.original_corpora,
+                                                                       self.corpora, self.uploader_names, self.urls):
                 self.all_articles[i] = {}
                 self.all_articles[i]["title"] = title
                 self.all_articles[i]["abstract"] = original_corpus
                 self.all_articles[i]["people"] = []
+                self.all_articles[i]["url"] = url
 
                 # print user
 

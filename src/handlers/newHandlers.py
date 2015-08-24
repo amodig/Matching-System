@@ -55,7 +55,8 @@ class TopicArticleHandler(BaseHandler):
                 "title": article["title"],
                 "people": [authors[person] for person in article["people"]],
                 "abstract": article["abstract"],
-                "weight": weight
+                "weight": weight,
+                "url": article["url"]
             })
 
         message = {"articles": message_list}
