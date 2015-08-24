@@ -52,8 +52,6 @@ class TopicArticleHandler(BaseHandler):
             if (article["title"]) not in added_article_titles:
                 added_articles.append(articles[i])
                 added_article_titles.add(article["title"])
-            else:
-                print "Discarded duplicate article " + (article["title"])
             i += 1
 
         articles = added_articles
@@ -68,6 +66,7 @@ class TopicArticleHandler(BaseHandler):
             weight = weight_dict[key]
             message_list.append({
                 "title": article["title"],
+                "url": article["url"],
                 "people": [authors[person] for person in article["people"]],
                 "abstract": article["abstract"],
                 "weight": weight

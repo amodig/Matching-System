@@ -132,6 +132,7 @@ class Extractors():
         corpora = []
         author_names = []
         titles = []
+        urls = []
         if file_name is None:
             file_name = self._file_name
         thefile = open(file_name, 'r')
@@ -139,34 +140,37 @@ class Extractors():
         while nextline:
             if "@proceedings" in nextline or "@book" in nextline:
                 proceedings = True
+                oktoadd = False
             elif nextline.find("@") == 0:
                 proceedings = False
                 current_author = None
+                oktoadd = False
+                url = None
             splitline = nextline.split('=')
             if (splitline[0] == '  author    ' and proceedings == False):
-                author = processLine(splitline, thefile)
-                author_names.append(author)
-                current_author = author
+                current_author = processLine(splitline, thefile)
             if (splitline[0] == '  title     ' and proceedings == False):
                 title = processLine(splitline, thefile)
+                titles.append(title)
+                corpora.append("")
+                oktoadd = True
                 if current_author is None:
                     print "Title " + title + " has no associated author!"
-                if title not in titles:
-                    titles.append(title)
-                corpora.append("")
+                else:
+                    author_names.append(current_author)
+            if (splitline[0] == '  url       ' and oktoadd):
+                url = processLine(splitline, thefile)
+                urls.append(url)
+            if (splitline[0] == '  biburl    ' and oktoadd and url == None):
+                biburl = processLine(splitline, thefile)
+                urls.append(biburl)
             if len(corpora) == number_of_corpora:
                 break
             nextline = thefile.readline()
         thefile.close()
         if not (len(corpora) == len(author_names) == len(titles)):
             print "Warning: mismatch in number of abstracts, authors, and titles (" + str(len(corpora)) + ", " + str(len(author_names)) + ", " + str(len(titles)) + ")"
-        return corpora, author_names, titles
-
-
-
-
-
-
+        return corpora, author_names, titles, urls
 
     def get_information_from_xml(self, number_of_corpora, file_name=None):
         """
