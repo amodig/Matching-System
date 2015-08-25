@@ -61,7 +61,7 @@
       </p>
 
       <div ng-show="chosenArticle">
-        <h3>{[chosenArticle.title]}</h3>
+        <h3><a ng-href="{[chosenArticle.url]}" target="_blank">{[chosenArticle.title]}</a></h3>
         <p class="text-muted">{[chosenArticle.authors]}</p>
         <p mathjax-bind="chosenArticle.abstract"></p>
 
