@@ -24,7 +24,7 @@ MatchingApp.config(function($routeProvider){
       templateUrl: 'static/app/views/search.html'
     })
     .otherwise({
-      redirectTo: '/profile'
+      redirectTo: '/engine/search'
     });
 });
 
