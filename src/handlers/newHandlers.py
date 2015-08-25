@@ -42,13 +42,17 @@ class TopicArticleHandler(BaseHandler):
     def get(self, key):
 
         articles = self.application.articles_associated_with_topic[key]
+
+        if (int(key)==134):
+            print articles[0:30]
+
         articles_to_fetch = min(len(articles), 5)
 
         added_articles = []
         added_article_titles = set()
         i = 0
         while (len(added_articles) < articles_to_fetch):
-            article = self.application.all_articles[i]
+            article = self.application.all_articles[articles[i]]
             if (article["title"]) not in added_article_titles:
                 added_articles.append(articles[i])
                 added_article_titles.add(article["title"])
@@ -71,6 +75,7 @@ class TopicArticleHandler(BaseHandler):
                 "abstract": article["abstract"],
                 "weight": weight
             })
+            print str(article_number) + ": " + article["title"] + ". Weight: " + str(weight)
 
         message = {"articles": message_list}
 
