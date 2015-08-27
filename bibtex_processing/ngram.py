@@ -54,6 +54,7 @@ EDIT_FILES = True
 # what files to read and from where, for forming the corpus
 CORPUS_ROOT = 'arxiv_dataset/'
 CORPUS_EXTENSION =r'.*\.lemmatized'
+CORPUS_OUTPUT_EXTENSION = "*.lemmatized"
 
 # which files to actually rewrite
 OUTPUT_SIGNATURE = "file*.lemmatized"
@@ -79,7 +80,7 @@ finder_3gram.apply_freq_filter(MIN_FREQUENCY)
 
 # combine all the 3-grams meeting the PMI threshold
 print "Looking for 3-grams with a PMI of at least ", MIN_3GRAM_PMI
-filelist = [ f for f in glob.glob(CORPUS_ROOT+CORPUS_EXTENSION) ]
+filelist = [ f for f in glob.glob(CORPUS_ROOT+CORPUS_OUTPUT_EXTENSION) ]
 
 gen = finder_3gram.above_score(trigram_measures.pmi, MIN_3GRAM_PMI)
 processGrams(gen, filelist)

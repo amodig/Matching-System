@@ -19,7 +19,7 @@ python splitter.py
 mkdir temp
 mv file* temp/
 for f in temp/file*
-   ./lemmatize -l lem-me-en.bin $f $f.lemmatized
+   do ./lemmatize -l lem-me-en.bin $f $f.lemmatized
 done
 tar -zxf arxiv_dataset.tar.gz 
 mv temp/*.lemmatized arxiv_dataset/
@@ -29,10 +29,10 @@ mv arxiv_dataset/file* temp/temp2/
 mallet-2.0.7/bin/mallet import-dir --token-regex "[\p{Alpha}_]{3,}" --input temp/temp2/ --output bibtex.mallet --keep-sequence TRUE
 mallet-2.0.7/bin/mallet infer-topics --inferencer arxiv.inferencer --input bibtex.mallet --output-doc-topics bibtex_doc_topics.txt --doc-topics-threshold 0.05
 python topicModelExtractor.py
+mv all.txt ../docs/abstracts/bibtex.txt
 echo "Cleaning up..."
 rm -rf mallet-2.0.7
 rm *.bib
-rm all.txt
 rm all_processed.txt
 rm -rf temp/
 rm -rf arxiv_dataset/
