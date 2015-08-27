@@ -132,50 +132,26 @@ class Application(tornado.web.Application):
 
         # following part is for Analyzer
         @tornado.gen.coroutine
-        def set_keywords_parameters(metadata_source='bibtex', abstract_source='mallet'):
+        def set_keywords_parameters():
             print "Set keywords for analyzer..."
-            print "Using metadata source:", metadata_source
-            print "Using abstract source:", abstract_source
             self.keywords_number = 10
 
-            if metadata_source is 'xml':
-                self._num_of_corpora = "all"
-                self.abstracts_filename = "../docs/abstracts/abstracts_70k.xml"  # information of all abstracts
-                self.extractors = Extractors(file_name=self.abstracts_filename)
-                self.original_corpora, self.uploader_names, self.titles = self.extractors.get_information_from_xml(2500)
-            elif metadata_source is 'db':
-                self._num_of_corpora = "db"
-                self.extractors = Extractors(database=self.db, collection=u'fs.files')
-                info = yield self.extractors.get_information_from_database()
-                self.original_corpora = info['corpora']
-                self.uploader_names = info['uploader_names']
-                self.titles = info['titles']
-            elif metadata_source is 'bibtex':
-                self._num_of_corpora = "all"
-                self.abstracts_filename = "../docs/abstracts/bibtex.txt"
-                self.extractors = Extractors(file_name=self.abstracts_filename)
-                self.original_corpora, self.uploader_names, self.titles, self.urls = self.extractors.get_information_from_bibtex(2500)
-                self.valid_people_filename = '../docs/people/people.txt'
+            self._num_of_corpora = "all"
+            self.abstracts_filename = "../docs/abstracts/bibtex.txt"
+            self.extractors = Extractors(file_name=self.abstracts_filename)
+            self.original_corpora, self.uploader_names, self.titles, self.urls = self.extractors.get_information_from_bibtex(2500)
+            self.valid_people_filename = '../docs/people/people.txt'
 
-                # set keywords (might take a while):
-                # yield self.extractors.set_keywords_from_database()  # recommended to run only when needed
-
-            if abstract_source is 'mallet':
-                # information of all topics as a set:
-                self.keywords_filename = "../docs/keywords/mallet_abstract.txt"
-                # topic lists of each abstract:
-                self.corpus_keywords_filename = "../docs/keywords/mallet_corpus_abstract.txt"
-                # a dictionary of topic number-keyword list mappings
-                self.topic_keywords_filename = "../docs/keywords/mallet_topic_keywords.txt"
-                # a list containing dictionaries of keyword weights for each topic
-                self.topic_keyword_weights_filename = "../docs/keywords/mallet_topic_keywordweights.txt"
-                # a list of dicts, containing the various topicweights for each article
-                self.articles_topicweights_filename = "../docs/keywords/mallet_topic_articleweights.txt"
-            elif abstract_source is 'old':
-                # information of all keywords as a set:
-                self.keywords_filename = "../docs/keywords/abstract_%s.txt" % self._num_of_corpora
-                # keyword lists of each abstract:
-                self.corpus_keywords_filename = "../docs/keywords/corpus_abstract_%s.txt" % self._num_of_corpora
+            # information of all topics as a set:
+            self.keywords_filename = "../docs/keywords/mallet_abstract.txt"
+            # topic lists of each abstract:
+            self.corpus_keywords_filename = "../docs/keywords/mallet_corpus_abstract.txt"
+            # a dictionary of topic number-keyword list mappings
+            self.topic_keywords_filename = "../docs/keywords/mallet_topic_keywords.txt"
+            # a list containing dictionaries of keyword weights for each topic
+            self.topic_keyword_weights_filename = "../docs/keywords/mallet_topic_keywordweights.txt"
+            # a list of dicts, containing the various topicweights for each article
+            self.articles_topicweights_filename = "../docs/keywords/mallet_topic_articleweights.txt"
 
             # load and set abstract and keyword cd
             self.corpus_keywords_file_obj = open(self.corpus_keywords_filename, 'rb')
@@ -183,42 +159,40 @@ class Application(tornado.web.Application):
             self.corpora = pickle.load(self.corpus_keywords_file_obj)
             self.corpus_keywords_file_obj.close()
 
-            if self.topic_keywords_filename is not None:
-                # set keyword data
-                self.topic_keywords_obj = open(self.topic_keywords_filename, 'rb')
-                self.corpus_keywords = pickle.load(self.topic_keywords_obj)
-                self.topic_keywords_obj.close()
+            # set keyword data
+            self.topic_keywords_obj = open(self.topic_keywords_filename, 'rb')
+            self.corpus_keywords = pickle.load(self.topic_keywords_obj)
+            self.topic_keywords_obj.close()
 
-                self.topic_keyword_weights_obj = open(self.topic_keyword_weights_filename, 'rb')
-                self.topic_keyword_weights = pickle.load(self.topic_keyword_weights_obj)
-                self.topic_keyword_weights_obj.close()
+            self.topic_keyword_weights_obj = open(self.topic_keyword_weights_filename, 'rb')
+            self.topic_keyword_weights = pickle.load(self.topic_keyword_weights_obj)
+            self.topic_keyword_weights_obj.close()
 
-                self.articles_topicweights_obj = open(self.articles_topicweights_filename, 'rb')
-                self.articles_topicweights = pickle.load(self.articles_topicweights_obj)
-                self.articles_topicweights_obj.close()
+            self.articles_topicweights_obj = open(self.articles_topicweights_filename, 'rb')
+            self.articles_topicweights = pickle.load(self.articles_topicweights_obj)
+            self.articles_topicweights_obj.close()
 
-            if self.valid_people_filename is not None:
-                self.authors = {}
-                self.valid_people_file = open(self.valid_people_filename, mode='r')
-                people_data = [line.strip() for line in self.valid_people_file]
-                for entry in people_data:
-                    fields = entry.split(',')
-                    author = fields[0].strip()
-                    self.authors[author] = {}
-                    self.authors[author]["name"] = author
-                    self.authors[author]["email"] = fields[1].strip()
-                    self.authors[author]["room"] = fields[2].strip()
-                    self.authors[author]["phone"] = fields[3].strip()
-                    self.authors[author]["homepage"] = fields[4].strip()
-                    self.authors[author]["group"] = fields[5].strip()
-                    profile_picture = "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg"
-                    if len(fields) > 6:
-                        if len(fields[6].strip()):
-                            profile_picture = fields[6].strip()
-                    self.authors[author]["profile_picture"] = profile_picture
+            self.authors = {}
+            self.valid_people_file = open(self.valid_people_filename, mode='r')
+            people_data = [line.strip() for line in self.valid_people_file]
+            for entry in people_data:
+                fields = entry.split(',')
+                author = fields[0].strip()
+                self.authors[author] = {}
+                self.authors[author]["name"] = author
+                self.authors[author]["email"] = fields[1].strip()
+                self.authors[author]["room"] = fields[2].strip()
+                self.authors[author]["phone"] = fields[3].strip()
+                self.authors[author]["homepage"] = fields[4].strip()
+                self.authors[author]["group"] = fields[5].strip()
+                profile_picture = "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg"
+                if len(fields) > 6:
+                    if len(fields[6].strip()):
+                        profile_picture = fields[6].strip()
+                self.authors[author]["profile_picture"] = profile_picture
 
-                print self.authors
-                self.valid_people_file.close()
+            print self.authors
+            self.valid_people_file.close()
 
         # overlapping with old system, adding this separately to maintain compatibility with old for now...
         def form_papers_info():
@@ -268,46 +242,6 @@ class Application(tornado.web.Application):
 
                 i += 1
 
-        def form_persons_info():
-            print "amount of original corpora:", len(self.original_corpora)
-            print "amount of preprocessed corpora:", len(self.corpora)
-            print "amount of uploaders:", len(self.uploader_names)
-            # assert(len(self.original_corpora) == len(self.corpora) == len(self.uploader_names))  # for persons_info
-            self.corpora_user_id = {}
-            self.persons_info = []  # this variable is a list that contains all information of persons
-            person_id = 0
-            for title, original_corpus, decomposed_corpus, user in zip(self.titles, self.original_corpora,
-                                                                       self.corpora, self.uploader_names):
-                if user not in self.corpora_user_id.keys():
-                    self.corpora_user_id[user] = {}
-                    self.corpora_user_id[user]["id"] = person_id
-                    person_id += 1
-                    self.corpora_user_id[user]["name"] = user
-                    self.corpora_user_id[user]["email"] = "Random@email.com"
-
-                    self.corpora_user_id[user]["room"] = "D212"
-                    self.corpora_user_id[user]["phone"] = "+358 9999 9999"
-                    self.corpora_user_id[user]["homepage"] = "http://random.homepage.com"
-                    self.corpora_user_id[user]["reception_time"] = "By appointment"
-                    self.corpora_user_id[user]["group"] = "Secure Systems"
-                    self.corpora_user_id[user]["keywords"] = []
-                    self.corpora_user_id[user]["articles"] = []
-                    self.corpora_user_id[user]["profile_picture"] = "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg"
-                    # self.corpora_user_id[user]["profile_picture"] = GravatarHandler.get_gravatar_url(email)
-
-                self.corpora_user_id[user]["articles"].append({
-                    "author_profile_picture":
-                        "http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg",
-                    "id": 1, "title": "%s" % title, "abstract": "%s" % original_corpus,
-                    "url": "http://images4.fanpop.com/image/photos/14700000/Beautifull-cat-cats-14749885-1600-1200.jpg"
-                })
-
-                # append keywords in list corpora_user_id[name]["keywords"]
-                for keyword in decomposed_corpus.split(','):
-                    for keyword_info in self.keywords_info:
-                        if keyword == keyword_info["text"]:
-                            self.corpora_user_id[user]["keywords"].append(keyword_info["id"])
-
         def set_iteration_parameters():
             # number of iteration
             self.iter_num = 0
@@ -329,11 +263,13 @@ class Application(tornado.web.Application):
             self.keywords_file_obj.close()
 
         # set keywords parameters
-        tornado.ioloop.IOLoop.instance().run_sync(lambda: set_keywords_parameters(metadata_source='bibtex', abstract_source='mallet'))  # xml, db or bibtex, old or mallet
+        tornado.ioloop.IOLoop.instance().run_sync(lambda: set_keywords_parameters())  # xml, db or bibtex, old or mallet
 
         set_iteration_parameters()
         form_keywords_info()
-        form_persons_info()
+        print "amount of original corpora:", len(self.original_corpora)
+        print "amount of preprocessed corpora:", len(self.corpora)
+        print "amount of uploaders:", len(self.uploader_names)
         form_papers_info()
         analyze_data()
         print "Ready!"
