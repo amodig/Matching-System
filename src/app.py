@@ -23,9 +23,9 @@ import pickle
 __author__ = "Yuan (Alex) Gao, Arttu Modig, Kaj Sotala"
 __credits__ = "Yuan (Alex) Gao, Arttu Modig, Kalle Ilves, Han Xiao, Kaj Sotala"
 __license__ = "MIT"
-__version__ = "0.1"
-__maintainer__ = "Arttu Modig"
-__email__ = "arttu.modig@gmail.com"
+__version__ = "0.2"
+__maintainer__ = "Inactive, but Kaj Sotala was the latest maintainer"
+__email__ = "kaj.sotala@gmail.com"
 __status__ = "Prototype"
 
 # Tornado config

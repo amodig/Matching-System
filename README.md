@@ -128,3 +128,26 @@ Activate your Python virtualenv and then install Python requirement:
 `pip install -r requirements.txt`
 
 OK, then you should have a basic installation!
+
+# Usage
+
+Run the run-server.sh script, then point your browser to localhost:8899.
+
+# Updating the data
+
+People's publication records are based on BibTeX files downloaded from http://dblp.uni-trier.de/ . To add a new person or update a previous one:
+* Add the new/updated .bib file to bibtex\_processing/bibtex_source
+* Run bibtex\_processing/process_bibtex.sh
+* If you added new people, go add their details into docs/people/people.txt - the system will ignore them until they can be found from this file
+
+If you wish to generate new topic models with different parameters, look at the conditional code block in process_bibtex.sh as well as http://mallet.cs.umass.edu/ in order to figure out how.
+
+# Known issues
+
+* Sometimes the list of topics in the recommender system comes out looking weird/unreadable. Just generate a new set of topics (by clicking next or starting a new search).
+* You can access a profile page that's a remnant of the old system, but doesn't actually do anything.
+
+# Backend notes
+
+* A bunch of the code in app.py is inherited from the old system, which was keyword-based rather than topic-based. As a result, some variable names that talk about keywords actually refer to topics. This can be a little confusing.
+* The main files used by the backend are app.py, extractors.py, analyzer.py, and newHandlers.py. 
