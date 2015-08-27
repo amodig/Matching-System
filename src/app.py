@@ -42,29 +42,35 @@ class Application(tornado.web.Application):
     def __init__(self, **overrides):
         # self.config = self._get_config()  # could be useful?
 
+
+
         handlers = [
-            url(r'/', LoginHandler, name='/'),
+            # Commented out handlers are remains from the older system and can be ignored
 
-            url(r'/index', IndexHandler, name='index'),
-            url(r'/charts', ChartsHandler, name='charts'),
-            url(r'/charts_data', ChartsDataHandler, name='charts_data'),
-            url(r'/topic_model', TopicModelHandler, name='topic_model'),
-            url(r'/tables', TablesHandler, name='tables'),
-            url(r'/tables_data', TablesDataHandler, name='tables_data'),
-            url(r'/article_matrix', ArticleMatrixHandler, name='article_matrix'),
-            url(r'/related_articles', RelatedArticlesHandler, name='related_articles'),
-            url(r'/next', NextHandler, name='next'),
-            url(r'/remove_person', RemovePersonHandler, name='remove_person'),
-            url(r'/search', SearchHandler, name='search'),
+            # url(r'/', LoginHandler, name='/'),
 
+            url(r'/', ProfileIndexHandler, name="/"),
             url(r'/control', ProfileIndexHandler, name="profile_index"),
-            url(r'/download', DownloadHandler, name="download"),
-            url(r'/upload', UploadHandler, name="upload"),
-            url(r'/update_bio', ProfileHandler, name="update_bio"),
-            url(r'/profile', ProfileHandler, name="profile"),
+
+            # url(r'/index', IndexHandler, name='index'),
+            # url(r'/charts', ChartsHandler, name='charts'),
+            # url(r'/charts_data', ChartsDataHandler, name='charts_data'),
+            # url(r'/topic_model', TopicModelHandler, name='topic_model'),
+            # url(r'/tables', TablesHandler, name='tables'),
+            # url(r'/tables_data', TablesDataHandler, name='tables_data'),
+            # url(r'/article_matrix', ArticleMatrixHandler, name='article_matrix'),
+            # url(r'/related_articles', RelatedArticlesHandler, name='related_articles'),
+            # url(r'/next', NextHandler, name='next'),
+            # url(r'/remove_person', RemovePersonHandler, name='remove_person'),
+            # url(r'/search', SearchHandler, name='search'),
+
+            # url(r'/download', DownloadHandler, name="download"),
+            # url(r'/upload', UploadHandler, name="upload"),
+            # url(r'/update_bio', ProfileHandler, name="update_bio"),
+            # url(r'/profile', ProfileHandler, name="profile"),
             url(r'/article/([a-z0-9]+)', ArticleDataHandler, name='article/([a-z0-9]+)'),
             url(r'/article/([a-z0-9]+)/edit', ArticleDataHandler, name='article/([a-z0-9]+)/edit'),
-            url(r'/grav', GravatarHandler, name='grav'),
+            # url(r'/grav', GravatarHandler, name='grav'),
 
             url(r'/topics[/]*([0-9]*)', TopicHandler, name='topics/([0-9]*)'),
             url(r'/topic/([a-z0-9]+)/articles', TopicArticleHandler, name='topic/([a-z0-9]+)/articles'),
@@ -93,9 +99,9 @@ class Application(tornado.web.Application):
             # url(r'/twitter_login', TwitterLoginHandler, name='twitter_login'),
             # url(r'/facebook_login', FacebookLoginHandler, name='facebook_login'),
 
-            url(r'/register', RegisterHandler, name='register'),
-            url(r'/logout', LogoutHandler, name='logout'),
-            url(r'/login', LoginHandler, name='login'),
+            # url(r'/register', RegisterHandler, name='register'),
+            # url(r'/logout', LogoutHandler, name='logout'),
+            # url(r'/login', LoginHandler, name='login'),
         ]
 
         # xsrf_cookies is for XSS protection add this to all forms: {{ xsrf_form_html() }}
@@ -194,7 +200,6 @@ class Application(tornado.web.Application):
             print self.authors
             self.valid_people_file.close()
 
-        # overlapping with old system, adding this separately to maintain compatibility with old for now...
         def form_papers_info():
             self.all_articles = [None] * len(self.corpora)
             self.articles_associated_with_topic = {}
@@ -209,8 +214,6 @@ class Application(tornado.web.Application):
                 self.all_articles[i]["people"] = []
 
 
-                # print user
-
                 for author in user.split('and'):
                     author = author.strip()
                     if (author in self.authors.keys()):
@@ -220,6 +223,7 @@ class Application(tornado.web.Application):
                 for keyword in decomposed_corpus.split(","):
                     for keyword_info in self.keywords_info:
                         if keyword == keyword_info["text"]:
+                            # used for sorting articles based on their topicweight
                             def compare_article_weights(x,y):
                                 x_article_dict = self.articles_topicweights[int(x)]
                                 y_article_dict = self.articles_topicweights[int(y)]
@@ -237,8 +241,6 @@ class Application(tornado.web.Application):
                             # sort article list based on how strongly each is associated with keyword
                             sorted_article_list = sorted(article_list, cmp=compare_article_weights)
                             self.articles_associated_with_topic[keyword] = sorted_article_list
-
-
 
                 i += 1
 

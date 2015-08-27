@@ -517,7 +517,6 @@ class ArticleDataHandler(BaseProfileHandler):
         self.finish()
 
 class ProfileIndexHandler(BaseProfileHandler):
-    @web.authenticated
     def get(self):
         # Old style, send template variables
         variables = {'user': "foobar", 'email': "email@email.com", 'bio': "short bio", 'files': json.dumps({})}
